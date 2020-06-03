@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="Unit tests" parallel="classes" thread-count="1">
+    <test name="tests">
+        <packages>
+            <package name="com.restsecure.http"/>
+            <package name="com.restsecure.matchers"/>
+
+            <package name="com.restsecure.request"/>
+            <package name="com.restsecure.request.handler"/>
+            <package name="com.restsecure.request.specification"/>
+            <package name="com.restsecure.request.util"/>
+
+            <package name="com.restsecure.response"/>
+            <package name="com.restsecure.response.validation"/>
+        </packages>
+    </test>
+</suite>
+
