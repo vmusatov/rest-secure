@@ -1,11 +1,11 @@
-package com.restsecure.mapper;
+package com.restsecure.deserialize;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.restsecure.exception.ObjectMappingException;
 
 import java.io.IOException;
 
-public class DefaultJacksonResponseMapper implements ResponseMapper {
+public class DefaultJacksonJsonDeserializer implements Deserializer {
 
     @Override
     public <T> T deserialize(String content, Class<T> tClass) {

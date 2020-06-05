@@ -1,5 +1,7 @@
 package com.restsecure.request.specification;
 
+import com.restsecure.configuration.Config;
+import com.restsecure.configuration.ConfigFactory;
 import com.restsecure.http.Header;
 import com.restsecure.http.Parameter;
 import com.restsecure.http.RequestMethod;
@@ -14,9 +16,7 @@ import lombok.Getter;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.impl.client.HttpClientBuilder;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Getter
 public class RequestSpecificationImpl implements RequestSpecification {
@@ -30,6 +30,7 @@ public class RequestSpecificationImpl implements RequestSpecification {
     private final List<RequestHandler> requestHandlers;
     private final List<ResponseHandler> responseHandlers;
     private final List<ResponseValidation> responseValidations;
+    private final List<Config> configs;
     private final HttpClientContext httpClientContext;
     private final HttpClientBuilder httpClientBuilder;
 
@@ -41,6 +42,7 @@ public class RequestSpecificationImpl implements RequestSpecification {
         this.requestHandlers = new ArrayList<>();
         this.responseHandlers = new ArrayList<>();
         this.responseValidations = new ArrayList<>();
+        this.configs = new ArrayList<>();
         this.httpClientContext = HttpClientContext.create();
         this.httpClientBuilder = HttpClientBuilder.create();
     }
@@ -149,6 +151,38 @@ public class RequestSpecificationImpl implements RequestSpecification {
     }
 
     @Override
+    public RequestSpecification config(Config config, Config... additionalConfigs) {
+        List<Config> configs = new ArrayList<>();
+        configs.add(config);
+        configs.addAll(Arrays.asList(additionalConfigs));
+
+        return config(configs);
+    }
+
+    @Override
+    public RequestSpecification config(List<Config> configs) {
+        for(Config config : configs) {
+            if(getConfig(config.getClass()) != null) {
+                this.configs.removeIf(config.getClass()::isInstance);
+            }
+
+            this.configs.add(config);
+        }
+
+        return this;
+    }
+
+    @Override
+    public List<Config> getConfigs() {
+        return this.configs;
+    }
+
+    @Override
+    public <T extends Config> T getConfig(Class<T> configClass) {
+        return ConfigFactory.getConfig(this.configs, configClass);
+    }
+
+    @Override
     public HttpClientContext getContext() {
         return this.httpClientContext;
     }
@@ -167,6 +201,12 @@ public class RequestSpecificationImpl implements RequestSpecification {
     @Override
     public RequestSpecification validate(ResponseValidation validation) {
         this.responseValidations.add(validation);
+        return this;
+    }
+
+    @Override
+    public RequestSpecification validate(List<ResponseValidation> validations) {
+        this.responseValidations.addAll(validations);
         return this;
     }
 

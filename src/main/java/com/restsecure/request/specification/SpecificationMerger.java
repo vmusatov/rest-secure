@@ -16,6 +16,8 @@ public class SpecificationMerger {
         to.handleRequest(from.getRequestHandlers());
         to.handleResponse(from.getResponseHandlers());
 
-        to.getValidations().addAll(from.getValidations());
+        to.validate(from.getValidations());
+
+        to.config(from.getConfigs());
     }
 }

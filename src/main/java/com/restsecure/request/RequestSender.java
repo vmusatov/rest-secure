@@ -1,7 +1,9 @@
 package com.restsecure.request;
 
+import com.restsecure.RestSecure;
 import com.restsecure.exception.SendRequestException;
 import com.restsecure.request.specification.RequestSpecification;
+import com.restsecure.request.specification.RequestSpecificationImpl;
 import com.restsecure.request.util.Session;
 import com.restsecure.response.Response;
 import com.restsecure.response.ResponseConfigurator;
@@ -84,12 +86,17 @@ public class RequestSender {
      * @return Response
      */
     public static Response send(RequestSpecification spec) {
-        HttpUriRequest request = RequestFactory.createRequest(spec);
 
-        try (CloseableHttpClient httpClient = spec.getBuilder().build(); httpClient) {
-            CloseableHttpResponse httpResponse = httpClient.execute(request, spec.getContext());
+        RequestSpecification specification = new RequestSpecificationImpl()
+                .mergeWith(RestSecure.globalSpecification)
+                .mergeWith(spec);
 
-            return ResponseConfigurator.configureResponse(httpResponse, spec);
+        HttpUriRequest request = RequestFactory.createRequest(specification);
+
+        try (CloseableHttpClient httpClient = specification.getBuilder().build(); httpClient) {
+            CloseableHttpResponse httpResponse = httpClient.execute(request, specification.getContext());
+
+            return ResponseConfigurator.configureResponse(httpResponse, specification);
         } catch (IOException e) {
             throw new SendRequestException(e.getMessage());
         }

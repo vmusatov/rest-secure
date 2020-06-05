@@ -1,9 +1,11 @@
 package com.restsecure.response;
 
+import com.restsecure.configuration.ConfigFactory;
+import com.restsecure.configuration.DeserializeConfig;
+import com.restsecure.http.Header;
 import com.restsecure.http.HttpHelper;
 import com.restsecure.request.specification.RequestSpecification;
 import com.restsecure.response.validation.ResponseValidation;
-import org.apache.http.Header;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.util.EntityUtils;
 
@@ -16,32 +18,37 @@ import java.util.stream.Collectors;
 public class ResponseConfigurator {
 
     public static Response configureResponse(CloseableHttpResponse httpResponse, RequestSpecification spec) {
-        Response response = parseHttpResponse(httpResponse);
+        Response response = parseHttpResponse(httpResponse, spec);
 
         validateResponse(response, spec.getValidations());
-        handleResponse(response, spec.getResponseHandlers());
+        handleResponse(response, spec);
 
         return response;
     }
 
-    private static Response parseHttpResponse(CloseableHttpResponse httpResponse) {
+    private static Response parseHttpResponse(CloseableHttpResponse httpResponse, RequestSpecification spec) {
         try (httpResponse) {
             Response response = new HttpResponse();
-
-            List<Header> apacheHeaders = Arrays.asList(httpResponse.getAllHeaders());
-            List<com.restsecure.http.Header> headers = apacheHeaders.stream()
-                    .map(apacheHeader -> new com.restsecure.http.Header(apacheHeader.getName(), apacheHeader.getValue()))
-                    .collect(Collectors.toList());
+            List<Header> headers = parseHeaders(httpResponse);
 
             response.setHeaders(headers);
             response.setCookies(HttpHelper.getCookiesFromHeaders(headers));
             response.setStatusCode(httpResponse.getStatusLine().getStatusCode());
-            response.setBody(new ResponseBody(getBodyContent(httpResponse)));
+
+            DeserializeConfig deserializeConfig = ConfigFactory.getConfigOrCreateDefault(spec.getConfigs(), DeserializeConfig.class);
+            response.setBody(new ResponseBody(getBodyContent(httpResponse), deserializeConfig));
 
             return response;
         } catch (IOException e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(e);
         }
+    }
+
+    private static List<Header> parseHeaders(CloseableHttpResponse httpResponse) {
+        List<org.apache.http.Header> apacheHeaders = Arrays.asList(httpResponse.getAllHeaders());
+        return apacheHeaders.stream()
+                .map(apacheHeader -> new Header(apacheHeader.getName(), apacheHeader.getValue()))
+                .collect(Collectors.toList());
     }
 
     private static String getBodyContent(org.apache.http.HttpResponse response) {
@@ -58,9 +65,9 @@ public class ResponseConfigurator {
         }
     }
 
-    private static void handleResponse(Response response, List<ResponseHandler> handlers) {
-        for (ResponseHandler handler : handlers) {
-            handler.handleResponse(response);
+    private static void handleResponse(Response response, RequestSpecification spec) {
+        for (ResponseHandler handler : spec.getResponseHandlers()) {
+            handler.handleResponse(response, spec);
         }
     }
 }

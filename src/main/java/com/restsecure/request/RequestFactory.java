@@ -1,9 +1,10 @@
 package com.restsecure.request;
 
-import com.restsecure.RestSecureConfiguration;
+import com.restsecure.RestSecure;
 import com.restsecure.exception.RequestConfigurationException;
+import com.restsecure.request.handler.RequestConfigurationHandler;
+import com.restsecure.request.handler.RequestDataHandler;
 import com.restsecure.request.specification.RequestSpecification;
-import com.restsecure.request.specification.RequestSpecificationImpl;
 import com.restsecure.request.specification.SpecificationValidator;
 import org.apache.http.client.methods.*;
 
@@ -15,29 +16,28 @@ public class RequestFactory {
 
     public static HttpUriRequest createRequest(RequestSpecification specification) {
 
-        RequestSpecification spec = new RequestSpecificationImpl()
-                .mergeWith(RestSecureConfiguration.getDefaultRequestSpecification())
-                .mergeWith(specification);
+        handleSpecification(specification);
+        SpecificationValidator.validate(specification);
 
-        SpecificationValidator.validate(spec);
-        handleRequest(spec);
-
-        switch (spec.getMethod()) {
+        switch (specification.getMethod()) {
             case GET:
-                return createGet(spec);
+                return createGet(specification);
             case DELETE:
-                return createDelete(spec);
+                return createDelete(specification);
             case PUT:
-                return createPut(spec);
+                return createPut(specification);
             case POST:
-                return createPost(spec);
+                return createPost(specification);
             default:
-                throw new RequestConfigurationException("Unsupported request method " + spec.getMethod());
+                throw new RequestConfigurationException("Unsupported request method " + specification.getMethod());
         }
     }
 
-    private static void handleRequest(RequestSpecification specification) {
-        RestSecureConfiguration.getGeneralRequestHandler().handleRequest(specification);
+    private static void handleSpecification(RequestSpecification specification) {
+        new RequestDataHandler().handleRequest(specification);
+        new RequestConfigurationHandler().handleRequest(specification);
+
+        specification.handleRequest(RestSecure.getGlobalRequestHandlers());
 
         for (RequestHandler handler : specification.getRequestHandlers()) {
             handler.handleRequest(specification);

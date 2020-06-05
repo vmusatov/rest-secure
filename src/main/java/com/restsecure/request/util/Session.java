@@ -1,6 +1,7 @@
 package com.restsecure.request.util;
 
-import com.restsecure.RestSecureConfiguration;
+import com.restsecure.configuration.ConfigFactory;
+import com.restsecure.configuration.SessionConfig;
 import com.restsecure.http.Cookie;
 import com.restsecure.http.MultiValueList;
 import com.restsecure.request.RequestHandler;
@@ -42,25 +43,30 @@ import lombok.Getter;
 public class Session implements RequestHandler, ResponseHandler {
 
     @Getter
-    private String sessionValue;
+    private String sessionIdValue;
 
     @Override
     public void handleRequest(RequestSpecification spec) {
-        if (sessionValue != null && !sessionValue.isEmpty()) {
-            spec.header("Cookie", RestSecureConfiguration.getSessionId() + "=" + sessionValue);
+        SessionConfig sessionConfig = ConfigFactory.getConfigOrCreateDefault(spec.getConfigs(), SessionConfig.class);
+
+        String sessionIdName = sessionConfig.getSessionIdName();
+        if (sessionIdValue != null && !sessionIdValue.isEmpty()) {
+            spec.header("Cookie", sessionIdName + "=" + sessionIdValue);
         }
     }
 
     @Override
-    public void handleResponse(Response response) {
+    public void handleResponse(Response response, RequestSpecification spec) {
         MultiValueList<Cookie> responseCookies = response.getCookies();
         if (responseCookies == null) {
             return;
         }
 
-        Cookie sessionCookie = responseCookies.getFirst(RestSecureConfiguration.getSessionId());
+        SessionConfig sessionConfig = ConfigFactory.getConfigOrCreateDefault(spec.getConfigs(), SessionConfig.class);
+
+        Cookie sessionCookie = responseCookies.getFirst(sessionConfig.getSessionIdName());
         if (sessionCookie != null) {
-            sessionValue = sessionCookie.getValue();
+            sessionIdValue = sessionCookie.getValue();
         }
     }
 }

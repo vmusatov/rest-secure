@@ -9,6 +9,6 @@ public class NoAuthentication extends RequestAuthHandler {
 
     @Override
     protected void authenticate(RequestSpecification spec) {
-        spec.getRequestHandlers().removeIf(handler -> !handler.equals(this) && handler instanceof RequestAuthHandler);
+
     }
 }

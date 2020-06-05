@@ -1,24 +1,18 @@
 package com.restsecure.request.handler;
 
-import com.restsecure.RestSecureConfiguration;
+import com.restsecure.RestSecure;
+import com.restsecure.http.HttpHelper;
 import com.restsecure.request.RequestHandler;
 import com.restsecure.request.specification.RequestSpecification;
 
-/**
- * This request handler extracts data from the configuration and adds it to the request specification.
- */
 public class RequestConfigurationHandler implements RequestHandler {
+
     @Override
     public void handleRequest(RequestSpecification spec) {
-        String baseUrl = RestSecureConfiguration.getBaseUrl();
-        String requestUrl = spec.getUrl();
-
-        String resultUrl = baseUrl + requestUrl;
-
-        if (resultUrl.isEmpty()) {
-            resultUrl = RestSecureConfiguration.DEFAULT_URL;
+        String domainName = HttpHelper.getDomainName(spec.getUrl());
+        if(domainName == null || domainName.isEmpty()) {
+            String url = RestSecure.baseUrl + spec.getUrl();
+            spec.url(url);
         }
-
-        spec.url(resultUrl);
     }
 }

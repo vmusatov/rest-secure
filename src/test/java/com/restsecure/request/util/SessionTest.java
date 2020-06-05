@@ -1,6 +1,6 @@
 package com.restsecure.request.util;
 
-import com.restsecure.RestSecureConfiguration;
+import com.restsecure.configuration.SessionConfig;
 import com.restsecure.http.Cookie;
 import com.restsecure.http.Header;
 import com.restsecure.request.specification.RequestSpecification;
@@ -18,14 +18,14 @@ public class SessionTest {
     @Test
     public void sessionTest() {
         Session session = new Session();
-        RequestSpecification request = new RequestSpecificationImpl();
+        RequestSpecification spec = new RequestSpecificationImpl();
         Response response = new HttpResponse();
-        response.setCookies(Collections.singletonList(new Cookie(RestSecureConfiguration.getSessionId(), "session_value")));
+        response.setCookies(Collections.singletonList(new Cookie(SessionConfig.DEFAULT_SESSION_ID_NAME, "session_value")));
 
-        session.handleResponse(response);
-        session.handleRequest(request);
+        session.handleResponse(response, spec);
+        session.handleRequest(spec);
 
-        Header expectedHeader = new Header("Cookie", RestSecureConfiguration.getSessionId() + "=session_value");
-        assertThat("request not contain session cookie", request.getHeaders().contains(expectedHeader));
+        Header expectedHeader = new Header("Cookie", SessionConfig.DEFAULT_SESSION_ID_NAME + "=session_value");
+        assertThat("request not contain session cookie", spec.getHeaders().contains(expectedHeader));
     }
 }

@@ -1,6 +1,7 @@
 package com.restsecure;
 
 import com.restsecure.http.RequestMethod;
+import com.restsecure.request.RequestHandler;
 import com.restsecure.request.RequestSender;
 import com.restsecure.request.authentication.BasicAuthentication;
 import com.restsecure.request.authentication.BearerTokenAuthentication;
@@ -12,17 +13,54 @@ import com.restsecure.request.util.Session;
 import com.restsecure.response.Response;
 import com.restsecure.response.validation.ResponseOptionsValidation;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class RestSecure {
 
+    public static final String DEFAULT_URL = "http://localhost";
+
     /**
-     * Creates an empty request specification
-     *
-     * @return RequestSpecification
+     * A base url will be added to each requests if its url does not have a domain name
      */
-    public static RequestSpecification spec() {
-        return new RequestSpecificationImpl();
+    public static String baseUrl = DEFAULT_URL;
+
+    /**
+     * A global specification will be added to each request. 
+     */
+    public static RequestSpecification globalSpecification = new RequestSpecificationImpl();
+
+    /**
+     * A global request handlers will be added to each request. 
+     */
+    private static final List<RequestHandler> globalRequestHandlers = new ArrayList<>();
+
+    /**
+     * Adding global request handlers that will be added to each request
+     *
+     * @param handler            request handler
+     * @param additionalHandlers request handlers list
+     */
+    public static void handleRequest(RequestHandler handler, RequestHandler... additionalHandlers) {
+        globalRequestHandlers.add(handler);
+        globalRequestHandlers.addAll(Arrays.asList(additionalHandlers));
+    }
+
+    /**
+     * Adding global request handlers that will be added to each request
+     *
+     * @param handlers request handlers list
+     */
+    public static void handleRequest(List<RequestHandler> handlers) {
+        globalRequestHandlers.addAll(handlers);
+    }
+
+    /**
+     * @return request handlers list
+     */
+    public static List<RequestHandler> getGlobalRequestHandlers() {
+        return globalRequestHandlers;
     }
 
     /**

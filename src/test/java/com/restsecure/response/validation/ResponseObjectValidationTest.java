@@ -1,7 +1,7 @@
 package com.restsecure.response.validation;
 
 import com.restsecure.BaseTest;
-import com.restsecure.mapper.DefaultJacksonResponseMapper;
+import com.restsecure.deserialize.DefaultJacksonJsonDeserializer;
 import com.restsecure.response.HttpResponse;
 import com.restsecure.response.Response;
 import com.restsecure.response.ResponseBody;
@@ -15,7 +15,7 @@ public class ResponseObjectValidationTest extends BaseTest {
 
     @BeforeMethod
     public void init() {
-        user = new DefaultJacksonResponseMapper().deserialize(userJson, User.class);
+        user = new DefaultJacksonJsonDeserializer().deserialize(userJson, User.class);
     }
 
     @Test

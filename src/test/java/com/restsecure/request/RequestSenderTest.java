@@ -2,8 +2,10 @@ package com.restsecure.request;
 
 import com.restsecure.BaseTest;
 import com.restsecure.GenerateDataHelper;
-import com.restsecure.RestSecureConfiguration;
+import com.restsecure.RestSecure;
+import com.restsecure.deserialize.DefaultJacksonJsonDeserializer;
 import com.restsecure.request.specification.RequestSpecification;
+import com.restsecure.request.specification.RequestSpecificationImpl;
 import com.restsecure.response.Response;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -13,6 +15,7 @@ import org.testng.annotations.Test;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.restsecure.Configs.*;
 import static com.restsecure.RestSecure.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -25,10 +28,10 @@ public class RequestSenderTest extends BaseTest {
 
     @BeforeClass
     public void init() {
-        RestSecureConfiguration.getDefaultRequestSpecification()
-                .auth(bearerToken(""));
+        RestSecure.globalSpecification
+                .auth(bearerToken("ZqN_YXfqVYlsxjwQLOb5gbE4318XA5IFcBKJ"));
 
-        RestSecureConfiguration.setBaseUrl("https://gorest.co.in/public-api");
+        RestSecure.baseUrl = "https://gorest.co.in/public-api";
     }
 
     @BeforeMethod
@@ -41,7 +44,8 @@ public class RequestSenderTest extends BaseTest {
 
     @AfterClass
     public void reset() {
-        RestSecureConfiguration.reset();
+        RestSecure.globalSpecification = new RequestSpecificationImpl();
+        RestSecure.baseUrl = "";
     }
 
     @Test

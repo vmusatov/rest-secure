@@ -1,5 +1,6 @@
 package com.restsecure.request.specification;
 
+import com.restsecure.configuration.Config;
 import com.restsecure.http.Header;
 import com.restsecure.http.Parameter;
 import com.restsecure.http.RequestMethod;
@@ -260,6 +261,50 @@ public interface RequestSpecification {
     Object getData();
 
     /**
+     * Allow tou to add configuration<br>
+     * For example:
+     * <pre>
+     *     get("url")
+     *          .config(sessionConfig().setSessionIdName("PHPSESSID"))
+     *          .session(session)
+     *          .send();
+     * </pre>
+     *
+     * @param config            config
+     * @param additionalConfigs additional configs
+     * @return RequestSpecification
+     */
+    RequestSpecification config(Config config, Config... additionalConfigs);
+
+    /**
+     * Allow tou to add configuration<br>
+     * For example:
+     * <pre>
+     *     List<Config> configs = Arrays.asList(config1, config2, config3);
+     *     get("url")
+     *          .config(configs)
+     *          .send();
+     * </pre>
+     *
+     * @param configs configs list
+     * @return RequestSpecification
+     */
+    RequestSpecification config(List<Config> configs);
+
+    /**
+     * @return Configs list
+     */
+    List<Config> getConfigs();
+
+    /**
+     * Allows you to get a specific config
+     *
+     * @param configClass config class
+     * @return Config
+     */
+    <T extends Config> T getConfig(Class<T> configClass);
+
+    /**
      * @return HttpClientContext
      */
     HttpClientContext getContext();
@@ -293,6 +338,14 @@ public interface RequestSpecification {
      */
     RequestSpecification validate(ResponseValidation validation);
 
+
+    /**
+     * Allows you to add a response validation<br>
+     *
+     * @return ResponseValidation
+     */
+    RequestSpecification validate(List<ResponseValidation> validations);
+
     /**
      * @return List<ResponseValidation>
      */
@@ -300,6 +353,7 @@ public interface RequestSpecification {
 
     /**
      * Allows you to send request with specified specification
+     *
      * @return Response
      */
     Response send();

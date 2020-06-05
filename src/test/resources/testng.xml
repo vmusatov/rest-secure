@@ -3,6 +3,7 @@
 <suite name="Unit tests" parallel="classes" thread-count="1">
     <test name="tests">
         <packages>
+            <package name="com.restsecure.configuration"/>
             <package name="com.restsecure.http"/>
             <package name="com.restsecure.matchers"/>
 

@@ -1,5 +1,8 @@
 package com.restsecure.request.specification;
 
+import com.restsecure.configuration.Config;
+import com.restsecure.configuration.DeserializeConfig;
+import com.restsecure.configuration.SessionConfig;
 import com.restsecure.data.RequestParam;
 import com.restsecure.http.Header;
 import com.restsecure.http.Parameter;
@@ -15,8 +18,7 @@ import java.util.List;
 
 import static com.restsecure.RestSecure.basicAuth;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.emptyString;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.*;
 
 public class RequestSpecificationTest {
 
@@ -170,29 +172,29 @@ public class RequestSpecificationTest {
 
     @Test
     public void addResponseHandlerTest() {
-        RequestSpecification spec = new RequestSpecificationImpl();
-        assertThat(spec.getResponseHandlers().size(), equalTo(0));
+        RequestSpecification specification = new RequestSpecificationImpl();
+        assertThat(specification.getResponseHandlers().size(), equalTo(0));
 
-        ResponseHandler handler1 = request -> {
+        ResponseHandler handler1 = (request, spec) -> {
         };
-        ResponseHandler handler2 = request -> {
+        ResponseHandler handler2 = (request, spec) -> {
         };
 
-        spec.handleResponse(handler1, handler2);
+        specification.handleResponse(handler1, handler2);
 
-        assertThat(spec.getResponseHandlers().size(), equalTo(2));
-        assertThat("Spec not contain specify handler", spec.getResponseHandlers().contains(handler1));
-        assertThat("Spec not contain specify handler", spec.getResponseHandlers().contains(handler2));
+        assertThat(specification.getResponseHandlers().size(), equalTo(2));
+        assertThat("Spec not contain specify handler", specification.getResponseHandlers().contains(handler1));
+        assertThat("Spec not contain specify handler", specification.getResponseHandlers().contains(handler2));
     }
 
     @Test
     public void addResponseHandlersListTest() {
-        RequestSpecification spec = new RequestSpecificationImpl();
-        assertThat(spec.getResponseHandlers().size(), equalTo(0));
+        RequestSpecification specification = new RequestSpecificationImpl();
+        assertThat(specification.getResponseHandlers().size(), equalTo(0));
 
-        ResponseHandler handler1 = request -> {
+        ResponseHandler handler1 = (request, spec) -> {
         };
-        ResponseHandler handler2 = request -> {
+        ResponseHandler handler2 = (request, spec) -> {
         };
 
         List<ResponseHandler> handlers = Arrays.asList(
@@ -200,11 +202,11 @@ public class RequestSpecificationTest {
             handler2
         );
 
-        spec.handleResponse(handlers);
+        specification.handleResponse(handlers);
 
-        assertThat(spec.getResponseHandlers().size(), equalTo(2));
-        assertThat("Spec not contain specify handler", spec.getResponseHandlers().contains(handler1));
-        assertThat("Spec not contain specify handler", spec.getResponseHandlers().contains(handler2));
+        assertThat(specification.getResponseHandlers().size(), equalTo(2));
+        assertThat("Spec not contain specify handler", specification.getResponseHandlers().contains(handler1));
+        assertThat("Spec not contain specify handler", specification.getResponseHandlers().contains(handler2));
     }
 
     @Test
@@ -250,6 +252,50 @@ public class RequestSpecificationTest {
 
         spec.data(loginData);
         assertThat(spec.getData(), equalTo(loginData));
+    }
+
+    @Test
+    public void addConfigTest() {
+        RequestSpecification spec = new RequestSpecificationImpl();
+        SessionConfig sessionConfig = new SessionConfig();
+        spec.config(sessionConfig);
+
+        assertThat(spec.getConfigs(), contains(sessionConfig));
+    }
+
+    @Test
+    public void addDuplicateConfigsTest() {
+        RequestSpecification spec = new RequestSpecificationImpl();
+        SessionConfig sessionConfig1 = new SessionConfig().setSessionIdName("name1");
+        SessionConfig sessionConfig2 = new SessionConfig().setSessionIdName("name2");
+
+        spec.config(sessionConfig1)
+            .config(sessionConfig2);
+
+        assertThat(spec.getConfigs(), contains(sessionConfig2));
+        assertThat(spec.getConfigs(), not(contains(sessionConfig1)));
+    }
+
+    @Test
+    public void addConfigsListTest() {
+        RequestSpecification spec = new RequestSpecificationImpl();
+        SessionConfig sessionConfig = new SessionConfig();
+        DeserializeConfig deserializeConfig = new DeserializeConfig();
+
+        List<Config> configs = Arrays.asList(sessionConfig, deserializeConfig);
+        spec.config(configs);
+
+        assertThat(spec.getConfigs().size(), equalTo(2));
+    }
+
+    @Test
+    public void getConfigTest() {
+        RequestSpecification spec = new RequestSpecificationImpl();
+        SessionConfig sessionConfig = new SessionConfig().setSessionIdName("PHPSESSID");
+
+        spec.config(sessionConfig);
+
+        assertThat(spec.getConfig(SessionConfig.class).getSessionIdName(), equalTo("PHPSESSID"));
     }
 
     @Test
@@ -335,9 +381,9 @@ public class RequestSpecificationTest {
 
     @Test
     public void mergeResponseHandlersTest() {
-        ResponseHandler handler1 = request -> {
+        ResponseHandler handler1 = (request, spec) -> {
         };
-        ResponseHandler handler2 = request -> {
+        ResponseHandler handler2 = (request, spec) -> {
         };
 
         RequestSpecification spec1 = new RequestSpecificationImpl().handleResponse(handler1).handleResponse(handler2);
