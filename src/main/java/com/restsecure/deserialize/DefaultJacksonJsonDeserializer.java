@@ -1,7 +1,7 @@
 package com.restsecure.deserialize;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.restsecure.exception.ObjectMappingException;
+import com.restsecure.exception.DeserializeException;
 
 import java.io.IOException;
 
@@ -12,7 +12,7 @@ public class DefaultJacksonJsonDeserializer implements Deserializer {
         try {
             return new ObjectMapper().readValue(content, tClass);
         } catch (IOException e) {
-          throw new ObjectMappingException(e.getMessage());
+            throw new DeserializeException(e);
         }
     }
 }
