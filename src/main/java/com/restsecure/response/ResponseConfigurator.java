@@ -1,7 +1,7 @@
 package com.restsecure.response;
 
 import com.restsecure.configuration.ConfigFactory;
-import com.restsecure.configuration.DeserializeConfig;
+import com.restsecure.deserialize.DeserializeConfig;
 import com.restsecure.http.Header;
 import com.restsecure.http.HttpHelper;
 import com.restsecure.request.specification.RequestSpecification;

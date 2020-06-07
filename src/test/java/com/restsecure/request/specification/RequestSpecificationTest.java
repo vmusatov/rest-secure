@@ -1,16 +1,16 @@
 package com.restsecure.request.specification;
 
+import com.restsecure.authentication.RequestAuthHandler;
 import com.restsecure.configuration.Config;
-import com.restsecure.configuration.DeserializeConfig;
-import com.restsecure.configuration.SessionConfig;
 import com.restsecure.data.RequestParam;
+import com.restsecure.deserialize.DeserializeConfig;
 import com.restsecure.http.Header;
 import com.restsecure.http.Parameter;
 import com.restsecure.http.RequestMethod;
 import com.restsecure.request.RequestHandler;
-import com.restsecure.request.authentication.RequestAuthHandler;
-import com.restsecure.request.util.Session;
 import com.restsecure.response.ResponseHandler;
+import com.restsecure.session.Session;
+import com.restsecure.session.SessionConfig;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
@@ -198,8 +198,8 @@ public class RequestSpecificationTest {
         };
 
         List<ResponseHandler> handlers = Arrays.asList(
-            handler1,
-            handler2
+                handler1,
+                handler2
         );
 
         specification.handleResponse(handlers);
@@ -270,7 +270,7 @@ public class RequestSpecificationTest {
         SessionConfig sessionConfig2 = new SessionConfig().setSessionIdName("name2");
 
         spec.config(sessionConfig1)
-            .config(sessionConfig2);
+                .config(sessionConfig2);
 
         assertThat(spec.getConfigs(), contains(sessionConfig2));
         assertThat(spec.getConfigs(), not(contains(sessionConfig1)));

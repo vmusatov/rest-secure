@@ -1,6 +1,5 @@
-package com.restsecure.request.util;
+package com.restsecure.session;
 
-import com.restsecure.configuration.SessionConfig;
 import com.restsecure.http.Cookie;
 import com.restsecure.http.Header;
 import com.restsecure.request.specification.RequestSpecification;

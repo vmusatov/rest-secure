@@ -1,5 +1,6 @@
-package com.restsecure.configuration;
+package com.restsecure.session;
 
+import com.restsecure.configuration.Config;
 import lombok.Getter;
 
 /**

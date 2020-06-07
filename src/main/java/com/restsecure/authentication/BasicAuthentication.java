@@ -1,4 +1,4 @@
-package com.restsecure.request.authentication;
+package com.restsecure.authentication;
 
 import com.restsecure.http.HttpHelper;
 import com.restsecure.request.specification.RequestSpecification;

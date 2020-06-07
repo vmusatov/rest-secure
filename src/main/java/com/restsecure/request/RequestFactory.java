@@ -1,9 +1,8 @@
 package com.restsecure.request;
 
 import com.restsecure.RestSecure;
+import com.restsecure.data.RequestDataHandler;
 import com.restsecure.exception.RequestConfigurationException;
-import com.restsecure.request.handler.RequestConfigurationHandler;
-import com.restsecure.request.handler.RequestDataHandler;
 import com.restsecure.request.specification.RequestSpecification;
 import com.restsecure.request.specification.SpecificationValidator;
 import org.apache.http.client.methods.*;

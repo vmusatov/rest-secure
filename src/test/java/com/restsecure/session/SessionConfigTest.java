@@ -1,4 +1,4 @@
-package com.restsecure.configuration;
+package com.restsecure.session;
 
 import org.testng.annotations.Test;
 

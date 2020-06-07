@@ -1,7 +1,5 @@
-package com.restsecure.request.handler;
+package com.restsecure.data;
 
-import com.restsecure.data.RequestHeader;
-import com.restsecure.data.RequestParam;
 import com.restsecure.request.RequestHandler;
 import com.restsecure.request.specification.RequestSpecification;
 

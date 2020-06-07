@@ -1,17 +1,17 @@
 package com.restsecure;
 
+import com.restsecure.authentication.BasicAuthentication;
+import com.restsecure.authentication.BearerTokenAuthentication;
+import com.restsecure.authentication.NoAuthentication;
+import com.restsecure.authentication.RequestAuthHandler;
 import com.restsecure.http.RequestMethod;
 import com.restsecure.request.RequestHandler;
 import com.restsecure.request.RequestSender;
-import com.restsecure.request.authentication.BasicAuthentication;
-import com.restsecure.request.authentication.BearerTokenAuthentication;
-import com.restsecure.request.authentication.NoAuthentication;
-import com.restsecure.request.authentication.RequestAuthHandler;
 import com.restsecure.request.specification.RequestSpecification;
 import com.restsecure.request.specification.RequestSpecificationImpl;
-import com.restsecure.request.util.Session;
 import com.restsecure.response.Response;
 import com.restsecure.response.validation.ResponseOptionsValidation;
+import com.restsecure.session.Session;
 
 import java.util.ArrayList;
 import java.util.Arrays;

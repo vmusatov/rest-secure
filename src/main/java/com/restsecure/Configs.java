@@ -1,9 +1,9 @@
 package com.restsecure;
 
 import com.restsecure.configuration.ConfigFactory;
-import com.restsecure.configuration.DeserializeConfig;
-import com.restsecure.configuration.SessionConfig;
+import com.restsecure.deserialize.DeserializeConfig;
 import com.restsecure.deserialize.Deserializer;
+import com.restsecure.session.SessionConfig;
 
 public class Configs {
 

@@ -1,9 +1,7 @@
-package com.restsecure.configuration;
+package com.restsecure.deserialize;
 
-import com.restsecure.deserialize.DefaultJacksonJsonDeserializer;
-import com.restsecure.deserialize.Deserializer;
+import com.restsecure.configuration.Config;
 import lombok.Getter;
-
 
 public class DeserializeConfig implements Config {
 

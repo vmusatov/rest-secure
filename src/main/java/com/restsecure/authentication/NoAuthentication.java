@@ -1,9 +1,9 @@
-package com.restsecure.request.authentication;
+package com.restsecure.authentication;
 
 import com.restsecure.request.specification.RequestSpecification;
 
 /**
- * RequestAuthenticationHandler that removes all authentications from the request
+ * RequestAuthenticationHandler that do nothing
  */
 public class NoAuthentication extends RequestAuthHandler {
 

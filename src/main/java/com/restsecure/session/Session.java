@@ -1,7 +1,6 @@
-package com.restsecure.request.util;
+package com.restsecure.session;
 
 import com.restsecure.configuration.ConfigFactory;
-import com.restsecure.configuration.SessionConfig;
 import com.restsecure.http.Cookie;
 import com.restsecure.http.MultiValueList;
 import com.restsecure.request.RequestHandler;

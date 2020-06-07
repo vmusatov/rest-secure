@@ -1,6 +1,5 @@
-package com.restsecure.configuration;
+package com.restsecure.deserialize;
 
-import com.restsecure.deserialize.DefaultJacksonJsonDeserializer;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
