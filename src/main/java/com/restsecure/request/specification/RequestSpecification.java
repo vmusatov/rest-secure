@@ -1,15 +1,15 @@
 package com.restsecure.request.specification;
 
+import com.restsecure.authentication.RequestAuthHandler;
 import com.restsecure.configuration.Config;
 import com.restsecure.http.Header;
 import com.restsecure.http.Parameter;
 import com.restsecure.http.RequestMethod;
 import com.restsecure.request.RequestHandler;
-import com.restsecure.authentication.RequestAuthHandler;
-import com.restsecure.session.Session;
 import com.restsecure.response.Response;
 import com.restsecure.response.ResponseHandler;
 import com.restsecure.response.validation.ResponseValidation;
+import com.restsecure.session.Session;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.impl.client.HttpClientBuilder;
 
@@ -327,17 +327,19 @@ public interface RequestSpecification {
      * For example:
      * <pre>
      *     get("/getUser")
-     *          .param("name", "Sam")
+     *              .param("name", "Sam")
      *          .validate(
-     *              validation().body("user.login", equalTo("Sam"))
-     *          );
+     *              statusCode(200),
+     *              body("user.login", equalTo("Sam"))
+     *          )
+     *          .send();
      * </pre>
-     * Validation of the response is added to the request, which verifies that the user.login field is equal to Sam
+     * Validation of the response is added to the request, which verifies that status code is 200 and
+     * the user.login field is equal to Sam
      *
      * @return ResponseValidation
      */
-    RequestSpecification validate(ResponseValidation validation);
-
+    RequestSpecification validate(ResponseValidation validation, ResponseValidation... additionalValidation);
 
     /**
      * Allows you to add a response validation<br>

@@ -269,8 +269,7 @@ public class RequestSpecificationTest {
         SessionConfig sessionConfig1 = new SessionConfig().setSessionIdName("name1");
         SessionConfig sessionConfig2 = new SessionConfig().setSessionIdName("name2");
 
-        spec.config(sessionConfig1)
-                .config(sessionConfig2);
+        spec.config(sessionConfig1).config(sessionConfig2);
 
         assertThat(spec.getConfigs(), contains(sessionConfig2));
         assertThat(spec.getConfigs(), not(contains(sessionConfig1)));

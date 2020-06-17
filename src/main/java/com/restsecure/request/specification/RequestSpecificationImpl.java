@@ -199,8 +199,9 @@ public class RequestSpecificationImpl implements RequestSpecification {
     }
 
     @Override
-    public RequestSpecification validate(ResponseValidation validation) {
+    public RequestSpecification validate(ResponseValidation validation, ResponseValidation... additionalValidation) {
         this.responseValidations.add(validation);
+        this.responseValidations.addAll(Arrays.asList(additionalValidation));
         return this;
     }
 

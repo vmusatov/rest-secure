@@ -47,8 +47,8 @@ public class Session implements RequestHandler, ResponseHandler {
     @Override
     public void handleRequest(RequestSpecification spec) {
         SessionConfig sessionConfig = ConfigFactory.getConfigOrCreateDefault(spec.getConfigs(), SessionConfig.class);
-
         String sessionIdName = sessionConfig.getSessionIdName();
+
         if (sessionIdValue != null && !sessionIdValue.isEmpty()) {
             spec.header("Cookie", sessionIdName + "=" + sessionIdValue);
         }

@@ -10,7 +10,6 @@ import com.restsecure.request.RequestSender;
 import com.restsecure.request.specification.RequestSpecification;
 import com.restsecure.request.specification.RequestSpecificationImpl;
 import com.restsecure.response.Response;
-import com.restsecure.response.validation.ResponseOptionsValidation;
 import com.restsecure.session.Session;
 
 import java.util.ArrayList;
@@ -131,15 +130,6 @@ public class RestSecure {
     }
 
     /**
-     * Creates an empty response validation
-     *
-     * @return ResponseValidation
-     */
-    public static ResponseOptionsValidation validation() {
-        return new ResponseOptionsValidation();
-    }
-
-    /**
      * Allows you to send multiple requests at once<br>
      * For example:
      * <pre>
@@ -249,7 +239,7 @@ public class RestSecure {
      * Creates a  bearer token request authentication<br>
      * For example:
      * <pre>
-     *    RequestSpecification request = get("url").auth(bearerAuth("YOUR_TOKEN"));
+     *    RequestSpecification request = get("url").auth(bearerToken("YOUR_TOKEN"));
      * </pre>
      *
      * @param token access token
