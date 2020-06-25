@@ -3,11 +3,11 @@ package com.restsecure.session;
 import com.restsecure.configuration.ConfigFactory;
 import com.restsecure.http.Cookie;
 import com.restsecure.http.MultiValueList;
-import com.restsecure.request.RequestHandler;
+import com.restsecure.request.handler.RequestHandler;
 import com.restsecure.request.RequestSender;
 import com.restsecure.request.specification.RequestSpecification;
 import com.restsecure.response.Response;
-import com.restsecure.response.ResponseHandler;
+import com.restsecure.response.handler.ResponseHandler;
 import lombok.Getter;
 
 /**

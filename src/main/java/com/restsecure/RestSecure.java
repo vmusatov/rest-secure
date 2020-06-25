@@ -5,7 +5,7 @@ import com.restsecure.authentication.BearerTokenAuthentication;
 import com.restsecure.authentication.NoAuthentication;
 import com.restsecure.authentication.RequestAuthHandler;
 import com.restsecure.http.RequestMethod;
-import com.restsecure.request.RequestHandler;
+import com.restsecure.request.handler.RequestHandler;
 import com.restsecure.request.RequestSender;
 import com.restsecure.request.specification.RequestSpecification;
 import com.restsecure.request.specification.RequestSpecificationImpl;

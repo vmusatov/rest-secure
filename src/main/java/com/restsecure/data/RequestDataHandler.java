@@ -1,6 +1,6 @@
 package com.restsecure.data;
 
-import com.restsecure.request.RequestHandler;
+import com.restsecure.request.handler.RequestHandler;
 import com.restsecure.request.specification.RequestSpecification;
 
 import java.lang.reflect.Field;

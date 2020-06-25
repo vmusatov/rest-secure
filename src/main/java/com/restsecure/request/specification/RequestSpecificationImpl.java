@@ -1,22 +1,25 @@
 package com.restsecure.request.specification;
 
-import com.restsecure.configuration.Config;
-import com.restsecure.configuration.ConfigFactory;
-import com.restsecure.http.Header;
-import com.restsecure.http.Parameter;
-import com.restsecure.http.RequestMethod;
-import com.restsecure.request.RequestHandler;
-import com.restsecure.request.RequestSender;
 import com.restsecure.authentication.RequestAuthHandler;
-import com.restsecure.session.Session;
+import com.restsecure.configuration.Config;
+import com.restsecure.configuration.ConfigsStorage;
+import com.restsecure.http.*;
+import com.restsecure.request.RequestSender;
+import com.restsecure.request.handler.RequestHandler;
+import com.restsecure.request.handler.RequestHandlersStorage;
 import com.restsecure.response.Response;
-import com.restsecure.response.ResponseHandler;
+import com.restsecure.response.handler.ResponseHandler;
+import com.restsecure.response.handler.ResponseHandlersStorage;
 import com.restsecure.response.validation.ResponseValidation;
+import com.restsecure.response.validation.ResponseValidationsStorage;
+import com.restsecure.session.Session;
+import com.restsecure.storage.Storage;
 import lombok.Getter;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.impl.client.HttpClientBuilder;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 @Getter
 public class RequestSpecificationImpl implements RequestSpecification {
@@ -25,26 +28,38 @@ public class RequestSpecificationImpl implements RequestSpecification {
     private int port;
     private RequestMethod method;
     private Object data;
-    private final List<Header> headers;
-    private final List<Parameter> parameters;
-    private final List<RequestHandler> requestHandlers;
-    private final List<ResponseHandler> responseHandlers;
-    private final List<ResponseValidation> responseValidations;
-    private final List<Config> configs;
+
     private final HttpClientContext httpClientContext;
     private final HttpClientBuilder httpClientBuilder;
+
+    private final Storage<Header> headersStorage;
+    private final Storage<Parameter> parametersStorage;
+
+    private final Storage<RequestHandler> requestHandlerStorage;
+    private final Storage<ResponseHandler> responseHandlerStorage;
+
+    private final Storage<ResponseValidation> responseValidationsStorage;
+
+    private final ConfigsStorage configsStorage;
+
 
     public RequestSpecificationImpl() {
         this.url = "";
         this.data = null;
-        this.headers = new ArrayList<>();
-        this.parameters = new ArrayList<>();
-        this.requestHandlers = new ArrayList<>();
-        this.responseHandlers = new ArrayList<>();
-        this.responseValidations = new ArrayList<>();
-        this.configs = new ArrayList<>();
+
+        this.headersStorage = new HeadersStorage();
+        this.parametersStorage = new ParametersStorage();
+
         this.httpClientContext = HttpClientContext.create();
         this.httpClientBuilder = HttpClientBuilder.create();
+
+        this.requestHandlerStorage = new RequestHandlersStorage();
+        this.responseHandlerStorage = new ResponseHandlersStorage();
+
+        this.responseValidationsStorage = new ResponseValidationsStorage();
+
+        this.configsStorage = new ConfigsStorage();
+
     }
 
     @Override
@@ -72,14 +87,19 @@ public class RequestSpecificationImpl implements RequestSpecification {
 
     @Override
     public RequestSpecification header(Header header) {
-        headers.add(header);
+        headersStorage.update(header);
         return this;
     }
 
     @Override
     public RequestSpecification headers(List<Header> headers) {
-        this.headers.addAll(headers);
+        this.headersStorage.update(headers);
         return this;
+    }
+
+    @Override
+    public List<Header> getHeaders() {
+        return this.headersStorage.getAll();
     }
 
     @Override
@@ -89,47 +109,56 @@ public class RequestSpecificationImpl implements RequestSpecification {
 
     @Override
     public RequestSpecification param(Parameter parameter) {
-        this.parameters.add(parameter);
+        this.parametersStorage.update(parameter);
         return this;
     }
 
     @Override
     public RequestSpecification params(List<Parameter> parameters) {
-        this.parameters.addAll(parameters);
+        this.parametersStorage.update(parameters);
         return this;
+    }
+
+    @Override
+    public List<Parameter> getParameters() {
+        return this.parametersStorage.getAll();
     }
 
     @Override
     public RequestSpecification handleRequest(RequestHandler handler, RequestHandler... additionalHandlers) {
-        List<RequestHandler> handlers = new ArrayList<>();
-        handlers.add(handler);
-        handlers.addAll(Arrays.asList(additionalHandlers));
+        requestHandlerStorage.update(handler);
+        requestHandlerStorage.update(Arrays.asList(additionalHandlers));
 
-        return handleRequest(handlers);
-    }
-
-    @Override
-    public RequestSpecification handleRequest(List<RequestHandler> handlers) {
-        for (RequestHandler requestHandler : handlers) {
-            if (requestHandler instanceof RequestAuthHandler) {
-                requestHandlers.removeIf(item -> item instanceof RequestAuthHandler);
-            }
-            this.requestHandlers.add(requestHandler);
-        }
         return this;
     }
 
     @Override
+    public RequestSpecification handleRequest(List<RequestHandler> handlers) {
+        requestHandlerStorage.update(handlers);
+        return this;
+    }
+
+    @Override
+    public List<RequestHandler> getRequestHandlers() {
+        return this.requestHandlerStorage.getAll();
+    }
+
+    @Override
     public RequestSpecification handleResponse(ResponseHandler handler, ResponseHandler... additionalHandlers) {
-        this.responseHandlers.add(handler);
-        this.responseHandlers.addAll(Arrays.asList(additionalHandlers));
+        this.responseHandlerStorage.update(handler);
+        this.responseHandlerStorage.update(Arrays.asList(additionalHandlers));
         return this;
     }
 
     @Override
     public RequestSpecification handleResponse(List<ResponseHandler> handlers) {
-        this.responseHandlers.addAll(handlers);
+        this.responseHandlerStorage.update(handlers);
         return this;
+    }
+
+    @Override
+    public List<ResponseHandler> getResponseHandlers() {
+        return this.responseHandlerStorage.getAll();
     }
 
     @Override
@@ -152,34 +181,25 @@ public class RequestSpecificationImpl implements RequestSpecification {
 
     @Override
     public RequestSpecification config(Config config, Config... additionalConfigs) {
-        List<Config> configs = new ArrayList<>();
-        configs.add(config);
-        configs.addAll(Arrays.asList(additionalConfigs));
-
-        return config(configs);
+        this.configsStorage.update(config);
+        this.configsStorage.update(Arrays.asList(additionalConfigs));
+        return this;
     }
 
     @Override
     public RequestSpecification config(List<Config> configs) {
-        for(Config config : configs) {
-            if(getConfig(config.getClass()) != null) {
-                this.configs.removeIf(config.getClass()::isInstance);
-            }
-
-            this.configs.add(config);
-        }
-
+        this.configsStorage.update(configs);
         return this;
     }
 
     @Override
     public List<Config> getConfigs() {
-        return this.configs;
+        return this.configsStorage.getAll();
     }
 
     @Override
     public <T extends Config> T getConfig(Class<T> configClass) {
-        return ConfigFactory.getConfig(this.configs, configClass);
+        return this.configsStorage.get(configClass);
     }
 
     @Override
@@ -200,20 +220,20 @@ public class RequestSpecificationImpl implements RequestSpecification {
 
     @Override
     public RequestSpecification validate(ResponseValidation validation, ResponseValidation... additionalValidation) {
-        this.responseValidations.add(validation);
-        this.responseValidations.addAll(Arrays.asList(additionalValidation));
+        this.responseValidationsStorage.update(validation);
+        this.responseValidationsStorage.update(Arrays.asList(additionalValidation));
         return this;
     }
 
     @Override
     public RequestSpecification validate(List<ResponseValidation> validations) {
-        this.responseValidations.addAll(validations);
+        this.responseValidationsStorage.update(validations);
         return this;
     }
 
     @Override
     public List<ResponseValidation> getValidations() {
-        return this.responseValidations;
+        return this.responseValidationsStorage.getAll();
     }
 
     @Override

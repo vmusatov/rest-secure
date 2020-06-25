@@ -5,6 +5,7 @@ import com.restsecure.deserialize.DeserializeConfig;
 import com.restsecure.http.Header;
 import com.restsecure.http.HttpHelper;
 import com.restsecure.request.specification.RequestSpecification;
+import com.restsecure.response.handler.ResponseHandler;
 import com.restsecure.response.validation.ResponseValidation;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.util.EntityUtils;

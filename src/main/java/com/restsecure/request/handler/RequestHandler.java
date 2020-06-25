@@ -1,4 +1,4 @@
-package com.restsecure.request;
+package com.restsecure.request.handler;
 
 import com.restsecure.request.specification.RequestSpecification;
 
