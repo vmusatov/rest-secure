@@ -1,7 +1,9 @@
 package com.restsecure.response;
 
-import com.restsecure.configuration.ConfigFactory;
-import com.restsecure.deserialize.DeserializeConfig;
+import com.restsecure.components.configuration.ConfigFactory;
+import com.restsecure.components.deserialize.DeserializeConfig;
+import com.restsecure.components.logging.handler.ResponseLogHandler;
+import com.restsecure.components.logging.logger.ResponseLogger;
 import com.restsecure.http.Header;
 import com.restsecure.http.HttpHelper;
 import com.restsecure.request.specification.RequestSpecification;
@@ -67,6 +69,7 @@ public class ResponseConfigurator {
     }
 
     private static void handleResponse(Response response, RequestSpecification spec) {
+        new ResponseLogHandler().handleResponse(response, spec);
         for (ResponseHandler handler : spec.getResponseHandlers()) {
             handler.handleResponse(response, spec);
         }

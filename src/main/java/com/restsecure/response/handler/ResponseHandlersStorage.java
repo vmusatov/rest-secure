@@ -1,6 +1,6 @@
 package com.restsecure.response.handler;
 
-import com.restsecure.storage.ConfigurableStorage;
+import com.restsecure.components.storage.ConfigurableStorage;
 
 import java.util.List;
 

@@ -1,8 +1,8 @@
 package com.restsecure.request.specification;
 
-import com.restsecure.authentication.RequestAuthHandler;
-import com.restsecure.configuration.Config;
-import com.restsecure.configuration.ConfigsStorage;
+import com.restsecure.components.authentication.RequestAuthHandler;
+import com.restsecure.components.configuration.Config;
+import com.restsecure.components.configuration.ConfigsStorage;
 import com.restsecure.http.*;
 import com.restsecure.request.RequestSender;
 import com.restsecure.request.handler.RequestHandler;
@@ -12,8 +12,8 @@ import com.restsecure.response.handler.ResponseHandler;
 import com.restsecure.response.handler.ResponseHandlersStorage;
 import com.restsecure.response.validation.ResponseValidation;
 import com.restsecure.response.validation.ResponseValidationsStorage;
-import com.restsecure.session.Session;
-import com.restsecure.storage.Storage;
+import com.restsecure.components.session.Session;
+import com.restsecure.components.storage.Storage;
 import lombok.Getter;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.impl.client.HttpClientBuilder;

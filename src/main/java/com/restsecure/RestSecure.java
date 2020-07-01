@@ -1,18 +1,18 @@
 package com.restsecure;
 
-import com.restsecure.authentication.BasicAuthentication;
-import com.restsecure.authentication.BearerTokenAuthentication;
-import com.restsecure.authentication.NoAuthentication;
-import com.restsecure.authentication.RequestAuthHandler;
+import com.restsecure.components.authentication.BasicAuthentication;
+import com.restsecure.components.authentication.BearerTokenAuthentication;
+import com.restsecure.components.authentication.NoAuthentication;
+import com.restsecure.components.authentication.RequestAuthHandler;
+import com.restsecure.components.session.Session;
 import com.restsecure.http.RequestMethod;
-import com.restsecure.request.handler.RequestHandler;
 import com.restsecure.request.RequestSender;
+import com.restsecure.request.handler.RequestHandler;
+import com.restsecure.request.handler.RequestHandlersStorage;
 import com.restsecure.request.specification.RequestSpecification;
 import com.restsecure.request.specification.RequestSpecificationImpl;
 import com.restsecure.response.Response;
-import com.restsecure.session.Session;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,7 +33,7 @@ public class RestSecure {
     /**
      * A global request handlers will be added to each request. 
      */
-    private static final List<RequestHandler> globalRequestHandlers = new ArrayList<>();
+    private static final RequestHandlersStorage globalRequestHandlers = new RequestHandlersStorage();
 
     /**
      * Adding global request handlers that will be added to each request
@@ -42,8 +42,8 @@ public class RestSecure {
      * @param additionalHandlers request handlers list
      */
     public static void handleRequest(RequestHandler handler, RequestHandler... additionalHandlers) {
-        globalRequestHandlers.add(handler);
-        globalRequestHandlers.addAll(Arrays.asList(additionalHandlers));
+        globalRequestHandlers.update(handler);
+        globalRequestHandlers.update(Arrays.asList(additionalHandlers));
     }
 
     /**
@@ -52,14 +52,14 @@ public class RestSecure {
      * @param handlers request handlers list
      */
     public static void handleRequest(List<RequestHandler> handlers) {
-        globalRequestHandlers.addAll(handlers);
+        globalRequestHandlers.update(handlers);
     }
 
     /**
      * @return request handlers list
      */
     public static List<RequestHandler> getGlobalRequestHandlers() {
-        return globalRequestHandlers;
+        return globalRequestHandlers.getAll();
     }
 
     /**

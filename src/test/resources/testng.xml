@@ -3,8 +3,10 @@
 <suite name="Unit tests" parallel="classes" thread-count="1">
     <test name="tests">
         <packages>
-            <package name="com.restsecure.data"/>
-            <package name="com.restsecure.deserialize"/>
+            <package name="com.restsecure.components.data"/>
+            <package name="com.restsecure.components.deserialize"/>
+            <package name="com.restsecure.components.session"/>
+
             <package name="com.restsecure.http"/>
             <package name="com.restsecure.matchers"/>
 
@@ -13,8 +15,6 @@
 
             <package name="com.restsecure.response"/>
             <package name="com.restsecure.response.validation"/>
-
-            <package name="com.restsecure.session"/>
         </packages>
     </test>
 </suite>

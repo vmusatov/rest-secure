@@ -1,12 +1,12 @@
 package com.restsecure.request;
 
 import com.restsecure.RestSecure;
-import com.restsecure.exception.SendRequestException;
+import com.restsecure.request.exception.SendRequestException;
 import com.restsecure.request.specification.RequestSpecification;
 import com.restsecure.request.specification.RequestSpecificationImpl;
 import com.restsecure.response.Response;
 import com.restsecure.response.ResponseConfigurator;
-import com.restsecure.session.Session;
+import com.restsecure.components.session.Session;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.CloseableHttpClient;

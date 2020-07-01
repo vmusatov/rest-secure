@@ -1,8 +1,9 @@
 package com.restsecure.request;
 
 import com.restsecure.RestSecure;
-import com.restsecure.data.RequestDataHandler;
-import com.restsecure.exception.RequestConfigurationException;
+import com.restsecure.components.data.RequestDataHandler;
+import com.restsecure.components.logging.handler.RequestLogHandler;
+import com.restsecure.request.exception.RequestConfigurationException;
 import com.restsecure.request.handler.RequestConfigurationHandler;
 import com.restsecure.request.handler.RequestHandler;
 import com.restsecure.request.specification.RequestSpecification;
@@ -43,6 +44,8 @@ public class RequestFactory {
         for (RequestHandler handler : specification.getRequestHandlers()) {
             handler.handleRequest(specification);
         }
+
+        new RequestLogHandler().handleRequest(specification);
     }
 
     private static HttpUriRequest createPost(RequestSpecification specification) {

@@ -1,7 +1,7 @@
 package com.restsecure.response.validation;
 
 import com.restsecure.BaseTest;
-import com.restsecure.deserialize.DefaultJacksonJsonDeserializer;
+import com.restsecure.components.deserialize.DefaultJacksonJsonDeserializer;
 import com.restsecure.response.HttpResponse;
 import com.restsecure.response.Response;
 import com.restsecure.response.ResponseBody;

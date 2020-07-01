@@ -1,7 +1,7 @@
 package com.restsecure.request.handler;
 
-import com.restsecure.authentication.RequestAuthHandler;
-import com.restsecure.storage.ConfigurableStorage;
+import com.restsecure.components.authentication.RequestAuthHandler;
+import com.restsecure.components.storage.ConfigurableStorage;
 
 import java.util.List;
 

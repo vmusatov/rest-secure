@@ -1,8 +1,8 @@
 package com.restsecure.response;
 
 import com.jayway.jsonpath.JsonPath;
-import com.restsecure.configuration.ConfigFactory;
-import com.restsecure.deserialize.DeserializeConfig;
+import com.restsecure.components.configuration.ConfigFactory;
+import com.restsecure.components.deserialize.DeserializeConfig;
 
 public class ResponseBody {
     private final String content;
