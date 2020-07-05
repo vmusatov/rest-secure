@@ -2,7 +2,19 @@ package com.restsecure;
 
 import com.restsecure.http.Cookie;
 import com.restsecure.http.Header;
-import com.restsecure.response.validation.*;
+import com.restsecure.response.validation.DefaultValidation;
+import com.restsecure.response.validation.ResponseValidation;
+import com.restsecure.response.validation.base.BodyValidation;
+import com.restsecure.response.validation.base.CookiesValidation;
+import com.restsecure.response.validation.base.HeadersValidation;
+import com.restsecure.response.validation.base.StatusCodeValidation;
+import com.restsecure.response.validation.composite.CompositeValidation;
+import com.restsecure.response.validation.composite.LogicalOperators;
+import com.restsecure.response.validation.conditional.Condition;
+import com.restsecure.response.validation.conditional.ConditionalValidation;
+import com.restsecure.response.validation.conditional.ResponseConditionalValidation;
+import com.restsecure.response.validation.object.ObjectMatcherValidation;
+import com.restsecure.response.validation.object.ObjectValidation;
 import org.hamcrest.Matcher;
 
 import java.util.ArrayList;
@@ -17,20 +29,248 @@ import static org.hamcrest.Matchers.equalTo;
 
 public class Validations {
 
+    public static final ResponseValidation AND = LogicalOperators.AND;
+    public static final ResponseValidation OR = LogicalOperators.OR;
+
+    /**
+     * The default validation.
+     * The RequestSpecification can contain only one default validation, when adding a new one, the old one will be deleted.
+     * If non-default validation is added, the default validation will be deleted
+     *
+     * <pre>
+     *     RequestSpecification getUser = get("/users")
+     *          .param("id", id)
+     *          .validate(
+     *              byDefault(
+     *                  body("user.id", equalTo(id));
+     *              )
+     *          );
+     * </pre>
+     * A default validation will be added here, which checks that the server returned the user with the ID that we specified<br><br>
+     * <p>
+     * Suppose that we added an invalid parameter to the request and now we want to check that the server returns an error.
+     * To do this, we can add new validations and when this happens the default validation will be deleted
+     *
+     * <pre>
+     *     getUser.validate(
+     *          statusCode(400),
+     *          body("error.message", containString("One of the specified parameters is invalid."))
+     *     )
+     *     .send();
+     * </pre>
+     *
+     * @param validations response validations list
+     * @return DefaultValidation
+     */
+    public static DefaultValidation byDefault(List<ResponseValidation> validations) {
+        return new DefaultValidation(validations);
+    }
+
+    /**
+     * The default validation.
+     * The RequestSpecification can contain only one default validation, when adding a new one, the old one will be deleted.
+     * If non-default validation is added, the default validation will be deleted
+     *
+     * <pre>
+     *     RequestSpecification getUser = get("/users")
+     *          .param("id", id)
+     *          .validate(
+     *              byDefault(
+     *                  body("user.id", equalTo(id));
+     *              )
+     *          );
+     * </pre>
+     * A default validation will be added here, which checks that the server returned the user with the ID that we specified<br><br>
+     * <p>
+     * Suppose that we added an invalid parameter to the request and now we want to check that the server returns an error.
+     * To do this, we can add new validations and when this happens the default validation will be deleted
+     *
+     * <pre>
+     *     getUser.validate(
+     *          statusCode(400),
+     *          body("error.message", containString("One of the specified parameters is invalid."))
+     *     )
+     *     .send();
+     * </pre>
+     *
+     * @param validation            response validation
+     * @param additionalValidations additional response validation
+     * @return DefaultValidation
+     */
+    public static ResponseValidation byDefault(ResponseValidation validation, ResponseValidation... additionalValidations) {
+        List<ResponseValidation> validations = new ArrayList<>();
+        validations.add(validation);
+        validations.addAll(Arrays.asList(additionalValidations));
+
+        return new DefaultValidation(validations);
+    }
+
+    /**
+     * Combines several validations into one. Supports logical operators AND, OR
+     * Convenient if you need to make a difficult condition for conditional validation.
+     * <pre>
+     *     RequestSpecification getUser = get("/users")
+     *          .param("id", id)
+     *          .validate(
+     *              when(
+     *                  combine(
+     *                      statusCode(greaterThan(400)), statusCode(lessThan(500)),
+     *                  ),
+     *                  combine(
+     *                      body("error.message", containString("One of the specified parameters is invalid.")),
+     *                      cookies(containsName("MyCookie"))
+     *                  )
+     *              )
+     *          );
+     * </pre>
+     * Here we check that the server returned an error and response contain cookie "MyCookie" only if the code is between 400 and 500
+     *
+     * @param validations response validations list
+     * @return CompositeValidation
+     */
+    public static CompositeValidation combine(List<ResponseValidation> validations) {
+        return new CompositeValidation(validations);
+    }
+
+    /**
+     * Combines several validations into one. Supports logical operators AND, OR
+     * Convenient if you need to make a difficult condition for conditional validation.
+     * <pre>
+     *     RequestSpecification getUser = get("/users")
+     *          .param("id", id)
+     *          .validate(
+     *              when(
+     *                  combine(
+     *                      statusCode(greaterThan(400)), statusCode(lessThan(500)),
+     *                  ),
+     *                  combine(
+     *                      body("error.message", containString("One of the specified parameters is invalid.")),
+     *                      cookies(containsName("MyCookie"))
+     *                  )
+     *              )
+     *          );
+     * </pre>
+     * Here we check that the server returned an error and response contain cookie "MyCookie" only if the code is between 400 and 500
+     *
+     * @param validation            response validation
+     * @param additionalValidations additional response validations
+     * @return CompositeValidation
+     */
+    public static CompositeValidation combine(ResponseValidation validation, ResponseValidation... additionalValidations) {
+        List<ResponseValidation> validations = new ArrayList<>();
+        validations.add(validation);
+        validations.addAll(Arrays.asList(additionalValidations));
+
+        return new CompositeValidation(validations);
+    }
+
+    /**
+     * Conditional validation will be performed only if the condition is met.
+     * In this case, the condition is the validation of the answer - if the validation in the condition was successful,
+     * then the specified validation will be called, otherwise the validation will be considered successful.
+     * <pre>
+     *     RequestSpecification getUser = get("/users")
+     *          .param("id", id)
+     *          .validate(
+     *              when(statusCode(400), then(
+     *                  body("error.message", containString("One of the specified parameters is invalid."))
+     *              ))
+     *          );
+     * </pre>
+     * Here we check that the server returned an error only if the status code is 400
+     *
+     * @param condition  validation condition
+     * @param validation response validation
+     * @return ResponseConditionalValidation
+     */
+    public static ResponseConditionalValidation when(ResponseValidation condition, ResponseValidation validation) {
+        return new ResponseConditionalValidation(condition, validation);
+    }
+
+    /**
+     * Conditional validation will be performed only if the condition is met.
+     * In this case, the condition is the functional interface Condition with the method
+     * <pre>boolean isTrue();</pre>
+     * if the method returns true, the specified validation will be called, otherwise the validation will be considered successful
+     * <pre>
+     *     RequestSpecification getUser = get("/users")
+     *          .param("id", id)
+     *          .validate(
+     *              when(() -> id < 0, then(
+     *                  body("error.message", containString("One of the specified parameters is invalid."))
+     *              ))
+     *          );
+     * </pre>
+     * Here we check that the server returned an error only if the id less then 0
+     *
+     * @param condition  validation condition
+     * @param validation response validation
+     * @return ConditionalValidation
+     */
+    public static ConditionalValidation when(Condition condition, ResponseValidation validation) {
+        return new ConditionalValidation(condition, validation);
+    }
+
+    /**
+     * Conditional validation will be performed only if the condition is met.
+     * In this case, the condition is boolean value
+     * if condition is true, the specified validation will be called, otherwise the validation will be considered successful
+     * <pre>
+     *     RequestSpecification getUser = get("/users")
+     *          .param("id", id)
+     *          .validate(
+     *              when(id < 0, then(
+     *                  body("error.message", containString("One of the specified parameters is invalid."))
+     *              ))
+     *          );
+     * </pre>
+     * Here we check that the server returned an error only if the id less then 0
+     *
+     * @param condition  validation condition
+     * @param validation response validation
+     * @return ConditionalValidation
+     */
+    public static ConditionalValidation when(boolean condition, ResponseValidation validation) {
+        return new ConditionalValidation(() -> condition, validation);
+    }
+
+    /**
+     * It is a composite validation. Syntactic sugar for conditional validation
+     * Allow you to create construction when-then
+     *
+     * @param validations response validations list
+     * @return CompositeValidation
+     */
+    public static CompositeValidation then(List<ResponseValidation> validations) {
+        return combine(validations);
+    }
+
+    /**
+     * It is a composite validation. Syntactic sugar for conditional validation
+     * Allow you to create construction when-then
+     *
+     * @param validation            response validation
+     * @param additionalValidations additional response validations
+     * @return CompositeValidation
+     */
+    public static CompositeValidation then(ResponseValidation validation, ResponseValidation... additionalValidations) {
+        return combine(validation, additionalValidations);
+    }
+
     /**
      * Allows you to specify the expected response status code<br>
      * For example:
      * <pre>
      *     get("url")
      *          .param("name", "value")
-     *     .validate(statusCode(200))
-     *     .send();
+     *          .validate(statusCode(200))
+     *          .send();
      * </pre>
      *
      * @param expectedStatusCode expected response status code
      * @return ResponseValidation
      */
-    public static ResponseValidation statusCode(int expectedStatusCode) {
+    public static StatusCodeValidation statusCode(int expectedStatusCode) {
         return new StatusCodeValidation(equalTo(expectedStatusCode));
     }
 
@@ -40,14 +280,14 @@ public class Validations {
      * <pre>
      *     get("url")
      *          .param("name", "value")
-     *     .validate(statusCode(lessThan(300)))
-     *     .send();
+     *          .validate(statusCode(lessThan(300)))
+     *          .send();
      * </pre>
      *
      * @param statusCodeMatcher status code matcher
      * @return ResponseValidation
      */
-    public static ResponseValidation statusCode(Matcher<Integer> statusCodeMatcher) {
+    public static StatusCodeValidation statusCode(Matcher<Integer> statusCodeMatcher) {
         return new StatusCodeValidation(statusCodeMatcher);
     }
 
@@ -56,15 +296,15 @@ public class Validations {
      * <pre>
      *     get("url")
      *          .param("name", "value")
-     *     .validate(cookie("name", "value"))
-     *     .send();
+     *          .validate(cookie("name", "value"))
+     *          .send();
      * </pre>
      *
      * @param name  expected cookie name
      * @param value expected cookie value
      * @return ResponseValidation
      */
-    public static ResponseValidation cookie(String name, String value) {
+    public static CookiesValidation cookie(String name, String value) {
         return new CookiesValidation(containsPair(name, value));
     }
 
@@ -74,14 +314,14 @@ public class Validations {
      *     Cookie expectedCookie = new Cookie("name", "value");
      *     get("url")
      *          .param("name", "value")
-     *     .validate(cookie(expectedCookie))
-     *     .send();
+     *          .validate(cookie(expectedCookie))
+     *          .send();
      * </pre>
      *
      * @param cookie expected cookie
      * @return ResponseValidation
      */
-    public static ResponseValidation cookie(Cookie cookie) {
+    public static CookiesValidation cookie(Cookie cookie) {
         return new CookiesValidation(containsPair(cookie));
     }
 
@@ -90,15 +330,15 @@ public class Validations {
      * <pre>
      *     get("url")
      *          .param("name", "value")
-     *     .validate(cookie("name", containsString("value")))
-     *     .send();
+     *          .validate(cookie("name", containsString("value")))
+     *          .send();
      * </pre>
      *
      * @param name         expected cookie name
      * @param valueMatcher cookie value matcher
      * @return ResponseValidation
      */
-    public static ResponseValidation cookie(String name, Matcher<String> valueMatcher) {
+    public static CookiesValidation cookie(String name, Matcher<String> valueMatcher) {
         return new CookiesValidation(containsPair(name, valueMatcher));
     }
 
@@ -108,8 +348,8 @@ public class Validations {
      * <pre>
      *     get("url")
      *          .param("name", "value")
-     *     .validate(cookie("name", Integer::parseInt, lessThan(1000)))
-     *     .send();
+     *          .validate(cookie("name", Integer::parseInt, lessThan(1000)))
+     *          .send();
      * </pre>
      *
      * @param name            expected cookie name
@@ -117,7 +357,7 @@ public class Validations {
      * @param valueMatcher    cookie value matcher
      * @return ResponseValidation
      */
-    public static <T> ResponseValidation cookie(String name, Function<String, T> parsingFunction, Matcher<T> valueMatcher) {
+    public static <T> CookiesValidation cookie(String name, Function<String, T> parsingFunction, Matcher<T> valueMatcher) {
         return new CookiesValidation(containsPair(name, parsingFunction, valueMatcher));
     }
 
@@ -127,18 +367,18 @@ public class Validations {
      * <pre>
      *     get("url")
      *          .param("name", "value")
-     *     .validate(
-     *          cookies(containsName("name")),
-     *          cookies(containsValue("value")),
-     *          cookies(containsPair("name2", "value2"))
-     *     )
-     *     .send();
+     *          .validate(
+     *              cookies(containsName("name")),
+     *              cookies(containsValue("value")),
+     *              cookies(containsPair("name2", "value2"))
+     *          )
+     *          .send();
      * </pre>
      *
      * @param matcher cookies list matcher
      * @return ResponseValidation
      */
-    public static <T> ResponseValidation cookies(Matcher<? extends Iterable<? extends T>> matcher) {
+    public static <T> CookiesValidation cookies(Matcher<? extends Iterable<? extends T>> matcher) {
         return new CookiesValidation(matcher);
     }
 
@@ -147,15 +387,15 @@ public class Validations {
      * <pre>
      *     get("url")
      *          .param("name", "value")
-     *     .validate(header("name", "value"))
-     *     .send();
+     *          .validate(header("name", "value"))
+     *          .send();
      * </pre>
      *
      * @param name          expected header name
      * @param expectedValue expected header value
      * @return ResponseValidation
      */
-    public static ResponseValidation header(String name, String expectedValue) {
+    public static HeadersValidation header(String name, String expectedValue) {
         return new HeadersValidation(containsPair(name, expectedValue));
     }
 
@@ -165,14 +405,14 @@ public class Validations {
      *     Header header = new Header("name", "value");
      *     get("url")
      *          .param("name", "value")
-     *     .validate(header(header))
-     *     .send();
+     *          .validate(header(header))
+     *          .send();
      * </pre>
      *
      * @param header expected header
      * @return ResponseValidation
      */
-    public static ResponseValidation header(Header header) {
+    public static HeadersValidation header(Header header) {
         return new HeadersValidation(containsPair(header));
     }
 
@@ -181,15 +421,15 @@ public class Validations {
      * <pre>
      *     get("url")
      *          .param("name", "value")
-     *     .validate(header("name", containsString("value")))
-     *     .send();
+     *          .validate(header("name", containsString("value")))
+     *          .send();
      * </pre>
      *
      * @param name         expected header name
      * @param valueMatcher header value matcher
      * @return ResponseValidation
      */
-    public static ResponseValidation header(String name, Matcher<String> valueMatcher) {
+    public static HeadersValidation header(String name, Matcher<String> valueMatcher) {
         return new HeadersValidation(containsPair(name, valueMatcher));
     }
 
@@ -199,8 +439,8 @@ public class Validations {
      * <pre>
      *     get("url")
      *          .param("name", "value")
-     *     .validate(header("Content-Length", Integer::parseInt, lessThan(1000)))
-     *     .send();
+     *          .validate(header("Content-Length", Integer::parseInt, lessThan(1000)))
+     *          .send();
      * </pre>
      *
      * @param name            expected header name
@@ -208,7 +448,7 @@ public class Validations {
      * @param valueMatcher    header value matcher
      * @return ResponseValidation
      */
-    public static <T> ResponseValidation header(String name, Function<String, T> parsingFunction, Matcher<T> valueMatcher) {
+    public static <T> HeadersValidation header(String name, Function<String, T> parsingFunction, Matcher<T> valueMatcher) {
         return new HeadersValidation(containsPair(name, parsingFunction, valueMatcher));
     }
 
@@ -218,18 +458,18 @@ public class Validations {
      * <pre>
      *     get("url")
      *          .param("name", "value")
-     *     .validate(
-     *          headers(containsName("name"))
-     *          headers(containsValue("value"))
-     *          headers(containsPair("name2", "value2"))
-     *     )
-     *     .send();
+     *          .validate(
+     *              headers(containsName("name"))
+     *              headers(containsValue("value"))
+     *              headers(containsPair("name2", "value2"))
+     *          )
+     *          .send();
      * </pre>
      *
      * @param matcher headers list matcher
      * @return ResponseValidation
      */
-    public static <T> ResponseValidation headers(Matcher<? extends Iterable<? extends T>> matcher) {
+    public static <T> HeadersValidation headers(Matcher<? extends Iterable<? extends T>> matcher) {
         return new HeadersValidation(matcher);
     }
 
@@ -237,17 +477,17 @@ public class Validations {
      * Allows you to specify matchers to checking the response as json<br>
      * For example:
      * <pre>
-     *     get("/getUser")
+     *     get("/users")
      *          .param("id", "1")
-     *     .validate(body("user.login", equalTo("username")))
-     *     .send();
+     *          .validate(body("user.login", equalTo("username")))
+     *          .send();
      * </pre>
      *
      * @param path    json path
      * @param matcher value matcher
      * @return ResponseValidation
      */
-    public static ResponseValidation body(String path, Matcher<?> matcher) {
+    public static BodyValidation body(String path, Matcher<?> matcher) {
         return new BodyValidation(valueByPathIs(path, matcher));
     }
 
@@ -255,12 +495,12 @@ public class Validations {
      * Allows you to specify predicates for checking the response<br>
      * For example:
      * <pre>
-     *     get("/getUser")
+     *     get("/users")
      *          .param("id", "1")
-     *     .validate(
-     *          as(User.class, user -> user.getName().equal("username"), "username validation")
-     *     )
-     *     .send();
+     *          .validate(
+     *              as(User.class, user -> user.getName().equal("username"), "username validation")
+     *          )
+     *          .send();
      * </pre>
      *
      * @param responseClass response class
@@ -268,7 +508,7 @@ public class Validations {
      * @param reason        validation reason
      * @return ResponseValidation
      */
-    public static <E> ResponseValidation as(Class<E> responseClass, Predicate<E> predicate, String reason) {
+    public static <E> ObjectValidation<E> as(Class<E> responseClass, Predicate<E> predicate, String reason) {
         return new ObjectValidation<>(responseClass, predicate, reason);
     }
 
@@ -276,19 +516,19 @@ public class Validations {
      * Allows you to specify predicates for checking the response<br>
      * For example:
      * <pre>
-     *     get("/getUser")
+     *     get("/users")
      *          .param("id", "1")
-     *     .validate(
-     *          as(User.class, user -> user.getName().equal("username"), "username validation")
-     *     )
-     *     .send();
+     *          .validate(
+     *              as(User.class, user -> user.getName().equal("username"), "username validation")
+     *          )
+     *          .send();
      * </pre>
      *
      * @param responseClass response calss
      * @param predicate     predicate
      * @return ResponseValidation
      */
-    public static <E> ResponseValidation as(Class<E> responseClass, Predicate<E> predicate) {
+    public static <E> ObjectValidation<E> as(Class<E> responseClass, Predicate<E> predicate) {
         return new ObjectValidation<>(responseClass, predicate, null);
     }
 
@@ -296,15 +536,15 @@ public class Validations {
      * Allows you to specify predicates for checking the response<br>
      * For example:
      * <pre>
-     *     get("/getUser")
+     *     get("/users")
      *          .param("id", "1")
-     *     .validate(
-     *          as(User.class,
-     *              idIs(1),
-     *              loginIs("login")
+     *          .validate(
+     *              as(User.class,
+     *                  idIs(1),
+     *                  loginIs("login")
+     *              )
      *          )
-     *     )
-     *     .send();
+     *          .send();
      * </pre>
      *
      * @param responseClass      response class
@@ -313,7 +553,7 @@ public class Validations {
      * @return ResponseValidation
      */
     @SafeVarargs
-    public static <E> ResponseValidation as(Class<E> responseClass, Matcher<E> matcher, Matcher<E>... additionalMatchers) {
+    public static <E> ObjectMatcherValidation<E> as(Class<E> responseClass, Matcher<E> matcher, Matcher<E>... additionalMatchers) {
         List<Matcher<E>> matchers = new ArrayList<>();
         matchers.add(matcher);
         matchers.addAll(Arrays.asList(additionalMatchers));

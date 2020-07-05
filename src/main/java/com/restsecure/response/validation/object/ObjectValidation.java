@@ -1,6 +1,11 @@
-package com.restsecure.response.validation;
+package com.restsecure.response.validation.object;
+
+import com.restsecure.response.validation.ValidationResult;
+import com.restsecure.response.validation.ValidationStatus;
 
 import java.util.function.Predicate;
+
+import static com.restsecure.response.validation.ValidationStatus.SUCCESS;
 
 public class ObjectValidation<T> extends ResponseObjectValidation<T> {
 
@@ -14,13 +19,15 @@ public class ObjectValidation<T> extends ResponseObjectValidation<T> {
     }
 
     @Override
-    public void validate(T responseObject) {
+    public ValidationResult validate(T responseObject) {
         if (!predicate.test(responseObject)) {
             if (reason == null) {
-                throw new AssertionError("Wrong value " + responseObject);
+                return new ValidationResult(ValidationStatus.FAIL, "Wrong value " + responseObject);
             } else {
-                throw new AssertionError(reason);
+                return new ValidationResult(ValidationStatus.FAIL, reason);
             }
         }
+
+        return new ValidationResult(SUCCESS);
     }
 }

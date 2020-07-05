@@ -4,6 +4,8 @@ import com.restsecure.http.Cookie;
 import com.restsecure.http.Header;
 import com.restsecure.response.Response;
 import com.restsecure.response.validation.ResponseValidation;
+import com.restsecure.response.validation.ValidationResult;
+import com.restsecure.response.validation.ValidationStatus;
 import lombok.Data;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -62,14 +64,10 @@ public class BaseTest {
     );
 
     protected <T> void expectValidationFailWithErrorText(ResponseValidation validation, Response response, String expectedText) {
-        Throwable throwable = new Throwable();
-        try {
-            validation.validate(response);
-        } catch (Throwable t) {
-            throwable = t;
-        }
+        ValidationResult result = validation.validate(response);
 
-        assertThat(throwable.getMessage(), containsString(expectedText));
+        assertThat(result.getStatus(), equalTo(ValidationStatus.FAIL));
+        assertThat(result.getErrorText(), containsString(expectedText));
     }
 
     @Data

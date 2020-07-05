@@ -3,12 +3,12 @@ package com.restsecure.response;
 import com.restsecure.components.configuration.ConfigFactory;
 import com.restsecure.components.deserialize.DeserializeConfig;
 import com.restsecure.components.logging.handler.ResponseLogHandler;
-import com.restsecure.components.logging.logger.ResponseLogger;
 import com.restsecure.http.Header;
 import com.restsecure.http.HttpHelper;
 import com.restsecure.request.specification.RequestSpecification;
 import com.restsecure.response.handler.ResponseHandler;
 import com.restsecure.response.validation.ResponseValidation;
+import com.restsecure.response.validation.ValidationResult;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.util.EntityUtils;
 
@@ -64,7 +64,11 @@ public class ResponseConfigurator {
 
     private static void validateResponse(Response response, List<ResponseValidation> validations) {
         for (ResponseValidation validation : validations) {
-            validation.validate(response);
+            ValidationResult result = validation.validate(response);
+
+            if (result.isFail()) {
+                throw new AssertionError(result.getErrorText());
+            }
         }
     }
 
