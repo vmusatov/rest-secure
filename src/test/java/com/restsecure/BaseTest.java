@@ -1,11 +1,13 @@
 package com.restsecure;
 
-import com.restsecure.http.Cookie;
-import com.restsecure.http.Header;
-import com.restsecure.response.Response;
-import com.restsecure.response.validation.ResponseValidation;
-import com.restsecure.response.validation.ValidationResult;
-import com.restsecure.response.validation.ValidationStatus;
+import com.restsecure.core.http.Cookie;
+import com.restsecure.core.http.Header;
+import com.restsecure.core.request.RequestContext;
+import com.restsecure.core.request.specification.RequestSpecificationImpl;
+import com.restsecure.core.response.Response;
+import com.restsecure.core.processor.PostResponseValidationProcessor;
+import com.restsecure.core.response.validation.ValidationResult;
+import com.restsecure.core.response.validation.ValidationStatus;
 import lombok.Data;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -63,8 +65,18 @@ public class BaseTest {
             new Cookie("name5", "5")
     );
 
-    protected <T> void expectValidationFailWithErrorText(ResponseValidation validation, Response response, String expectedText) {
-        ValidationResult result = validation.validate(response);
+    protected void expectValidationSuccess(PostResponseValidationProcessor validation, Response response) {
+        RequestContext context = new RequestContext(new RequestSpecificationImpl());
+        context.setResponse(response);
+
+        ValidationResult result = validation.validate(context);
+        assertThat(result.getStatus(), equalTo(ValidationStatus.SUCCESS));
+    }
+
+    protected void expectValidationFailWithErrorText(PostResponseValidationProcessor validation, Response response, String expectedText) {
+        RequestContext context = new RequestContext(new RequestSpecificationImpl());
+        context.setResponse(response);
+        ValidationResult result = validation.validate(context);
 
         assertThat(result.getStatus(), equalTo(ValidationStatus.FAIL));
         assertThat(result.getErrorText(), containsString(expectedText));

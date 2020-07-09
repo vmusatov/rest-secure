@@ -1,20 +1,21 @@
 package com.restsecure;
 
-import com.restsecure.http.Cookie;
-import com.restsecure.http.Header;
-import com.restsecure.response.validation.DefaultValidation;
-import com.restsecure.response.validation.ResponseValidation;
-import com.restsecure.response.validation.base.BodyValidation;
-import com.restsecure.response.validation.base.CookiesValidation;
-import com.restsecure.response.validation.base.HeadersValidation;
-import com.restsecure.response.validation.base.StatusCodeValidation;
-import com.restsecure.response.validation.composite.CompositeValidation;
-import com.restsecure.response.validation.composite.LogicalOperators;
-import com.restsecure.response.validation.conditional.Condition;
-import com.restsecure.response.validation.conditional.ConditionalValidation;
-import com.restsecure.response.validation.conditional.ResponseConditionalValidation;
-import com.restsecure.response.validation.object.ObjectMatcherValidation;
-import com.restsecure.response.validation.object.ObjectValidation;
+import com.restsecure.core.http.Cookie;
+import com.restsecure.core.http.Header;
+import com.restsecure.core.processor.PostResponseValidationProcessor;
+import com.restsecure.validation.DefaultValidation;
+import com.restsecure.validation.base.BodyValidation;
+import com.restsecure.validation.base.CookiesValidation;
+import com.restsecure.validation.base.HeadersValidation;
+import com.restsecure.validation.base.StatusCodeValidation;
+import com.restsecure.validation.composite.BaseCompositeValidation;
+import com.restsecure.validation.composite.CompositeValidation;
+import com.restsecure.validation.composite.LogicalOperators;
+import com.restsecure.validation.conditional.Condition;
+import com.restsecure.validation.conditional.ConditionalValidation;
+import com.restsecure.validation.conditional.ResponseConditionalValidation;
+import com.restsecure.validation.object.ObjectMatcherValidation;
+import com.restsecure.validation.object.ObjectValidation;
 import org.hamcrest.Matcher;
 
 import java.util.ArrayList;
@@ -29,13 +30,13 @@ import static org.hamcrest.Matchers.equalTo;
 
 public class Validations {
 
-    public static final ResponseValidation AND = LogicalOperators.AND;
-    public static final ResponseValidation OR = LogicalOperators.OR;
+    public static final PostResponseValidationProcessor AND = LogicalOperators.AND;
+    public static final PostResponseValidationProcessor OR = LogicalOperators.OR;
 
     /**
      * The default validation.
-     * The RequestSpecification can contain only one default validation, when adding a new one, the old one will be deleted.
-     * If non-default validation is added, the default validation will be deleted
+     * The RequestSpecification can contain only one default validation, if more than one is specified, only the last one is executed.
+     * If non-default validation is added, default validations will not be executed
      *
      * <pre>
      *     RequestSpecification getUser = get("/users")
@@ -49,7 +50,7 @@ public class Validations {
      * A default validation will be added here, which checks that the server returned the user with the ID that we specified<br><br>
      * <p>
      * Suppose that we added an invalid parameter to the request and now we want to check that the server returns an error.
-     * To do this, we can add new validations and when this happens the default validation will be deleted
+     * To do this, we can add new validations and in this case default validation will not be executed
      *
      * <pre>
      *     getUser.validate(
@@ -62,14 +63,14 @@ public class Validations {
      * @param validations response validations list
      * @return DefaultValidation
      */
-    public static DefaultValidation byDefault(List<ResponseValidation> validations) {
+    public static DefaultValidation byDefault(List<PostResponseValidationProcessor> validations) {
         return new DefaultValidation(validations);
     }
 
     /**
      * The default validation.
-     * The RequestSpecification can contain only one default validation, when adding a new one, the old one will be deleted.
-     * If non-default validation is added, the default validation will be deleted
+     * The RequestSpecification can contain only one default validation, if more than one is specified, only the last one is executed.
+     * If non-default validation is added, default validations will not be executed
      *
      * <pre>
      *     RequestSpecification getUser = get("/users")
@@ -83,7 +84,7 @@ public class Validations {
      * A default validation will be added here, which checks that the server returned the user with the ID that we specified<br><br>
      * <p>
      * Suppose that we added an invalid parameter to the request and now we want to check that the server returns an error.
-     * To do this, we can add new validations and when this happens the default validation will be deleted
+     * To do this, we can add new validations and in this case default validation will not be executed
      *
      * <pre>
      *     getUser.validate(
@@ -97,8 +98,8 @@ public class Validations {
      * @param additionalValidations additional response validation
      * @return DefaultValidation
      */
-    public static ResponseValidation byDefault(ResponseValidation validation, ResponseValidation... additionalValidations) {
-        List<ResponseValidation> validations = new ArrayList<>();
+    public static PostResponseValidationProcessor byDefault(PostResponseValidationProcessor validation, PostResponseValidationProcessor... additionalValidations) {
+        List<PostResponseValidationProcessor> validations = new ArrayList<>();
         validations.add(validation);
         validations.addAll(Arrays.asList(additionalValidations));
 
@@ -128,8 +129,8 @@ public class Validations {
      * @param validations response validations list
      * @return CompositeValidation
      */
-    public static CompositeValidation combine(List<ResponseValidation> validations) {
-        return new CompositeValidation(validations);
+    public static CompositeValidation combine(List<PostResponseValidationProcessor> validations) {
+        return new BaseCompositeValidation(validations);
     }
 
     /**
@@ -156,12 +157,12 @@ public class Validations {
      * @param additionalValidations additional response validations
      * @return CompositeValidation
      */
-    public static CompositeValidation combine(ResponseValidation validation, ResponseValidation... additionalValidations) {
-        List<ResponseValidation> validations = new ArrayList<>();
+    public static CompositeValidation combine(PostResponseValidationProcessor validation, PostResponseValidationProcessor... additionalValidations) {
+        List<PostResponseValidationProcessor> validations = new ArrayList<>();
         validations.add(validation);
         validations.addAll(Arrays.asList(additionalValidations));
 
-        return new CompositeValidation(validations);
+        return new BaseCompositeValidation(validations);
     }
 
     /**
@@ -183,7 +184,7 @@ public class Validations {
      * @param validation response validation
      * @return ResponseConditionalValidation
      */
-    public static ResponseConditionalValidation when(ResponseValidation condition, ResponseValidation validation) {
+    public static ResponseConditionalValidation when(PostResponseValidationProcessor condition, PostResponseValidationProcessor validation) {
         return new ResponseConditionalValidation(condition, validation);
     }
 
@@ -207,7 +208,7 @@ public class Validations {
      * @param validation response validation
      * @return ConditionalValidation
      */
-    public static ConditionalValidation when(Condition condition, ResponseValidation validation) {
+    public static ConditionalValidation when(Condition condition, PostResponseValidationProcessor validation) {
         return new ConditionalValidation(condition, validation);
     }
 
@@ -230,7 +231,7 @@ public class Validations {
      * @param validation response validation
      * @return ConditionalValidation
      */
-    public static ConditionalValidation when(boolean condition, ResponseValidation validation) {
+    public static ConditionalValidation when(boolean condition, PostResponseValidationProcessor validation) {
         return new ConditionalValidation(() -> condition, validation);
     }
 
@@ -241,7 +242,7 @@ public class Validations {
      * @param validations response validations list
      * @return CompositeValidation
      */
-    public static CompositeValidation then(List<ResponseValidation> validations) {
+    public static CompositeValidation then(List<PostResponseValidationProcessor> validations) {
         return combine(validations);
     }
 
@@ -253,7 +254,7 @@ public class Validations {
      * @param additionalValidations additional response validations
      * @return CompositeValidation
      */
-    public static CompositeValidation then(ResponseValidation validation, ResponseValidation... additionalValidations) {
+    public static CompositeValidation then(PostResponseValidationProcessor validation, PostResponseValidationProcessor... additionalValidations) {
         return combine(validation, additionalValidations);
     }
 

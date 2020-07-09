@@ -1,18 +1,17 @@
 package com.restsecure;
 
-import com.restsecure.components.authentication.BasicAuthentication;
-import com.restsecure.components.authentication.BearerTokenAuthentication;
-import com.restsecure.components.authentication.NoAuthentication;
-import com.restsecure.components.authentication.RequestAuthHandler;
-import com.restsecure.components.session.Session;
-import com.restsecure.http.RequestMethod;
-import com.restsecure.request.RequestSender;
-import com.restsecure.request.handler.RequestHandler;
-import com.restsecure.request.handler.RequestHandlersStorage;
-import com.restsecure.request.specification.RequestSpecification;
-import com.restsecure.request.specification.RequestSpecificationImpl;
-import com.restsecure.response.Response;
+import com.restsecure.authentication.BasicAuthentication;
+import com.restsecure.authentication.BearerTokenAuthentication;
+import com.restsecure.core.http.RequestMethod;
+import com.restsecure.core.processor.BiProcessor;
+import com.restsecure.core.processor.PreSendProcessor;
+import com.restsecure.core.request.RequestSender;
+import com.restsecure.core.request.specification.RequestSpecification;
+import com.restsecure.core.request.specification.RequestSpecificationImpl;
+import com.restsecure.core.response.Response;
+import com.restsecure.session.Session;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,35 +30,35 @@ public class RestSecure {
     public static RequestSpecification globalSpecification = new RequestSpecificationImpl();
 
     /**
-     * A global request handlers will be added to each request. 
+     * A global request processors will be added to each request. 
      */
-    private static final RequestHandlersStorage globalRequestHandlers = new RequestHandlersStorage();
+    private static final List<PreSendProcessor> globalPreSendProcessors = new ArrayList<>();
 
     /**
-     * Adding global request handlers that will be added to each request
+     * Adding global request processors that will be added to each request
      *
-     * @param handler            request handler
-     * @param additionalHandlers request handlers list
+     * @param processor            request processor
+     * @param additionalProcessors request handlers list
      */
-    public static void handleRequest(RequestHandler handler, RequestHandler... additionalHandlers) {
-        globalRequestHandlers.update(handler);
-        globalRequestHandlers.update(Arrays.asList(additionalHandlers));
+    public static void preSendProcess(PreSendProcessor processor, PreSendProcessor... additionalProcessors) {
+        globalPreSendProcessors.add(processor);
+        globalPreSendProcessors.addAll(Arrays.asList(additionalProcessors));
     }
 
     /**
-     * Adding global request handlers that will be added to each request
+     * Adding global request processors that will be added to each request
      *
-     * @param handlers request handlers list
+     * @param processors request processors list
      */
-    public static void handleRequest(List<RequestHandler> handlers) {
-        globalRequestHandlers.update(handlers);
+    public static void preSendProcess(List<PreSendProcessor> processors) {
+        globalPreSendProcessors.addAll(processors);
     }
 
     /**
-     * @return request handlers list
+     * @return PreSendProcessor list
      */
-    public static List<RequestHandler> getGlobalRequestHandlers() {
-        return globalRequestHandlers.getAll();
+    public static List<PreSendProcessor> getGlobalPreSendProcessors() {
+        return globalPreSendProcessors;
     }
 
     /**
@@ -182,7 +181,7 @@ public class RestSecure {
      * @param additionalSpecs RequestSpecifications list
      * @return last request response
      */
-    public static Response send(Session session, RequestSpecification spec, RequestSpecification... additionalSpecs) {
+    public static Response send(BiProcessor session, RequestSpecification spec, RequestSpecification... additionalSpecs) {
         return RequestSender.send(session, spec, additionalSpecs);
     }
 
@@ -203,21 +202,8 @@ public class RestSecure {
      * @param specs   RequestSpecifications list
      * @return last request response
      */
-    public static Response send(Session session, List<RequestSpecification> specs) {
+    public static Response send(BiProcessor session, List<RequestSpecification> specs) {
         return RequestSender.send(session, specs);
-    }
-
-    /**
-     * Creates a RequestAuthenticationHandler that removes all authentications from the request<br>
-     * For example:
-     * <pre>
-     *    RequestSpecification request = get("url").auth(noAuth());
-     * </pre>
-     *
-     * @return RequestAuthenticationHandler
-     */
-    public static RequestAuthHandler noAuth() {
-        return new NoAuthentication();
     }
 
     /**
@@ -231,7 +217,7 @@ public class RestSecure {
      * @param password user password
      * @return RequestAuthenticationHandler
      */
-    public static RequestAuthHandler basicAuth(String name, String password) {
+    public static PreSendProcessor basicAuth(String name, String password) {
         return new BasicAuthentication(name, password);
     }
 
@@ -245,7 +231,7 @@ public class RestSecure {
      * @param token access token
      * @return RequestAuthenticationHandler
      */
-    public static RequestAuthHandler bearerToken(String token) {
+    public static PreSendProcessor bearerToken(String token) {
         return new BearerTokenAuthentication(token);
     }
 }

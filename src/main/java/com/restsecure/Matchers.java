@@ -1,10 +1,10 @@
 package com.restsecure;
 
-import com.restsecure.http.MultiValueList;
-import com.restsecure.http.NameAndValue;
-import com.restsecure.matchers.IsAnyValue;
-import com.restsecure.matchers.IsMultiValueListContaining;
-import com.restsecure.matchers.JsonMatcher;
+import com.restsecure.core.http.MultiValueList;
+import com.restsecure.core.http.NameAndValue;
+import com.restsecure.validation.matchers.IsAnyValue;
+import com.restsecure.validation.matchers.IsMultiValueListContaining;
+import com.restsecure.validation.matchers.JsonMatcher;
 import org.hamcrest.Matcher;
 
 import java.util.function.Function;
