@@ -1,23 +1,25 @@
-package com.restsecure.core.http;
+package com.restsecure.core.util;
+
+import com.restsecure.core.http.NameAndValue;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class MultiValueList<T extends NameAndValue> implements Iterable<T> {
+public class NameValueList<T extends NameAndValue> implements Iterable<T> {
 
     private List<T> items;
 
-    public MultiValueList() {
+    public NameValueList() {
         this.items = new ArrayList<>();
     }
 
-    public MultiValueList(List<T> items) {
+    public NameValueList(List<T> items) {
         this.items = new ArrayList<>(items);
     }
 
-    public MultiValueList(MultiValueList<T> items) {
+    public NameValueList(NameValueList<T> items) {
         this.items = new ArrayList<>(items.asList());
     }
 
@@ -37,7 +39,7 @@ public class MultiValueList<T extends NameAndValue> implements Iterable<T> {
         this.items.addAll(items);
     }
 
-    public void addAll(MultiValueList<T> items) {
+    public void addAll(NameValueList<T> items) {
         this.items.addAll(items.asList());
     }
 
@@ -62,8 +64,8 @@ public class MultiValueList<T extends NameAndValue> implements Iterable<T> {
         return null;
     }
 
-    public MultiValueList<T> getAll(String name) {
-        MultiValueList<T> result = new MultiValueList<>();
+    public NameValueList<T> getAll(String name) {
+        NameValueList<T> result = new NameValueList<>();
         for (T item : items) {
             if (item.getName().equals(name)) {
                 result.add(item);

@@ -1,14 +1,18 @@
-package com.restsecure.core.request.data;
+package com.restsecure.data;
 
+import com.restsecure.core.processor.ProcessAll;
+import com.restsecure.core.processor.ProcessScope;
 import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.processor.PreSendProcessor;
 import com.restsecure.core.request.specification.RequestSpecification;
 
 import java.lang.reflect.Field;
 
-public class RequestDataConfigurator {
+@ProcessAll(scope = ProcessScope.BEFORE_ALL)
+public class RequestDataProcessor implements PreSendProcessor {
 
-    public static void configure(RequestContext context) {
+    @Override
+    public void preSendProcess(RequestContext context) {
         Object dataClass = context.getSpecification().getData();
 
         if (dataClass != null) {

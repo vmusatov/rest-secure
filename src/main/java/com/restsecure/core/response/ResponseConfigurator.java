@@ -1,11 +1,12 @@
 package com.restsecure.core.response;
 
+import com.restsecure.RestSecure;
 import com.restsecure.core.deserialize.DeserializeConfig;
 import com.restsecure.core.http.Header;
 import com.restsecure.core.http.HttpHelper;
-import com.restsecure.core.logging.logger.Logger;
 import com.restsecure.core.processor.PostResponseProcessor;
 import com.restsecure.core.processor.PostResponseValidationProcessor;
+import com.restsecure.core.processor.ProcessScope;
 import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.response.validation.ValidationResult;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -17,6 +18,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.restsecure.core.processor.ProcessScope.*;
+
 public class ResponseConfigurator {
 
     public static Response configureResponse(CloseableHttpResponse httpResponse, RequestContext context) {
@@ -24,7 +27,6 @@ public class ResponseConfigurator {
         context.setResponse(response);
 
         validateResponse(context);
-        Logger.logResponse(context);
         precessResponse(context);
 
         return response;
@@ -74,8 +76,20 @@ public class ResponseConfigurator {
     }
 
     private static void precessResponse(RequestContext context) {
+        callPostResponseProcessors(BEFORE_ALL, context);
+        callPostResponseProcessors(BEFORE_SPECIFIED, context);
+
         for (PostResponseProcessor handler : context.getSpecification().getPostResponseProcessors()) {
             handler.postResponseProcess(context);
         }
+
+        callPostResponseProcessors(AFTER_SPECIFIED, context);
+        callPostResponseProcessors(AFTER_ALL, context);
+    }
+
+    private static void callPostResponseProcessors(ProcessScope scope, RequestContext context) {
+        RestSecure.getContext().getPostResponseProcessors().get(scope).forEach(
+                postResponseProcessor -> postResponseProcessor.postResponseProcess(context)
+        );
     }
 }

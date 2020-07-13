@@ -1,7 +1,7 @@
 package com.restsecure.session;
 
 import com.restsecure.core.http.Cookie;
-import com.restsecure.core.http.MultiValueList;
+import com.restsecure.core.util.NameValueList;
 import com.restsecure.core.processor.BiProcessor;
 import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.request.RequestSender;
@@ -53,7 +53,7 @@ public class Session implements BiProcessor {
 
     @Override
     public void postResponseProcess(RequestContext context) {
-        MultiValueList<Cookie> responseCookies = context.getResponse().getCookies();
+        NameValueList<Cookie> responseCookies = context.getResponse().getCookies();
         if (responseCookies == null) {
             return;
         }

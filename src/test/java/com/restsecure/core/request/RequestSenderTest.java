@@ -3,8 +3,6 @@ package com.restsecure.core.request;
 import com.restsecure.BaseTest;
 import com.restsecure.GenerateDataHelper;
 import com.restsecure.RestSecure;
-import com.restsecure.core.logging.LogInfo;
-import com.restsecure.core.logging.LogLevel;
 import com.restsecure.core.request.specification.RequestSpecification;
 import com.restsecure.core.request.specification.RequestSpecificationImpl;
 import com.restsecure.core.response.Response;
@@ -16,8 +14,6 @@ import org.testng.annotations.Test;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.restsecure.Configs.logConfig;
-import static com.restsecure.Configs.sessionConfig;
 import static com.restsecure.RestSecure.*;
 import static com.restsecure.Validations.*;
 import static org.hamcrest.MatcherAssert.assertThat;

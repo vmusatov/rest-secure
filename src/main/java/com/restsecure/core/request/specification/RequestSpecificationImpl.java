@@ -150,8 +150,8 @@ public class RequestSpecificationImpl implements RequestSpecification {
 
     @Override
     public RequestSpecification process(BiProcessor processor, BiProcessor... additionalProcessors) {
-        this.process(processor, additionalProcessors);
-        this.process(processor, additionalProcessors);
+        processRequest(processor, additionalProcessors);
+        processResponse(processor, additionalProcessors);
 
         return this;
     }
@@ -159,8 +159,8 @@ public class RequestSpecificationImpl implements RequestSpecification {
     @Override
     public RequestSpecification process(List<BiProcessor> processors) {
         processors.forEach(processor -> {
-            this.process(processor);
-            this.process(processor);
+            processRequest(processor);
+            processResponse(processor);
         });
 
         return this;

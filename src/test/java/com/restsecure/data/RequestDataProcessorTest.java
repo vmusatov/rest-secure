@@ -1,7 +1,7 @@
-package com.restsecure.core.request.data;
+package com.restsecure.data;
 
 import com.restsecure.core.http.Header;
-import com.restsecure.core.http.MultiValueList;
+import com.restsecure.core.util.NameValueList;
 import com.restsecure.core.http.Parameter;
 import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.request.specification.RequestSpecification;
@@ -13,15 +13,16 @@ import static com.restsecure.RestSecure.get;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
 
-public class RequestDataConfiguratorTest {
+public class RequestDataProcessorTest {
 
     @Test
     public void addParamsFromDataClassTest() {
-        RequestSpecification request = get("url").data(new RegisterRequestData());
+        RequestSpecification spec = get("url").data(new RegisterRequestData());
 
-        RequestDataConfigurator.configure(new RequestContext(request));
+        RequestDataProcessor processor = new RequestDataProcessor();
+        processor.preSendProcess(new RequestContext(spec));
 
-        MultiValueList<Parameter> parameters = new MultiValueList<>(request.getParameters());
+        NameValueList<Parameter> parameters = new NameValueList<>(spec.getParameters());
 
         assertThat(parameters, containsPair("user_login", "userlogin"));
         assertThat(parameters, not(containsName("login")));
@@ -35,11 +36,12 @@ public class RequestDataConfiguratorTest {
 
     @Test
     public void addHeadersFromDataClassTest() {
-        RequestSpecification request = get("url").data(new RegisterRequestData());
+        RequestSpecification spec = get("url").data(new RegisterRequestData());
 
-        RequestDataConfigurator.configure(new RequestContext(request));
+        RequestDataProcessor processor = new RequestDataProcessor();
+        processor.preSendProcess(new RequestContext(spec));
 
-        MultiValueList<Header> parameters = new MultiValueList<>(request.getHeaders());
+        NameValueList<Header> parameters = new NameValueList<>(spec.getHeaders());
 
         assertThat(parameters, containsPair("accept", "text/plain"));
 

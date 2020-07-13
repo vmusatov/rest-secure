@@ -1,7 +1,7 @@
 package com.restsecure.validation.matchers;
 
 import com.restsecure.core.http.Cookie;
-import com.restsecure.core.http.MultiValueList;
+import com.restsecure.core.util.NameValueList;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -9,9 +9,9 @@ import static com.restsecure.Matchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-public class IsMultiValueListContainingTest {
+public class IsNameValueListContainingTest {
 
-    private final MultiValueList<Cookie> cookies = new MultiValueList<>();
+    private final NameValueList<Cookie> cookies = new NameValueList<>();
 
     @BeforeClass
     public void init() {

@@ -4,14 +4,13 @@
     <test name="tests">
         <packages>
             <package name="com.restsecure.core.request"/>
-            <package name="com.restsecure.core.request.data"/>
             <package name="com.restsecure.core.deserialize"/>
             <package name="com.restsecure.core.http"/>
             <package name="com.restsecure.core.request.specification"/>
             <package name="com.restsecure.core.response"/>
 
             <package name="com.restsecure.session"/>
-
+            <package name="com.restsecure.data"/>
             <package name="com.restsecure.validation.base"/>
             <package name="com.restsecure.validation.matchers"/>
             <package name="com.restsecure.validation.object"/>

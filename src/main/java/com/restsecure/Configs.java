@@ -2,7 +2,7 @@ package com.restsecure;
 
 import com.restsecure.core.configuration.ConfigFactory;
 import com.restsecure.core.deserialize.DeserializeConfig;
-import com.restsecure.core.logging.LogConfig;
+import com.restsecure.logging.LogConfig;
 import com.restsecure.session.SessionConfig;
 
 public class Configs {

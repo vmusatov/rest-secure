@@ -2,7 +2,7 @@ package com.restsecure.core.response;
 
 import com.restsecure.core.http.Cookie;
 import com.restsecure.core.http.Header;
-import com.restsecure.core.http.MultiValueList;
+import com.restsecure.core.util.NameValueList;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ public interface Response {
     /**
      * @return MultiValueList<Header>
      */
-    MultiValueList<Header> getHeaders();
+    NameValueList<Header> getHeaders();
 
     /**
      * Setting the headers in response
@@ -35,7 +35,7 @@ public interface Response {
     /**
      * @return MultiValueList<Cookie>
      */
-    MultiValueList<Cookie> getCookies();
+    NameValueList<Cookie> getCookies();
 
     /**
      * Setting the cookies in response

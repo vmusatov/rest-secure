@@ -14,7 +14,6 @@ public class RequestFactory {
     public static HttpUriRequest createRequest(RequestContext context) {
 
         RequestConfigurator.configure(context);
-        RequestProcessor.process(context);
         SpecificationValidator.validate(context.getSpecification());
 
         switch (context.getSpecification().getMethod()) {

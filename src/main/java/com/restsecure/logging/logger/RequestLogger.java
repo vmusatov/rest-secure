@@ -1,6 +1,6 @@
-package com.restsecure.core.logging.logger;
+package com.restsecure.logging.logger;
 
-import com.restsecure.core.logging.LogInfo;
+import com.restsecure.logging.LogInfo;
 import com.restsecure.core.http.Header;
 import com.restsecure.core.http.Parameter;
 import com.restsecure.core.request.specification.RequestSpecification;
@@ -8,7 +8,7 @@ import com.restsecure.core.request.specification.RequestSpecification;
 import java.io.PrintStream;
 import java.util.List;
 
-import static com.restsecure.core.logging.logger.LogHelper.*;
+import static com.restsecure.logging.logger.LogHelper.*;
 
 public class RequestLogger {
 

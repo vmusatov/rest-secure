@@ -1,5 +1,6 @@
 package com.restsecure.core.http;
 
+import com.restsecure.core.util.NameValueList;
 import org.hamcrest.MatcherAssert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -11,7 +12,7 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-public class MultiValueListTest {
+public class NameValueListTest {
 
     private List<Header> headersList = new ArrayList<>();
 
@@ -25,7 +26,7 @@ public class MultiValueListTest {
 
     @Test
     public void constructorWithListTest() {
-        MultiValueList<Header> list = new MultiValueList<>(headersList);
+        NameValueList<Header> list = new NameValueList<>(headersList);
 
         assertThat(list.size(), equalTo(4));
         assertThat(list.getFirst("repeatName").getValue(), equalTo("value2"));
@@ -33,8 +34,8 @@ public class MultiValueListTest {
 
     @Test
     public void constructorWithMultiValueListTest() {
-        MultiValueList<Header> headersMultiValueList = new MultiValueList<>(headersList);
-        MultiValueList<Header> list = new MultiValueList<>(headersMultiValueList);
+        NameValueList<Header> headersNameValueList = new NameValueList<>(headersList);
+        NameValueList<Header> list = new NameValueList<>(headersNameValueList);
 
         assertThat(list.size(), equalTo(4));
         assertThat(list.getFirst("repeatName").getValue(), equalTo("value2"));
@@ -42,13 +43,13 @@ public class MultiValueListTest {
 
     @Test
     public void emptyConstructorTest() {
-        MultiValueList<Header> list = new MultiValueList<>();
+        NameValueList<Header> list = new NameValueList<>();
         assertThat(list.size(), equalTo(0));
     }
 
     @Test
     public void isEmptyTest() {
-        MultiValueList<Header> list = new MultiValueList<>();
+        NameValueList<Header> list = new NameValueList<>();
         assertThat(list.isEmpty(), equalTo(true));
 
         list.add(new Header("name", "value"));
@@ -57,7 +58,7 @@ public class MultiValueListTest {
 
     @Test
     public void addTest() {
-        MultiValueList<Header> list = new MultiValueList<>();
+        NameValueList<Header> list = new NameValueList<>();
         list.add(new Header("name1", "value1"));
 
         assertThat(list.size(), equalTo(1));
@@ -71,7 +72,7 @@ public class MultiValueListTest {
 
     @Test
     public void addAllWithListTest() {
-        MultiValueList<Header> list = new MultiValueList<>();
+        NameValueList<Header> list = new NameValueList<>();
         list.addAll(headersList);
 
         assertThat(list.size(), equalTo(4));
@@ -80,8 +81,8 @@ public class MultiValueListTest {
 
     @Test
     public void addAllWithMultiValueListTest() {
-        MultiValueList<Header> headersMultiValueList = new MultiValueList<>(headersList);
-        MultiValueList<Header> list = new MultiValueList<>();
+        NameValueList<Header> headersNameValueList = new NameValueList<>(headersList);
+        NameValueList<Header> list = new NameValueList<>();
         list.addAll(headersList);
 
         assertThat(list.size(), equalTo(4));
@@ -90,7 +91,7 @@ public class MultiValueListTest {
 
     @Test
     public void containsTest() {
-        MultiValueList<Header> list = new MultiValueList<>(headersList);
+        NameValueList<Header> list = new NameValueList<>(headersList);
         Header header = new Header("headerName", "headerValue");
         Header header2 = new Header("headerName2", "headerValue2");
 
@@ -104,7 +105,7 @@ public class MultiValueListTest {
 
     @Test
     public void containsAllTest() {
-        MultiValueList<Header> list = new MultiValueList<>(headersList);
+        NameValueList<Header> list = new NameValueList<>(headersList);
         Header header = new Header("headerName", "headerValue");
         Header header2 = new Header("headerName2", "headerValue2");
 
@@ -120,7 +121,7 @@ public class MultiValueListTest {
 
     @Test
     public void getTest() {
-        MultiValueList<Header> list = new MultiValueList<>(headersList);
+        NameValueList<Header> list = new NameValueList<>(headersList);
         Header expectedHeader1 = new Header("name1", "value1");
         Header expectedHeader2 = new Header("name3", "value3");
 
@@ -130,7 +131,7 @@ public class MultiValueListTest {
 
     @Test
     public void getValueTest() {
-        MultiValueList<Header> list = new MultiValueList<>(headersList);
+        NameValueList<Header> list = new NameValueList<>(headersList);
 
         assertThat(list.getValue("name1"), equalTo("value1"));
         assertThat(list.getValue("name3"), equalTo("value3"));
@@ -138,7 +139,7 @@ public class MultiValueListTest {
 
     @Test
     public void getAllValuesTest() {
-        MultiValueList<Header> list = new MultiValueList<>(headersList);
+        NameValueList<Header> list = new NameValueList<>(headersList);
         List<String> valuesList = list.getAllValues("repeatName");
 
         assertThat(valuesList.size(), equalTo(2));
@@ -154,7 +155,7 @@ public class MultiValueListTest {
 
     @Test
     public void getFirstTest() {
-        MultiValueList<Header> list = new MultiValueList<>(headersList);
+        NameValueList<Header> list = new NameValueList<>(headersList);
         Header expectedHeader = new Header("repeatName", "value2");
 
         assertThat(list.getFirst("repeatName"), equalTo(expectedHeader));
@@ -163,12 +164,12 @@ public class MultiValueListTest {
 
     @Test
     public void getAllTest() {
-        MultiValueList<Header> list = new MultiValueList<>(headersList);
+        NameValueList<Header> list = new NameValueList<>(headersList);
         Header expectedHeader1 = new Header("repeatName", "value2");
         Header expectedHeader2 = new Header("repeatName", "value4");
         Header expectedHeader3 = new Header("repeatName", "value5");
 
-        MultiValueList<Header> allList = list.getAll("repeatName");
+        NameValueList<Header> allList = list.getAll("repeatName");
 
         MatcherAssert.assertThat(allList.size(), equalTo(2));
         MatcherAssert.assertThat(allList.contains(expectedHeader1), equalTo(true));

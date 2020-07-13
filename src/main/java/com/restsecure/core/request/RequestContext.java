@@ -13,9 +13,8 @@ import java.util.List;
 
 public class RequestContext {
     @Getter
-    @Setter
     private RequestSpecification specification;
-    private final List<Config> configs;
+    private List<Config> configs;
     @Getter
     private final HttpClientContext httpClientContext;
     @Getter
@@ -40,5 +39,10 @@ public class RequestContext {
         }
 
         return config;
+    }
+
+    public void setSpecification(RequestSpecification spec) {
+        this.specification = spec;
+        this.configs = spec.getConfigs();
     }
 }

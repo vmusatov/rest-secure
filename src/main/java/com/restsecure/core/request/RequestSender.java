@@ -1,6 +1,5 @@
 package com.restsecure.core.request;
 
-import com.restsecure.core.logging.logger.Logger;
 import com.restsecure.core.processor.BiProcessor;
 import com.restsecure.core.request.exception.SendRequestException;
 import com.restsecure.core.request.specification.RequestSpecification;
@@ -88,7 +87,6 @@ public class RequestSender {
 
         RequestContext context = new RequestContext(spec);
         HttpUriRequest request = RequestFactory.createRequest(context);
-        Logger.logRequest(context);
 
         try (CloseableHttpClient httpClient = context.getHttpClientBuilder().build(); httpClient) {
             CloseableHttpResponse httpResponse = httpClient.execute(request, context.getHttpClientContext());

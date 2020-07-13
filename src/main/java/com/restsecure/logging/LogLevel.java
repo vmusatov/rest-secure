@@ -1,4 +1,4 @@
-package com.restsecure.core.logging;
+package com.restsecure.logging;
 
 public enum  LogLevel {
     NONE,

@@ -2,10 +2,10 @@ package com.restsecure;
 
 import com.restsecure.core.http.Cookie;
 import com.restsecure.core.http.Header;
+import com.restsecure.core.processor.PostResponseValidationProcessor;
 import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.request.specification.RequestSpecificationImpl;
 import com.restsecure.core.response.Response;
-import com.restsecure.core.processor.PostResponseValidationProcessor;
 import com.restsecure.core.response.validation.ValidationResult;
 import com.restsecure.core.response.validation.ValidationStatus;
 import lombok.Data;

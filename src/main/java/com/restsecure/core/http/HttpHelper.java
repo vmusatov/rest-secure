@@ -1,6 +1,7 @@
 package com.restsecure.core.http;
 
 import com.restsecure.core.request.specification.RequestSpecification;
+import com.restsecure.core.util.NameValueList;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
@@ -74,7 +75,7 @@ public class HttpHelper {
     }
 
     public static List<Cookie> getCookiesFromHeaders(List<Header> headers) {
-        MultiValueList<Header> headersWithCookies = new MultiValueList<>(headers).getAll("Set-Cookie");
+        NameValueList<Header> headersWithCookies = new NameValueList<>(headers).getAll("Set-Cookie");
 
         List<Cookie> cookies = new ArrayList<>();
         for (Header header : headersWithCookies) {

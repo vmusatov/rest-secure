@@ -7,7 +7,7 @@ import com.restsecure.core.http.Parameter;
 import com.restsecure.core.http.RequestMethod;
 import com.restsecure.core.processor.PostResponseProcessor;
 import com.restsecure.core.processor.PreSendProcessor;
-import com.restsecure.core.request.data.RequestParam;
+import com.restsecure.data.RequestParam;
 import com.restsecure.session.SessionConfig;
 import org.testng.annotations.Test;
 

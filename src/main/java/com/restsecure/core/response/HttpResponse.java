@@ -2,7 +2,7 @@ package com.restsecure.core.response;
 
 import com.restsecure.core.http.Cookie;
 import com.restsecure.core.http.Header;
-import com.restsecure.core.http.MultiValueList;
+import com.restsecure.core.util.NameValueList;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,31 +15,31 @@ public class HttpResponse implements Response {
     @Getter
     @Setter
     private int statusCode;
-    private MultiValueList<Header> headers;
-    private MultiValueList<Cookie> cookies;
+    private NameValueList<Header> headers;
+    private NameValueList<Cookie> cookies;
 
     public HttpResponse() {
-        this.headers = new MultiValueList<>();
-        this.cookies = new MultiValueList<>();
+        this.headers = new NameValueList<>();
+        this.cookies = new NameValueList<>();
     }
 
     @Override
-    public MultiValueList<Header> getHeaders() {
+    public NameValueList<Header> getHeaders() {
         return headers;
     }
 
     @Override
     public void setHeaders(List<Header> headers) {
-        this.headers = new MultiValueList<>(headers);
+        this.headers = new NameValueList<>(headers);
     }
 
     @Override
-    public MultiValueList<Cookie> getCookies() {
+    public NameValueList<Cookie> getCookies() {
         return this.cookies;
     }
 
     @Override
     public void setCookies(List<Cookie> cookies) {
-        this.cookies = new MultiValueList<>(cookies);
+        this.cookies = new NameValueList<>(cookies);
     }
 }

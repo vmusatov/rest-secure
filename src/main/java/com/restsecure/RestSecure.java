@@ -5,14 +5,14 @@ import com.restsecure.authentication.BearerTokenAuthentication;
 import com.restsecure.core.http.RequestMethod;
 import com.restsecure.core.processor.BiProcessor;
 import com.restsecure.core.processor.PreSendProcessor;
+import com.restsecure.core.Context;
 import com.restsecure.core.request.RequestSender;
 import com.restsecure.core.request.specification.RequestSpecification;
 import com.restsecure.core.request.specification.RequestSpecificationImpl;
 import com.restsecure.core.response.Response;
 import com.restsecure.session.Session;
+import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class RestSecure {
@@ -29,37 +29,8 @@ public class RestSecure {
      */
     public static RequestSpecification globalSpecification = new RequestSpecificationImpl();
 
-    /**
-     * A global request processors will be added to each request. 
-     */
-    private static final List<PreSendProcessor> globalPreSendProcessors = new ArrayList<>();
-
-    /**
-     * Adding global request processors that will be added to each request
-     *
-     * @param processor            request processor
-     * @param additionalProcessors request handlers list
-     */
-    public static void preSendProcess(PreSendProcessor processor, PreSendProcessor... additionalProcessors) {
-        globalPreSendProcessors.add(processor);
-        globalPreSendProcessors.addAll(Arrays.asList(additionalProcessors));
-    }
-
-    /**
-     * Adding global request processors that will be added to each request
-     *
-     * @param processors request processors list
-     */
-    public static void preSendProcess(List<PreSendProcessor> processors) {
-        globalPreSendProcessors.addAll(processors);
-    }
-
-    /**
-     * @return PreSendProcessor list
-     */
-    public static List<PreSendProcessor> getGlobalPreSendProcessors() {
-        return globalPreSendProcessors;
-    }
+    @Getter
+    private static final Context context = new Context();
 
     /**
      * Creates an empty request specification

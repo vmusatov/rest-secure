@@ -1,4 +1,4 @@
-package com.restsecure.core.logging;
+package com.restsecure.logging;
 
 import com.restsecure.core.configuration.Config;
 import lombok.Getter;
