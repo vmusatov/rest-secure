@@ -1,10 +1,12 @@
 package com.restsecure.core.http;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.net.HttpCookie;
 
 @Data
+@Builder
 public class Cookie implements NameAndValue {
     private String name;
     private String value;
