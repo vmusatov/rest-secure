@@ -1,4 +1,4 @@
-package com.restsecure.core.deserialize;
+package com.restsecure.core.mapping.deserialize;
 
 import com.restsecure.core.configuration.Config;
 import lombok.Getter;
@@ -15,6 +15,6 @@ public class DeserializeConfig implements Config {
 
     @Override
     public void reset() {
-        deserializer = new DefaultJacksonJsonDeserializer();
+        deserializer = new DefaultJacksonDeserializer();
     }
 }

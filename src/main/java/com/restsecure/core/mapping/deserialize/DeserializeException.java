@@ -1,4 +1,4 @@
-package com.restsecure.core.deserialize;
+package com.restsecure.core.mapping.deserialize;
 
 public class DeserializeException extends RuntimeException {
     public DeserializeException(String message) {

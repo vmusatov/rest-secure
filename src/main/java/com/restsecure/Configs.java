@@ -1,7 +1,8 @@
 package com.restsecure;
 
 import com.restsecure.core.configuration.ConfigFactory;
-import com.restsecure.core.deserialize.DeserializeConfig;
+import com.restsecure.core.mapping.deserialize.DeserializeConfig;
+import com.restsecure.core.mapping.serialize.SerializeConfig;
 import com.restsecure.logging.LogConfig;
 import com.restsecure.session.SessionConfig;
 
@@ -23,6 +24,15 @@ public class Configs {
      */
     public static DeserializeConfig deserializeConfig() {
         return ConfigFactory.createDefaultConfig(DeserializeConfig.class);
+    }
+
+    /**
+     * Create a new SerializeConfig instance with default settings
+     *
+     * @return SerializeConfig
+     */
+    public static SerializeConfig serializeConfig() {
+        return ConfigFactory.createDefaultConfig(SerializeConfig.class);
     }
 
     /**

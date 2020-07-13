@@ -1,4 +1,4 @@
-package com.restsecure.core.deserialize;
+package com.restsecure.core.mapping.deserialize;
 
 import org.testng.annotations.Test;
 
@@ -10,7 +10,7 @@ public class DeserializeConfigTest {
     @Test
     public void setDeserializerTest() {
         DeserializeConfig config = new DeserializeConfig();
-        DefaultJacksonJsonDeserializer deserializer = new DefaultJacksonJsonDeserializer();
+        DefaultJacksonDeserializer deserializer = new DefaultJacksonDeserializer();
         config.setDeserializer(deserializer);
 
         assertThat(config.getDeserializer(), equalTo(deserializer));

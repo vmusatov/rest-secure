@@ -1,8 +1,8 @@
 package com.restsecure.core.response;
 
 import com.jayway.jsonpath.JsonPath;
-import com.restsecure.core.deserialize.DefaultJacksonJsonDeserializer;
-import com.restsecure.core.deserialize.Deserializer;
+import com.restsecure.core.mapping.deserialize.DefaultJacksonDeserializer;
+import com.restsecure.core.mapping.deserialize.Deserializer;
 
 public class ResponseBody {
     private final String content;
@@ -10,7 +10,7 @@ public class ResponseBody {
 
     public ResponseBody(String content) {
         this.content = content;
-        this.deserializer = new DefaultJacksonJsonDeserializer();
+        this.deserializer = new DefaultJacksonDeserializer();
     }
 
     public ResponseBody(String content, Deserializer deserializer) {

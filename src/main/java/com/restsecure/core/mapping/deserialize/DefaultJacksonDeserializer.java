@@ -1,10 +1,10 @@
-package com.restsecure.core.deserialize;
+package com.restsecure.core.mapping.deserialize;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 
-public class DefaultJacksonJsonDeserializer implements Deserializer {
+public class DefaultJacksonDeserializer implements Deserializer {
 
     @Override
     public <T> T deserialize(String content, Class<T> tClass) {

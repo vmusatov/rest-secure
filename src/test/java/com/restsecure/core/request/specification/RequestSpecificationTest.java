@@ -1,7 +1,7 @@
 package com.restsecure.core.request.specification;
 
 import com.restsecure.core.configuration.Config;
-import com.restsecure.core.deserialize.DeserializeConfig;
+import com.restsecure.core.mapping.deserialize.DeserializeConfig;
 import com.restsecure.core.http.Header;
 import com.restsecure.core.http.Parameter;
 import com.restsecure.core.http.RequestMethod;
