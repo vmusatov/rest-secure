@@ -18,7 +18,7 @@ public class RequestLogger {
         builder.append("----------------------------------------")
                 .append(lineSeparator());
 
-        if (logInfoList.contains(LogInfo.TIME)) {
+        if (logInfoList.contains(LogInfo.TIME) || logInfoList.contains(LogInfo.ALL)) {
             addTime(builder);
         }
 
