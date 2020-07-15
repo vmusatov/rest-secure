@@ -1,17 +1,17 @@
 package com.restsecure.data;
 
-import com.restsecure.core.http.Header;
-import com.restsecure.core.util.NameValueList;
 import com.restsecure.core.http.Parameter;
 import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.request.specification.RequestSpecification;
+import com.restsecure.core.util.MultiKeyMap;
+import com.restsecure.core.util.NameValueList;
 import org.testng.annotations.Test;
 
 import static com.restsecure.Matchers.containsName;
 import static com.restsecure.Matchers.containsPair;
 import static com.restsecure.RestSecure.get;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.*;
 
 public class RequestDataProcessorTest {
 
@@ -41,15 +41,15 @@ public class RequestDataProcessorTest {
         RequestDataProcessor processor = new RequestDataProcessor();
         processor.preSendProcess(new RequestContext(spec));
 
-        NameValueList<Header> parameters = new NameValueList<>(spec.getHeaders());
+        MultiKeyMap<String, Object> headers = spec.getHeaders();
 
-        assertThat(parameters, containsPair("accept", "text/plain"));
+        assertThat(headers.getFirst("accept"), equalTo("text/plain"));
 
-        assertThat(parameters, containsPair("Cache-Control", "no-cache"));
-        assertThat(parameters, not(containsName("cacheControl")));
+        assertThat(headers.getFirst("Cache-Control"), equalTo("no-cache"));
+        assertThat(headers.getFirst("cacheControl"), is(nullValue()));
 
-        assertThat(parameters, not(containsName("Content-Length")));
-        assertThat(parameters, not(containsName("contentLength")));
+        assertThat(headers.getFirst("Content-Length"), is(nullValue()));
+        assertThat(headers.getFirst("contentLength"), is(nullValue()));
     }
 
     private static class RegisterRequestData {

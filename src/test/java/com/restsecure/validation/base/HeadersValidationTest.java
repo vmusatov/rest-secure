@@ -2,7 +2,7 @@ package com.restsecure.validation.base;
 
 import com.restsecure.BaseTest;
 import com.restsecure.core.processor.PostResponseValidationProcessor;
-import com.restsecure.core.http.Header;
+import com.restsecure.core.http.header.Header;
 import com.restsecure.core.response.HttpResponse;
 import com.restsecure.core.response.Response;
 import org.testng.annotations.Test;

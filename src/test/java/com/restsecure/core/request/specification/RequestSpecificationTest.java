@@ -1,10 +1,10 @@
 package com.restsecure.core.request.specification;
 
 import com.restsecure.core.configuration.Config;
-import com.restsecure.core.mapping.deserialize.DeserializeConfig;
-import com.restsecure.core.http.Header;
 import com.restsecure.core.http.Parameter;
 import com.restsecure.core.http.RequestMethod;
+import com.restsecure.core.http.header.Header;
+import com.restsecure.core.mapping.deserialize.DeserializeConfig;
 import com.restsecure.core.processor.PostResponseProcessor;
 import com.restsecure.core.processor.PreSendProcessor;
 import com.restsecure.data.RequestParam;
@@ -55,7 +55,7 @@ public class RequestSpecificationTest {
         spec.header(header);
 
         assertThat(spec.getHeaders().size(), equalTo(1));
-        assertThat(spec.getHeaders().get(0), equalTo(header));
+        assertThat(spec.getHeaders().getFirst("name"), equalTo(header.getValue()));
     }
 
     @Test
@@ -67,7 +67,7 @@ public class RequestSpecificationTest {
         spec.header(header.getName(), header.getValue());
 
         assertThat(spec.getHeaders().size(), equalTo(1));
-        assertThat(spec.getHeaders().get(0), equalTo(header));
+        assertThat(spec.getHeaders().getFirst("name"), equalTo(header.getValue()));
     }
 
     @Test
@@ -82,9 +82,9 @@ public class RequestSpecificationTest {
         spec.headers(headers);
 
         assertThat(spec.getHeaders().size(), equalTo(3));
-        assertThat(spec.getHeaders().get(0), equalTo(header1));
-        assertThat(spec.getHeaders().get(1), equalTo(header2));
-        assertThat(spec.getHeaders().get(2), equalTo(header3));
+        assertThat(spec.getHeaders().getFirst("name"), equalTo(header1.getValue()));
+        assertThat(spec.getHeaders().getFirst("name2"), equalTo(header2.getValue()));
+        assertThat(spec.getHeaders().getFirst("name3"), equalTo(header3.getValue()));
     }
 
     @Test
@@ -301,8 +301,8 @@ public class RequestSpecificationTest {
         spec2.mergeWith(spec1);
 
         assertThat(spec2.getHeaders().size(), equalTo(2));
-        assertThat("Spec not contain specify handler", spec2.getHeaders().contains(header1));
-        assertThat("Spec not contain specify handler", spec2.getHeaders().contains(header2));
+        assertThat("Spec not contain specify handler", spec2.getHeaders().getFirst("name1").equals("value1"));
+        assertThat("Spec not contain specify handler", spec2.getHeaders().getFirst("name2").equals("value2"));
     }
 
     @Test

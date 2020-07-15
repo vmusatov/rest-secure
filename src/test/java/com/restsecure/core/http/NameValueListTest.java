@@ -1,5 +1,6 @@
 package com.restsecure.core.http;
 
+import com.restsecure.core.http.header.Header;
 import com.restsecure.core.util.NameValueList;
 import org.hamcrest.MatcherAssert;
 import org.testng.annotations.BeforeClass;

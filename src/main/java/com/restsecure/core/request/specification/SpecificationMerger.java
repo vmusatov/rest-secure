@@ -11,7 +11,8 @@ public class SpecificationMerger {
         to.data(from.getData());
 
         to.params(from.getParameters());
-        to.headers(from.getHeaders());
+
+        from.getHeaders().forEach(header -> to.header(header.getKey(), header.getValue()));
 
         to.processRequest(from.getPreSendProcessors());
         to.processResponse(from.getPostResponseProcessors());

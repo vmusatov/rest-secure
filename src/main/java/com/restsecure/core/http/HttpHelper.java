@@ -1,6 +1,8 @@
 package com.restsecure.core.http;
 
+import com.restsecure.core.http.header.Header;
 import com.restsecure.core.request.specification.RequestSpecification;
+import com.restsecure.core.util.MultiKeyMap;
 import com.restsecure.core.util.NameValueList;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -65,13 +67,11 @@ public class HttpHelper {
         );
     }
 
-    public static void setHeadersToRequest(List<Header> headers, HttpUriRequest request) {
-        List<org.apache.http.Header> apacheHeadersList = headers
-                .stream()
-                .map(restSecureHeader -> new BasicHeader(restSecureHeader.getName(), restSecureHeader.getValue()))
-                .collect(Collectors.toList());
-
-        request.setHeaders(apacheHeadersList.toArray(new org.apache.http.Header[headers.size()]));
+    public static void setHeadersToRequest(MultiKeyMap<String, Object> headers, HttpUriRequest request) {
+        headers.forEach(header -> {
+            BasicHeader basicHeader = new BasicHeader(header.getKey(), header.getValue().toString());
+            request.addHeader(basicHeader);
+        });
     }
 
     public static List<Cookie> getCookiesFromHeaders(List<Header> headers) {

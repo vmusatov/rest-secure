@@ -1,14 +1,15 @@
 package com.restsecure.core.request.specification;
 
 import com.restsecure.core.configuration.Config;
-import com.restsecure.core.http.Header;
 import com.restsecure.core.http.Parameter;
 import com.restsecure.core.http.RequestMethod;
+import com.restsecure.core.http.header.Header;
 import com.restsecure.core.processor.BiProcessor;
 import com.restsecure.core.processor.PostResponseProcessor;
 import com.restsecure.core.processor.PostResponseValidationProcessor;
 import com.restsecure.core.processor.PreSendProcessor;
 import com.restsecure.core.response.Response;
+import com.restsecure.core.util.MultiKeyMap;
 import com.restsecure.session.Session;
 
 import java.util.List;
@@ -72,11 +73,12 @@ public interface RequestSpecification {
      *     RequestSpecification spec = get("url").header("name", "value");
      * </pre>
      *
-     * @param name  header name
-     * @param value header value
+     * @param name             header name
+     * @param value            header value
+     * @param additionalValues additional header values
      * @return RequestSpecification
      */
-    RequestSpecification header(String name, String value);
+    RequestSpecification header(String name, Object value, Object... additionalValues);
 
     /**
      * Allows you to specify request header<br><br>
@@ -109,7 +111,7 @@ public interface RequestSpecification {
     /**
      * @return request headers
      */
-    List<Header> getHeaders();
+    MultiKeyMap<String, Object> getHeaders();
 
     /**
      * Allows you to specify request parameters<br>

@@ -2,7 +2,7 @@ package com.restsecure.core.response;
 
 import com.restsecure.RestSecure;
 import com.restsecure.core.mapping.deserialize.DeserializeConfig;
-import com.restsecure.core.http.Header;
+import com.restsecure.core.http.header.Header;
 import com.restsecure.core.http.HttpHelper;
 import com.restsecure.core.processor.PostResponseProcessor;
 import com.restsecure.core.processor.PostResponseValidationProcessor;

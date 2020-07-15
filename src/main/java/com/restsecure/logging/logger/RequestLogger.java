@@ -1,7 +1,7 @@
 package com.restsecure.logging.logger;
 
 import com.restsecure.logging.LogInfo;
-import com.restsecure.core.http.Header;
+import com.restsecure.core.http.header.Header;
 import com.restsecure.core.http.Parameter;
 import com.restsecure.core.request.specification.RequestSpecification;
 
@@ -95,8 +95,8 @@ public class RequestLogger {
 
         builder.append(lineSeparator());
 
-        for (Header header : spec.getHeaders()) {
-            addNameAndValue(builder, header);
-        }
+        spec.getHeaders().forEach(header -> {
+            addNameAndValue(builder, new Header(header.getKey(), header.getValue().toString()));
+        });
     }
 }

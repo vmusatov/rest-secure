@@ -1,15 +1,16 @@
 package com.restsecure.core.request.specification;
 
 import com.restsecure.core.configuration.Config;
-import com.restsecure.core.http.Header;
 import com.restsecure.core.http.Parameter;
 import com.restsecure.core.http.RequestMethod;
+import com.restsecure.core.http.header.Header;
 import com.restsecure.core.processor.BiProcessor;
 import com.restsecure.core.processor.PostResponseProcessor;
 import com.restsecure.core.processor.PostResponseValidationProcessor;
 import com.restsecure.core.processor.PreSendProcessor;
 import com.restsecure.core.request.RequestSender;
 import com.restsecure.core.response.Response;
+import com.restsecure.core.util.MultiKeyMap;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class RequestSpecificationImpl implements RequestSpecification {
     private RequestMethod method;
     private Object data;
 
-    private final List<Header> headers;
+    private final MultiKeyMap<String, Object> headers;
     private final List<Parameter> parameters;
 
     private final List<PreSendProcessor> preSendProcessors;
@@ -38,7 +39,7 @@ public class RequestSpecificationImpl implements RequestSpecification {
         this.url = "";
         this.data = null;
 
-        this.headers = new ArrayList<>();
+        this.headers = new MultiKeyMap<>();
         this.parameters = new ArrayList<>();
 
         this.preSendProcessors = new ArrayList<>();
@@ -46,7 +47,6 @@ public class RequestSpecificationImpl implements RequestSpecification {
         this.validationProcessors = new ArrayList<>();
 
         this.configs = new ArrayList<>();
-
     }
 
     @Override
@@ -68,24 +68,35 @@ public class RequestSpecificationImpl implements RequestSpecification {
     }
 
     @Override
-    public RequestSpecification header(String name, String value) {
-        return header(new Header(name, value));
+    public RequestSpecification header(String name, Object value, Object... additionalValues) {
+        this.headers.put(name, value);
+        if (additionalValues != null && additionalValues.length > 0) {
+            for (Object additionalValue : additionalValues) {
+                this.headers.put(name, additionalValue);
+            }
+        }
+
+        return this;
     }
 
     @Override
     public RequestSpecification header(Header header) {
-        headers.add(header);
+        headers.put(header.getName(), header.getValue());
         return this;
     }
 
     @Override
     public RequestSpecification headers(List<Header> headers) {
-        this.headers.addAll(headers);
+        if (headers != null && !headers.isEmpty()) {
+            for (Header header : headers) {
+                header(header);
+            }
+        }
         return this;
     }
 
     @Override
-    public List<Header> getHeaders() {
+    public MultiKeyMap<String, Object> getHeaders() {
         return this.headers;
     }
 
