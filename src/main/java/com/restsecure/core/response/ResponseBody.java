@@ -4,6 +4,8 @@ import com.jayway.jsonpath.JsonPath;
 import com.restsecure.core.mapping.deserialize.DefaultJacksonDeserializer;
 import com.restsecure.core.mapping.deserialize.Deserializer;
 
+import java.lang.reflect.Type;
+
 public class ResponseBody {
     private final String content;
     private final Deserializer deserializer;
@@ -23,6 +25,10 @@ public class ResponseBody {
     }
 
     public <T> T as(Class<T> to) {
+        return this.deserializer.deserialize(content, to);
+    }
+
+    public <T> T as(Type to) {
         return this.deserializer.deserialize(content, to);
     }
 
