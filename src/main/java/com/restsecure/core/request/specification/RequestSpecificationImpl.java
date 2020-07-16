@@ -1,9 +1,9 @@
 package com.restsecure.core.request.specification;
 
 import com.restsecure.core.configuration.Config;
-import com.restsecure.core.http.Parameter;
 import com.restsecure.core.http.RequestMethod;
 import com.restsecure.core.http.header.Header;
+import com.restsecure.core.http.param.Parameter;
 import com.restsecure.core.processor.BiProcessor;
 import com.restsecure.core.processor.PostResponseProcessor;
 import com.restsecure.core.processor.PostResponseValidationProcessor;
@@ -26,7 +26,7 @@ public class RequestSpecificationImpl implements RequestSpecification {
     private Object data;
 
     private final MultiKeyMap<String, Object> headers;
-    private final List<Parameter> parameters;
+    private final MultiKeyMap<String, Object> parameters;
 
     private final List<PreSendProcessor> preSendProcessors;
     private final List<PostResponseProcessor> postResponseProcessors;
@@ -40,7 +40,7 @@ public class RequestSpecificationImpl implements RequestSpecification {
         this.data = null;
 
         this.headers = new MultiKeyMap<>();
-        this.parameters = new ArrayList<>();
+        this.parameters = new MultiKeyMap<>();
 
         this.preSendProcessors = new ArrayList<>();
         this.postResponseProcessors = new ArrayList<>();
@@ -101,24 +101,35 @@ public class RequestSpecificationImpl implements RequestSpecification {
     }
 
     @Override
-    public RequestSpecification param(String name, String value) {
-        return param(new Parameter(name, value));
+    public RequestSpecification param(String name, Object value, Object... additionalValues) {
+        this.parameters.put(name, value);
+        if (additionalValues != null && additionalValues.length > 0) {
+            for (Object additionalValue : additionalValues) {
+                this.parameters.put(name, additionalValue);
+            }
+        }
+
+        return this;
     }
 
     @Override
     public RequestSpecification param(Parameter parameter) {
-        this.parameters.add(parameter);
+        param(parameter.getName(), parameter.getValue());
         return this;
     }
 
     @Override
     public RequestSpecification params(List<Parameter> parameters) {
-        this.parameters.addAll(parameters);
+        if (parameters != null && !parameters.isEmpty()) {
+            for (Parameter param : parameters) {
+                param(param);
+            }
+        }
         return this;
     }
 
     @Override
-    public List<Parameter> getParameters() {
+    public MultiKeyMap<String, Object> getParameters() {
         return this.parameters;
     }
 

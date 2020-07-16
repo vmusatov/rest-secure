@@ -1,9 +1,9 @@
 package com.restsecure.core.request.specification;
 
 import com.restsecure.core.configuration.Config;
-import com.restsecure.core.http.Parameter;
 import com.restsecure.core.http.RequestMethod;
 import com.restsecure.core.http.header.Header;
+import com.restsecure.core.http.param.Parameter;
 import com.restsecure.core.processor.BiProcessor;
 import com.restsecure.core.processor.PostResponseProcessor;
 import com.restsecure.core.processor.PostResponseValidationProcessor;
@@ -121,11 +121,12 @@ public interface RequestSpecification {
      *     RequestSpecification spec = get("url").param("name", "value");
      * </pre>
      *
-     * @param name  parameter name
-     * @param value parameter value
+     * @param name             parameter name
+     * @param value            parameter value
+     * @param additionalValues additional param values
      * @return RequestSpecification
      */
-    RequestSpecification param(String name, String value);
+    RequestSpecification param(String name, Object value, Object... additionalValues);
 
     /**
      * Allows you to specify request parameters<br>
@@ -162,7 +163,7 @@ public interface RequestSpecification {
     /**
      * @return request parameters
      */
-    List<Parameter> getParameters();
+    MultiKeyMap<String, Object> getParameters();
 
     /**
      * Allows you to process request and get some information about request or change request<br><br>

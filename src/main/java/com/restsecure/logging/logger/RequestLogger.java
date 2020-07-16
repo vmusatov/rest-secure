@@ -2,7 +2,7 @@ package com.restsecure.logging.logger;
 
 import com.restsecure.logging.LogInfo;
 import com.restsecure.core.http.header.Header;
-import com.restsecure.core.http.Parameter;
+import com.restsecure.core.http.param.Parameter;
 import com.restsecure.core.request.specification.RequestSpecification;
 
 import java.io.PrintStream;
@@ -80,9 +80,7 @@ public class RequestLogger {
 
         builder.append(lineSeparator());
 
-        for (Parameter parameter : spec.getParameters()) {
-            addNameAndValue(builder, parameter);
-        }
+        spec.getParameters().forEach(param -> addNameAndValue(builder, new Parameter(param.getKey(), param.getValue().toString())));
     }
 
     private static void addHeaders(StringBuilder builder, RequestSpecification spec) {

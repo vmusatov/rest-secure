@@ -1,4 +1,4 @@
-package com.restsecure.core.http.header;
+package com.restsecure.core.http.param;
 
 import com.restsecure.core.mapping.serialize.SerializeConfig;
 import com.restsecure.core.mapping.serialize.SerializeHelper;
@@ -11,21 +11,21 @@ import com.restsecure.core.util.MultiKeyMap;
 import static com.restsecure.core.http.OverrideValuesHelper.overrideValue;
 
 @ProcessAll(preSendScope = ProcessScope.BEFORE_ALL)
-public class HeadersProcessor implements PreSendProcessor {
+public class ParamProcessor implements PreSendProcessor {
 
     @Override
     public void preSendProcess(RequestContext context) {
-        HeadersConfig headersConfig = context.getConfig(HeadersConfig.class);
+        ParamConfig paramConfig = context.getConfig(ParamConfig.class);
         SerializeConfig serializeConfig = context.getConfig(SerializeConfig.class);
-        MultiKeyMap<String, Object> headers = context.getSpecification().getHeaders();
+        MultiKeyMap<String, Object> params = context.getSpecification().getParameters();
 
-        SerializeHelper.serializeValuesIfNeed(headers, serializeConfig);
-        overrideValues(headers, headersConfig);
+        SerializeHelper.serializeValuesIfNeed(params, serializeConfig);
+        overrideValues(params, paramConfig);
     }
 
-    private void overrideValues(MultiKeyMap<String, Object> headers, HeadersConfig headersConfig) {
-        for (String name : headersConfig.getOverrideHeaders()) {
-            overrideValue(name, headers);
+    private void overrideValues(MultiKeyMap<String, Object> params, ParamConfig paramConfig) {
+        for (String name : paramConfig.getOverrideParams()) {
+            overrideValue(name, params);
         }
     }
 }

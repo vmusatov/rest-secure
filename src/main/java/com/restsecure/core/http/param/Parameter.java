@@ -1,5 +1,6 @@
-package com.restsecure.core.http;
+package com.restsecure.core.http.param;
 
+import com.restsecure.core.http.NameAndValue;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

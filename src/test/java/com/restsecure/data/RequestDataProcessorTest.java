@@ -1,14 +1,10 @@
 package com.restsecure.data;
 
-import com.restsecure.core.http.Parameter;
 import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.request.specification.RequestSpecification;
 import com.restsecure.core.util.MultiKeyMap;
-import com.restsecure.core.util.NameValueList;
 import org.testng.annotations.Test;
 
-import static com.restsecure.Matchers.containsName;
-import static com.restsecure.Matchers.containsPair;
 import static com.restsecure.RestSecure.get;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -22,16 +18,16 @@ public class RequestDataProcessorTest {
         RequestDataProcessor processor = new RequestDataProcessor();
         processor.preSendProcess(new RequestContext(spec));
 
-        NameValueList<Parameter> parameters = new NameValueList<>(spec.getParameters());
+        MultiKeyMap<String, Object> parameters = spec.getParameters();
 
-        assertThat(parameters, containsPair("user_login", "userlogin"));
-        assertThat(parameters, not(containsName("login")));
+        assertThat(parameters.getFirst("user_login"), equalTo("userlogin"));
+        assertThat(parameters.getFirst("login"), is(nullValue()));
 
-        assertThat(parameters, containsPair("user_pass", "userpass"));
-        assertThat(parameters, not(containsPair("password", "userpass")));
+        assertThat(parameters.getFirst("user_pass"), equalTo("userpass"));
+        assertThat(parameters.getFirst("password"), is(nullValue()));
 
-        assertThat(parameters, containsPair("notify", "false"));
-        assertThat(parameters, not(containsName("disableParam")));
+        assertThat(parameters.getFirst("notify"), equalTo("false"));
+        assertThat(parameters.getFirst("disableParam"), is(nullValue()));
     }
 
     @Test

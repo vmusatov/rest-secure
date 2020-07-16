@@ -25,13 +25,11 @@ import static com.restsecure.core.http.RequestMethod.GET;
 
 public class HttpHelper {
 
-    public static List<NameValuePair> getFilteredParameters(List<Parameter> parameters) {
-        return parameters.stream()
-                .filter(Objects::nonNull)
-                .filter(parameter -> parameter.getValue() != null)
-                .filter(parameter -> !parameter.getValue().equals("null"))
-                .map(parameter -> new BasicNameValuePair(parameter.getName(), parameter.getValue()))
-                .collect(Collectors.toList());
+    public static List<NameValuePair> getFilteredParameters(MultiKeyMap<String, Object> parameters) {
+        List<NameValuePair> pairs = new ArrayList<>();
+        parameters.forEach(param -> pairs.add(new BasicNameValuePair(param.getKey(), param.getValue().toString())));
+
+        return pairs;
     }
 
     public static boolean isHaveBody(RequestMethod method) {

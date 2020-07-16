@@ -1,9 +1,9 @@
 package com.restsecure.core.request.specification;
 
 import com.restsecure.core.configuration.Config;
-import com.restsecure.core.http.Parameter;
 import com.restsecure.core.http.RequestMethod;
 import com.restsecure.core.http.header.Header;
+import com.restsecure.core.http.param.Parameter;
 import com.restsecure.core.mapping.deserialize.DeserializeConfig;
 import com.restsecure.core.processor.PostResponseProcessor;
 import com.restsecure.core.processor.PreSendProcessor;
@@ -96,7 +96,7 @@ public class RequestSpecificationTest {
         spec.param(param);
 
         assertThat(spec.getParameters().size(), equalTo(1));
-        assertThat(spec.getParameters().get(0), equalTo(param));
+        assertThat(spec.getParameters().getFirst("name"), equalTo("value"));
     }
 
     @Test
@@ -108,7 +108,7 @@ public class RequestSpecificationTest {
         spec.param(param.getName(), param.getValue());
 
         assertThat(spec.getParameters().size(), equalTo(1));
-        assertThat(spec.getParameters().get(0), equalTo(param));
+        assertThat(spec.getParameters().getFirst("name"), equalTo("value"));
     }
 
     @Test
@@ -123,9 +123,9 @@ public class RequestSpecificationTest {
         spec.params(params);
 
         assertThat(spec.getParameters().size(), equalTo(3));
-        assertThat(spec.getParameters().get(0), equalTo(param1));
-        assertThat(spec.getParameters().get(1), equalTo(param2));
-        assertThat(spec.getParameters().get(2), equalTo(param3));
+        assertThat(spec.getParameters().getFirst("name"), equalTo("value"));
+        assertThat(spec.getParameters().getFirst("name2"), equalTo("value2"));
+        assertThat(spec.getParameters().getFirst("name3"), equalTo("value3"));
     }
 
     @Test
@@ -287,8 +287,8 @@ public class RequestSpecificationTest {
         spec2.mergeWith(spec1);
 
         assertThat(spec2.getParameters().size(), equalTo(2));
-        assertThat("Spec not contain specify handler", spec2.getParameters().contains(param1));
-        assertThat("Spec not contain specify handler", spec2.getParameters().contains(param2));
+        assertThat("Spec not contain specify handler", spec2.getParameters().getFirst("name1").equals("value1"));
+        assertThat("Spec not contain specify handler", spec2.getParameters().getFirst("name2").equals("value2"));
     }
 
     @Test
