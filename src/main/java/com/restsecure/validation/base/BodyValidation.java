@@ -1,6 +1,6 @@
 package com.restsecure.validation.base;
 
-import com.restsecure.core.processor.PostResponseValidationProcessor;
+import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.response.validation.ValidationResult;
 import com.restsecure.validation.matchers.JsonMatcher;
@@ -11,7 +11,7 @@ import org.hamcrest.Description;
 import static com.restsecure.core.response.validation.ValidationStatus.FAIL;
 import static com.restsecure.core.response.validation.ValidationStatus.SUCCESS;
 
-public class BodyValidation implements PostResponseValidationProcessor {
+public class BodyValidation implements Validation {
 
     private final String BODY_VALIDATION_REASON = "Body validation";
 
@@ -22,8 +22,7 @@ public class BodyValidation implements PostResponseValidationProcessor {
     }
 
     @Override
-    public ValidationResult validate(RequestContext context) {
-        Response response = context.getResponse();
+    public ValidationResult validate(RequestContext context, Response response) {
 
         if (!bodyMatcher.matches(response.getBody().getContent())) {
             Description description = MatcherUtils.getDescription(BODY_VALIDATION_REASON, response.getBody().getContent(), bodyMatcher);

@@ -1,10 +1,11 @@
 package com.restsecure.session;
 
 import com.restsecure.core.http.Cookie;
-import com.restsecure.core.util.NameValueList;
-import com.restsecure.core.processor.BiProcessor;
+import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.request.RequestSender;
+import com.restsecure.core.response.Response;
+import com.restsecure.core.util.NameValueList;
 import lombok.Getter;
 
 /**
@@ -36,13 +37,13 @@ import lombok.Getter;
  *     );
  * </pre>
  */
-public class Session implements BiProcessor {
+public class Session implements Processor {
 
     @Getter
     private String sessionIdValue;
 
     @Override
-    public void preSendProcess(RequestContext context) {
+    public void processRequest(RequestContext context) {
         SessionConfig sessionConfig = context.getConfig(SessionConfig.class);
         String sessionIdName = sessionConfig.getSessionIdName();
 
@@ -52,8 +53,8 @@ public class Session implements BiProcessor {
     }
 
     @Override
-    public void postResponseProcess(RequestContext context) {
-        NameValueList<Cookie> responseCookies = context.getResponse().getCookies();
+    public void processResponse(RequestContext context, Response response) {
+        NameValueList<Cookie> responseCookies = response.getCookies();
         if (responseCookies == null) {
             return;
         }

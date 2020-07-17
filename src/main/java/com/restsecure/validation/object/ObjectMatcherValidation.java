@@ -1,5 +1,6 @@
 package com.restsecure.validation.object;
 
+import com.restsecure.core.request.RequestContext;
 import com.restsecure.validation.matchers.MatcherUtils;
 import com.restsecure.core.response.validation.ValidationResult;
 import org.hamcrest.Description;
@@ -20,7 +21,7 @@ public class ObjectMatcherValidation<T> extends ResponseObjectValidation<T> {
     }
 
     @Override
-    public ValidationResult validate(T responseObject) {
+    public ValidationResult validate(RequestContext context, T responseObject) {
 
         for (Matcher<T> matcher : this.matchers) {
             if (!matcher.matches(responseObject)) {

@@ -1,18 +1,17 @@
 package com.restsecure.data;
 
 import com.restsecure.core.processor.ProcessAll;
-import com.restsecure.core.processor.ProcessScope;
+import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.RequestContext;
-import com.restsecure.core.processor.PreSendProcessor;
 import com.restsecure.core.request.specification.RequestSpecification;
 
 import java.lang.reflect.Field;
 
-@ProcessAll(scope = ProcessScope.BEFORE_ALL)
-public class RequestDataProcessor implements PreSendProcessor {
+@ProcessAll
+public class RequestDataProcessor implements Processor {
 
     @Override
-    public void preSendProcess(RequestContext context) {
+    public void processRequest(RequestContext context) {
         Object dataClass = context.getSpecification().getData();
 
         if (dataClass != null) {
@@ -82,5 +81,10 @@ public class RequestDataProcessor implements PreSendProcessor {
                 field.setAccessible(false);
             }
         }
+    }
+
+    @Override
+    public int getRequestProcessOrder() {
+        return Processor.MIN_ORDER;
     }
 }

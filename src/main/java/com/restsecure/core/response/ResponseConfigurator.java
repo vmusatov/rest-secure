@@ -1,33 +1,31 @@
 package com.restsecure.core.response;
 
 import com.restsecure.RestSecure;
-import com.restsecure.core.mapping.deserialize.DeserializeConfig;
-import com.restsecure.core.http.header.Header;
 import com.restsecure.core.http.HttpHelper;
-import com.restsecure.core.processor.PostResponseProcessor;
-import com.restsecure.core.processor.PostResponseValidationProcessor;
-import com.restsecure.core.processor.ProcessScope;
+import com.restsecure.core.http.header.Header;
+import com.restsecure.core.mapping.deserialize.DeserializeConfig;
+import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.RequestContext;
+import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.response.validation.ValidationResult;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.restsecure.core.processor.ProcessScope.*;
 
 public class ResponseConfigurator {
 
     public static Response configureResponse(CloseableHttpResponse httpResponse, RequestContext context) {
         Response response = parseHttpResponse(httpResponse, context);
-        context.setResponse(response);
 
-        validateResponse(context);
-        precessResponse(context);
+        validateResponse(context, response);
+        precessResponse(context, response);
 
         return response;
     }
@@ -65,9 +63,9 @@ public class ResponseConfigurator {
         }
     }
 
-    private static void validateResponse(RequestContext context) {
-        for (PostResponseValidationProcessor validation : context.getSpecification().getValidations()) {
-            ValidationResult result = validation.validate(context);
+    private static void validateResponse(RequestContext context, Response response) {
+        for (Validation validation : context.getSpecification().getValidations()) {
+            ValidationResult result = validation.validate(context, response);
 
             if (result.isFail()) {
                 throw new AssertionError(result.getErrorText());
@@ -75,21 +73,13 @@ public class ResponseConfigurator {
         }
     }
 
-    private static void precessResponse(RequestContext context) {
-        callPostResponseProcessors(BEFORE_ALL, context);
-        callPostResponseProcessors(BEFORE_SPECIFIED, context);
+    private static void precessResponse(RequestContext context, Response response) {
+        List<Processor> processors = new ArrayList<>();
+        processors.addAll(RestSecure.getContext().getProcessors());
+        processors.addAll(context.getSpecification().getProcessors());
 
-        for (PostResponseProcessor handler : context.getSpecification().getPostResponseProcessors()) {
-            handler.postResponseProcess(context);
-        }
-
-        callPostResponseProcessors(AFTER_SPECIFIED, context);
-        callPostResponseProcessors(AFTER_ALL, context);
-    }
-
-    private static void callPostResponseProcessors(ProcessScope scope, RequestContext context) {
-        RestSecure.getContext().getPostResponseProcessors().get(scope).forEach(
-                postResponseProcessor -> postResponseProcessor.postResponseProcess(context)
-        );
+        processors.stream()
+                .sorted(Comparator.comparingInt(Processor::getResponseProcessOrder))
+                .forEach(processor -> processor.processResponse(context, response));
     }
 }

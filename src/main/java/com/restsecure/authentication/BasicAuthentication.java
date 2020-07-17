@@ -1,11 +1,11 @@
 package com.restsecure.authentication;
 
-import com.restsecure.core.processor.PreSendProcessor;
+import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.RequestContext;
 
 import java.util.Base64;
 
-public class BasicAuthentication implements PreSendProcessor {
+public class BasicAuthentication implements Processor {
     private final String userName;
     private final String password;
 
@@ -15,7 +15,7 @@ public class BasicAuthentication implements PreSendProcessor {
     }
 
     @Override
-    public void preSendProcess(RequestContext context) {
+    public void processRequest(RequestContext context) {
         String nameAndPass = userName + ":" + password;
         String encoded = Base64.getEncoder().encodeToString(nameAndPass.getBytes());
 

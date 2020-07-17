@@ -2,12 +2,13 @@ package com.restsecure.core.request;
 
 import com.restsecure.RestSecure;
 import com.restsecure.core.http.HttpHelper;
-import com.restsecure.core.processor.PreSendProcessor;
-import com.restsecure.core.processor.ProcessScope;
+import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.specification.RequestSpecification;
 import com.restsecure.core.request.specification.RequestSpecificationImpl;
 
-import static com.restsecure.core.processor.ProcessScope.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 public class RequestConfigurator {
 
@@ -34,20 +35,12 @@ public class RequestConfigurator {
     }
 
     private static void processRequest(RequestContext context) {
-        callPreSendProcessors(BEFORE_ALL, context);
-        callPreSendProcessors(BEFORE_SPECIFIED, context);
+        List<Processor> processors = new ArrayList<>();
+        processors.addAll(RestSecure.getContext().getProcessors());
+        processors.addAll(context.getSpecification().getProcessors());
 
-        for (PreSendProcessor handler : context.getSpecification().getPreSendProcessors()) {
-            handler.preSendProcess(context);
-        }
-
-        callPreSendProcessors(AFTER_SPECIFIED, context);
-        callPreSendProcessors(AFTER_ALL, context);
-    }
-
-    private static void callPreSendProcessors(ProcessScope scope, RequestContext context) {
-        RestSecure.getContext().getPreSendProcessors().get(scope).forEach(
-                preSendProcessor -> preSendProcessor.preSendProcess(context)
-        );
+        processors.stream()
+                .sorted(Comparator.comparingInt(Processor::getRequestProcessOrder))
+                .forEach(processor -> processor.processRequest(context));
     }
 }

@@ -1,6 +1,6 @@
 package com.restsecure.core.request;
 
-import com.restsecure.core.processor.BiProcessor;
+import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.exception.SendRequestException;
 import com.restsecure.core.request.specification.RequestSpecification;
 import com.restsecure.core.response.Response;
@@ -20,14 +20,14 @@ import java.util.List;
 public class RequestSender {
 
     /**
-     * Allows you to send multiple requests in one session at once
+     * Allows you to send multiple requests at once
      *
-     * @param processor       BiProcessor
+     * @param processor       Processor
      * @param spec            RequestSpecification
      * @param additionalSpecs RequestSpecifications list
      * @return last request response
      */
-    public static Response send(BiProcessor processor, RequestSpecification spec, RequestSpecification... additionalSpecs) {
+    public static Response send(Processor processor, RequestSpecification spec, RequestSpecification... additionalSpecs) {
         List<RequestSpecification> requests = new ArrayList<>();
         requests.add(spec);
         requests.addAll(Arrays.asList(additionalSpecs));
@@ -36,13 +36,13 @@ public class RequestSender {
     }
 
     /**
-     * Allows you to send multiple requests in one session at once
+     * Allows you to send multiple requests at once
      *
-     * @param processor BiProcessor
+     * @param processor Processor
      * @param specs     RequestSpecification list
      * @return last request response
      */
-    public static Response send(BiProcessor processor, List<RequestSpecification> specs) {
+    public static Response send(Processor processor, List<RequestSpecification> specs) {
         for (RequestSpecification spec : specs) {
             spec.process(processor);
         }
@@ -78,7 +78,7 @@ public class RequestSender {
     }
 
     /**
-     * Allows you to send request by specified specification
+     * Allows you to send request by specified RequestSpecification
      *
      * @param spec RequestSpecification
      * @return Response

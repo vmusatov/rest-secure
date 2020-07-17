@@ -1,25 +1,26 @@
 package com.restsecure.validation.conditional;
 
-import com.restsecure.core.processor.PostResponseValidationProcessor;
+import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.request.RequestContext;
+import com.restsecure.core.response.Response;
 import com.restsecure.core.response.validation.ValidationResult;
 import com.restsecure.core.response.validation.ValidationStatus;
 
-public class ResponseConditionalValidation implements PostResponseValidationProcessor {
+public class ResponseConditionalValidation implements Validation {
 
-    private final PostResponseValidationProcessor conditional;
-    private final PostResponseValidationProcessor validation;
+    private final Validation conditional;
+    private final Validation validation;
 
-    public ResponseConditionalValidation(PostResponseValidationProcessor conditional, PostResponseValidationProcessor validation) {
+    public ResponseConditionalValidation(Validation conditional, Validation validation) {
         this.conditional = conditional;
         this.validation = validation;
     }
 
     @Override
-    public ValidationResult validate(RequestContext context) {
+    public ValidationResult validate(RequestContext context, Response response) {
 
-        if (!conditional.validate(context).isFail()) {
-            return validation.validate(context);
+        if (!conditional.validate(context, response).isFail()) {
+            return validation.validate(context, response);
         } else {
             return new ValidationResult(ValidationStatus.SUCCESS);
         }

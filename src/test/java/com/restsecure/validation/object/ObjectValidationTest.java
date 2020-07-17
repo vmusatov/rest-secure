@@ -5,7 +5,7 @@ import com.restsecure.core.mapping.deserialize.DefaultJacksonDeserializer;
 import com.restsecure.core.response.HttpResponse;
 import com.restsecure.core.response.Response;
 import com.restsecure.core.response.ResponseBody;
-import com.restsecure.core.processor.PostResponseValidationProcessor;
+import com.restsecure.core.response.validation.Validation;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -24,7 +24,7 @@ public class ObjectValidationTest extends BaseTest {
         Response response = new HttpResponse();
         response.setBody(new ResponseBody(userJson));
 
-        PostResponseValidationProcessor validation = as(User.class, user -> user.getId() == 1);
+        Validation validation = as(User.class, user -> user.getId() == 1);
         expectValidationSuccess(validation, response);
     }
 
@@ -33,7 +33,7 @@ public class ObjectValidationTest extends BaseTest {
         Response response = new HttpResponse();
         response.setBody(new ResponseBody(userJson));
 
-        PostResponseValidationProcessor validation = as(User.class, user -> user.getId() == 2);
+        Validation validation = as(User.class, user -> user.getId() == 2);
         expectValidationFailWithErrorText(validation, response, "Wrong value");
     }
 
@@ -42,7 +42,7 @@ public class ObjectValidationTest extends BaseTest {
         Response response = new HttpResponse();
         response.setBody(new ResponseBody(userJson));
 
-        PostResponseValidationProcessor validation = as(User.class, user -> user.getId() == 1, "Id validation");
+        Validation validation = as(User.class, user -> user.getId() == 1, "Id validation");
         expectValidationSuccess(validation, response);
     }
 
@@ -51,7 +51,7 @@ public class ObjectValidationTest extends BaseTest {
         Response response = new HttpResponse();
         response.setBody(new ResponseBody(userJson));
 
-        PostResponseValidationProcessor validation = as(User.class, user -> user.getId() == 2, "Id validation");
+        Validation validation = as(User.class, user -> user.getId() == 2, "Id validation");
 
         expectValidationFailWithErrorText(validation, response, "Id validation");
     }

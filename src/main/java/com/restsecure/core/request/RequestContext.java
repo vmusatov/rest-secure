@@ -19,9 +19,6 @@ public class RequestContext {
     private final HttpClientContext httpClientContext;
     @Getter
     private final HttpClientBuilder httpClientBuilder;
-    @Getter
-    @Setter
-    private Response response;
 
     public RequestContext(RequestSpecification specification) {
         this.specification = specification;

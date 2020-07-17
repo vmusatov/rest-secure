@@ -5,8 +5,9 @@ import com.restsecure.core.http.RequestMethod;
 import com.restsecure.core.http.header.Header;
 import com.restsecure.core.http.param.Parameter;
 import com.restsecure.core.mapping.deserialize.DeserializeConfig;
-import com.restsecure.core.processor.PostResponseProcessor;
-import com.restsecure.core.processor.PreSendProcessor;
+import com.restsecure.core.processor.Processor;
+import com.restsecure.core.request.RequestContext;
+import com.restsecure.core.response.Response;
 import com.restsecure.data.RequestParam;
 import com.restsecure.session.SessionConfig;
 import org.testng.annotations.Test;
@@ -129,81 +130,38 @@ public class RequestSpecificationTest {
     }
 
     @Test
-    public void addRequestHandlerTest() {
-        RequestSpecification spec = new RequestSpecificationImpl();
-        assertThat(spec.getPreSendProcessors().size(), equalTo(0));
+    public void addProcessorTest() {
+        RequestSpecification specification = new RequestSpecificationImpl();
+        assertThat(specification.getProcessors().size(), equalTo(0));
 
-        PreSendProcessor handler1 = request -> {
-        };
-        PreSendProcessor handler2 = request -> {
-        };
+        Processor processor1 = new TestProcessor();
+        Processor processor2 = new TestProcessor();
 
-        spec.processRequest(handler1, handler2);
+        specification.process(processor1, processor2);
 
-        assertThat(spec.getPreSendProcessors().size(), equalTo(2));
-        assertThat("Spec not contain specify handler", spec.getPreSendProcessors().contains(handler1));
-        assertThat("Spec not contain specify handler", spec.getPreSendProcessors().contains(handler2));
+        assertThat(specification.getProcessors().size(), equalTo(2));
+        assertThat("Spec not contain specify handler", specification.getProcessors().contains(processor1));
+        assertThat("Spec not contain specify handler", specification.getProcessors().contains(processor2));
     }
 
     @Test
-    public void addRequestHandlersListTest() {
-        RequestSpecification spec = new RequestSpecificationImpl();
-        assertThat(spec.getPreSendProcessors().size(), equalTo(0));
+    public void addProcessorsListTest() {
+        RequestSpecification specification = new RequestSpecificationImpl();
+        assertThat(specification.getProcessors().size(), equalTo(0));
 
-        PreSendProcessor handler1 = request -> {
-        };
-        PreSendProcessor handler2 = request -> {
-        };
+        Processor processor1 = new TestProcessor();
+        Processor processor2 = new TestProcessor();
 
-        List<PreSendProcessor> handlers = Arrays.asList(
-                handler1,
-                handler2
+        List<Processor> processors = Arrays.asList(
+                processor1,
+                processor2
         );
 
-        spec.processRequest(handlers);
+        specification.process(processors);
 
-        assertThat(spec.getPreSendProcessors().size(), equalTo(2));
-        assertThat("Spec not contain specify handler", spec.getPreSendProcessors().contains(handler1));
-        assertThat("Spec not contain specify handler", spec.getPreSendProcessors().contains(handler2));
-    }
-
-    @Test
-    public void addResponseHandlerTest() {
-        RequestSpecification specification = new RequestSpecificationImpl();
-        assertThat(specification.getPostResponseProcessors().size(), equalTo(0));
-
-        PostResponseProcessor handler1 = context -> {
-        };
-        PostResponseProcessor handler2 = context -> {
-        };
-
-        specification.processResponse(handler1, handler2);
-
-        assertThat(specification.getPostResponseProcessors().size(), equalTo(2));
-        assertThat("Spec not contain specify handler", specification.getPostResponseProcessors().contains(handler1));
-        assertThat("Spec not contain specify handler", specification.getPostResponseProcessors().contains(handler2));
-    }
-
-    @Test
-    public void addResponseHandlersListTest() {
-        RequestSpecification specification = new RequestSpecificationImpl();
-        assertThat(specification.getPostResponseProcessors().size(), equalTo(0));
-
-        PostResponseProcessor handler1 = context -> {
-        };
-        PostResponseProcessor handler2 = context -> {
-        };
-
-        List<PostResponseProcessor> handlers = Arrays.asList(
-                handler1,
-                handler2
-        );
-
-        specification.processResponse(handlers);
-
-        assertThat(specification.getPostResponseProcessors().size(), equalTo(2));
-        assertThat("Spec not contain specify handler", specification.getPostResponseProcessors().contains(handler1));
-        assertThat("Spec not contain specify handler", specification.getPostResponseProcessors().contains(handler2));
+        assertThat(specification.getProcessors().size(), equalTo(2));
+        assertThat("Spec not contain specify handler", specification.getProcessors().contains(processor1));
+        assertThat("Spec not contain specify handler", specification.getProcessors().contains(processor2));
     }
 
     @Test
@@ -306,37 +264,18 @@ public class RequestSpecificationTest {
     }
 
     @Test
-    public void mergeRequestHandlersTest() {
-        PreSendProcessor handler1 = request -> {
-        };
-        PreSendProcessor handler2 = request -> {
-        };
+    public void mergeProcessorsTest() {
+        Processor processor1 = new TestProcessor();
+        Processor processor2 = new TestProcessor();
 
-        RequestSpecification spec1 = new RequestSpecificationImpl().processRequest(handler1).processRequest(handler2);
-        RequestSpecification spec2 = new RequestSpecificationImpl().processRequest(handler1);
+        RequestSpecification spec1 = new RequestSpecificationImpl().process(processor1, processor2);
+        RequestSpecification spec2 = new RequestSpecificationImpl().process(processor1);
 
         spec2.mergeWith(spec1);
 
-        assertThat(spec2.getPreSendProcessors().size(), equalTo(3));
-        assertThat("Spec not contain specify handler", spec2.getPreSendProcessors().contains(handler1));
-        assertThat("Spec not contain specify handler", spec2.getPreSendProcessors().contains(handler2));
-    }
-
-    @Test
-    public void mergeResponseHandlersTest() {
-        PostResponseProcessor handler1 = context -> {
-        };
-        PostResponseProcessor handler2 = context -> {
-        };
-
-        RequestSpecification spec1 = new RequestSpecificationImpl().processResponse(handler1).processResponse(handler2);
-        RequestSpecification spec2 = new RequestSpecificationImpl().processResponse(handler1);
-
-        spec2.mergeWith(spec1);
-
-        assertThat(spec2.getPostResponseProcessors().size(), equalTo(3));
-        assertThat("Spec not contain specify handler", spec2.getPostResponseProcessors().contains(handler1));
-        assertThat("Spec not contain specify handler", spec2.getPostResponseProcessors().contains(handler2));
+        assertThat(spec2.getProcessors().size(), equalTo(3));
+        assertThat("Spec not contain specify handler", spec2.getProcessors().contains(processor1));
+        assertThat("Spec not contain specify handler", spec2.getProcessors().contains(processor2));
     }
 
     @Test
@@ -366,5 +305,17 @@ public class RequestSpecificationTest {
 
         @RequestParam(name = "user_pass")
         private String password;
+    }
+
+    private static class TestProcessor implements Processor {
+        @Override
+        public void processRequest(RequestContext context) {
+
+        }
+
+        @Override
+        public void processResponse(RequestContext context, Response response) {
+
+        }
     }
 }

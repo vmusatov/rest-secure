@@ -4,7 +4,7 @@ import com.restsecure.BaseTest;
 import com.restsecure.core.response.HttpResponse;
 import com.restsecure.core.response.Response;
 import com.restsecure.core.response.ResponseBody;
-import com.restsecure.core.processor.PostResponseValidationProcessor;
+import com.restsecure.core.response.validation.Validation;
 
 import org.testng.annotations.Test;
 
@@ -18,7 +18,7 @@ public class BodyValidationTest extends BaseTest {
         Response response = new HttpResponse();
         response.setBody(new ResponseBody(userJson));
 
-        PostResponseValidationProcessor validation = body("phone.code", equalTo("+7"));
+        Validation validation = body("phone.code", equalTo("+7"));
         expectValidationSuccess(validation, response);
     }
 
@@ -27,7 +27,7 @@ public class BodyValidationTest extends BaseTest {
         Response response = new HttpResponse();
         response.setBody(new ResponseBody(userJson));
 
-        PostResponseValidationProcessor validation = body("phone.code", equalTo("wrong value"));
+        Validation validation = body("phone.code", equalTo("wrong value"));
         expectValidationFailWithErrorText(validation, response, "json path [phone.code] should have value [\"wrong value\"]");
     }
 }

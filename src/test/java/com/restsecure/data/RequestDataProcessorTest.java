@@ -16,7 +16,7 @@ public class RequestDataProcessorTest {
         RequestSpecification spec = get("url").data(new RegisterRequestData());
 
         RequestDataProcessor processor = new RequestDataProcessor();
-        processor.preSendProcess(new RequestContext(spec));
+        processor.processRequest(new RequestContext(spec));
 
         MultiKeyMap<String, Object> parameters = spec.getParameters();
 
@@ -35,7 +35,7 @@ public class RequestDataProcessorTest {
         RequestSpecification spec = get("url").data(new RegisterRequestData());
 
         RequestDataProcessor processor = new RequestDataProcessor();
-        processor.preSendProcess(new RequestContext(spec));
+        processor.processRequest(new RequestContext(spec));
 
         MultiKeyMap<String, Object> headers = spec.getHeaders();
 

@@ -23,10 +23,9 @@ public class SessionTest {
         response.setCookies(Collections.singletonList(new Cookie(SessionConfig.DEFAULT_SESSION_ID_NAME, "session_value")));
 
         RequestContext context = new RequestContext(spec);
-        context.setResponse(response);
 
-        session.postResponseProcess(context);
-        session.preSendProcess(context);
+        session.processResponse(context, response);
+        session.processRequest(context);
 
         Header expectedHeader = new Header("Cookie", SessionConfig.DEFAULT_SESSION_ID_NAME + "=session_value");
         assertThat("request not contain session cookie", spec.getHeaders().getFirst(expectedHeader.getName()).equals(expectedHeader.getValue()));

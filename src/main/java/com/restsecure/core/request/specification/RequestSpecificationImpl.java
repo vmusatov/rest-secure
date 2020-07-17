@@ -4,10 +4,8 @@ import com.restsecure.core.configuration.Config;
 import com.restsecure.core.http.RequestMethod;
 import com.restsecure.core.http.header.Header;
 import com.restsecure.core.http.param.Parameter;
-import com.restsecure.core.processor.BiProcessor;
-import com.restsecure.core.processor.PostResponseProcessor;
-import com.restsecure.core.processor.PostResponseValidationProcessor;
-import com.restsecure.core.processor.PreSendProcessor;
+import com.restsecure.core.processor.Processor;
+import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.request.RequestSender;
 import com.restsecure.core.response.Response;
 import com.restsecure.core.util.MultiKeyMap;
@@ -28,11 +26,8 @@ public class RequestSpecificationImpl implements RequestSpecification {
     private final MultiKeyMap<String, Object> headers;
     private final MultiKeyMap<String, Object> parameters;
 
-    private final List<PreSendProcessor> preSendProcessors;
-    private final List<PostResponseProcessor> postResponseProcessors;
-
-    private final List<PostResponseValidationProcessor> validationProcessors;
-
+    private final List<Processor> processors;
+    private final List<Validation> validations;
     private final List<Config> configs;
 
     public RequestSpecificationImpl() {
@@ -42,9 +37,8 @@ public class RequestSpecificationImpl implements RequestSpecification {
         this.headers = new MultiKeyMap<>();
         this.parameters = new MultiKeyMap<>();
 
-        this.preSendProcessors = new ArrayList<>();
-        this.postResponseProcessors = new ArrayList<>();
-        this.validationProcessors = new ArrayList<>();
+        this.processors = new ArrayList<>();
+        this.validations = new ArrayList<>();
 
         this.configs = new ArrayList<>();
     }
@@ -134,57 +128,16 @@ public class RequestSpecificationImpl implements RequestSpecification {
     }
 
     @Override
-    public RequestSpecification processRequest(PreSendProcessor processor, PreSendProcessor... additionalProcessors) {
-        preSendProcessors.add(processor);
-        preSendProcessors.addAll(Arrays.asList(additionalProcessors));
-
-        return this;
-    }
-
-    public RequestSpecification processRequest(List<PreSendProcessor> handlers) {
-        preSendProcessors.addAll(handlers);
-        return this;
-    }
-
-    @Override
-    public List<PreSendProcessor> getPreSendProcessors() {
-        return this.preSendProcessors;
-    }
-
-    @Override
-    public RequestSpecification processResponse(PostResponseProcessor processor, PostResponseProcessor... additionalProcessors) {
-        this.postResponseProcessors.add(processor);
-        this.postResponseProcessors.addAll(Arrays.asList(additionalProcessors));
-        return this;
-    }
-
-    @Override
-    public RequestSpecification processResponse(List<PostResponseProcessor> processors) {
-        this.postResponseProcessors.addAll(processors);
-        return this;
-    }
-
-
-    @Override
-    public List<PostResponseProcessor> getPostResponseProcessors() {
-        return this.postResponseProcessors;
-    }
-
-    @Override
-    public RequestSpecification process(BiProcessor processor, BiProcessor... additionalProcessors) {
-        processRequest(processor, additionalProcessors);
-        processResponse(processor, additionalProcessors);
+    public RequestSpecification process(Processor processor, Processor... additionalProcessors) {
+        this.processors.add(processor);
+        this.processors.addAll(Arrays.asList(additionalProcessors));
 
         return this;
     }
 
     @Override
-    public RequestSpecification process(List<BiProcessor> processors) {
-        processors.forEach(processor -> {
-            processRequest(processor);
-            processResponse(processor);
-        });
-
+    public RequestSpecification process(List<Processor> processors) {
+        this.processors.addAll(processors);
         return this;
     }
 
@@ -219,21 +172,21 @@ public class RequestSpecificationImpl implements RequestSpecification {
     }
 
     @Override
-    public RequestSpecification validate(PostResponseValidationProcessor validation, PostResponseValidationProcessor... additionalValidation) {
-        this.validationProcessors.add(validation);
-        this.validationProcessors.addAll(Arrays.asList(additionalValidation));
+    public RequestSpecification validate(Validation validation, Validation... additionalValidation) {
+        this.validations.add(validation);
+        this.validations.addAll(Arrays.asList(additionalValidation));
         return this;
     }
 
     @Override
-    public RequestSpecification validate(List<PostResponseValidationProcessor> validations) {
-        this.validationProcessors.addAll(validations);
+    public RequestSpecification validate(List<Validation> validations) {
+        this.validations.addAll(validations);
         return this;
     }
 
     @Override
-    public List<PostResponseValidationProcessor> getValidations() {
-        return this.validationProcessors;
+    public List<Validation> getValidations() {
+        return this.validations;
     }
 
     @Override

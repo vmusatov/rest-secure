@@ -3,7 +3,7 @@ package com.restsecure.validation.base;
 import com.restsecure.BaseTest;
 import com.restsecure.core.response.HttpResponse;
 import com.restsecure.core.response.Response;
-import com.restsecure.core.processor.PostResponseValidationProcessor;
+import com.restsecure.core.response.validation.Validation;
 import org.testng.annotations.Test;
 
 import static com.restsecure.Validations.statusCode;
@@ -16,7 +16,7 @@ public class StatusCodeValidationTest extends BaseTest {
         Response response = new HttpResponse();
         response.setStatusCode(200);
 
-        PostResponseValidationProcessor validation = statusCode(200);
+        Validation validation = statusCode(200);
 
         expectValidationSuccess(validation, response);
     }
@@ -26,7 +26,7 @@ public class StatusCodeValidationTest extends BaseTest {
         Response response = new HttpResponse();
         response.setStatusCode(500);
 
-        PostResponseValidationProcessor validation = statusCode(200);
+        Validation validation = statusCode(200);
         expectValidationFailWithErrorText(validation, response, "Expected status code is <200>");
     }
 
@@ -35,7 +35,7 @@ public class StatusCodeValidationTest extends BaseTest {
         Response response = new HttpResponse();
         response.setStatusCode(200);
 
-        PostResponseValidationProcessor validation = statusCode(equalTo(200));
+        Validation validation = statusCode(equalTo(200));
 
         expectValidationSuccess(validation, response);
     }
@@ -45,7 +45,7 @@ public class StatusCodeValidationTest extends BaseTest {
         Response response = new HttpResponse();
         response.setStatusCode(500);
 
-        PostResponseValidationProcessor validation = statusCode(equalTo(200));
+        Validation validation = statusCode(equalTo(200));
         expectValidationFailWithErrorText(validation, response, "Expected status code is <200>");
     }
 }

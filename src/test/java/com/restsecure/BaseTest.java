@@ -2,7 +2,7 @@ package com.restsecure;
 
 import com.restsecure.core.http.Cookie;
 import com.restsecure.core.http.header.Header;
-import com.restsecure.core.processor.PostResponseValidationProcessor;
+import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.request.specification.RequestSpecificationImpl;
 import com.restsecure.core.response.Response;
@@ -65,18 +65,17 @@ public class BaseTest {
             new Cookie("name5", "5")
     );
 
-    protected void expectValidationSuccess(PostResponseValidationProcessor validation, Response response) {
+    protected void expectValidationSuccess(Validation validation, Response response) {
         RequestContext context = new RequestContext(new RequestSpecificationImpl());
-        context.setResponse(response);
 
-        ValidationResult result = validation.validate(context);
+        ValidationResult result = validation.validate(context, response);
         assertThat(result.getStatus(), equalTo(ValidationStatus.SUCCESS));
     }
 
-    protected void expectValidationFailWithErrorText(PostResponseValidationProcessor validation, Response response, String expectedText) {
+    protected void expectValidationFailWithErrorText(Validation validation, Response response, String expectedText) {
         RequestContext context = new RequestContext(new RequestSpecificationImpl());
-        context.setResponse(response);
-        ValidationResult result = validation.validate(context);
+
+        ValidationResult result = validation.validate(context, response);
 
         assertThat(result.getStatus(), equalTo(ValidationStatus.FAIL));
         assertThat(result.getErrorText(), containsString(expectedText));

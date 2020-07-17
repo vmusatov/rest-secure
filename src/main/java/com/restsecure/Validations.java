@@ -2,7 +2,7 @@ package com.restsecure;
 
 import com.restsecure.core.http.Cookie;
 import com.restsecure.core.http.header.Header;
-import com.restsecure.core.processor.PostResponseValidationProcessor;
+import com.restsecure.core.response.validation.Validation;
 import com.restsecure.validation.DefaultValidation;
 import com.restsecure.validation.base.BodyValidation;
 import com.restsecure.validation.base.CookiesValidation;
@@ -30,8 +30,8 @@ import static org.hamcrest.Matchers.equalTo;
 
 public class Validations {
 
-    public static final PostResponseValidationProcessor AND = LogicalOperators.AND;
-    public static final PostResponseValidationProcessor OR = LogicalOperators.OR;
+    public static final Validation AND = LogicalOperators.AND;
+    public static final Validation OR = LogicalOperators.OR;
 
     /**
      * The default validation.
@@ -63,7 +63,7 @@ public class Validations {
      * @param validations response validations list
      * @return DefaultValidation
      */
-    public static DefaultValidation byDefault(List<PostResponseValidationProcessor> validations) {
+    public static DefaultValidation byDefault(List<Validation> validations) {
         return new DefaultValidation(validations);
     }
 
@@ -98,8 +98,8 @@ public class Validations {
      * @param additionalValidations additional response validation
      * @return DefaultValidation
      */
-    public static PostResponseValidationProcessor byDefault(PostResponseValidationProcessor validation, PostResponseValidationProcessor... additionalValidations) {
-        List<PostResponseValidationProcessor> validations = new ArrayList<>();
+    public static Validation byDefault(Validation validation, Validation... additionalValidations) {
+        List<Validation> validations = new ArrayList<>();
         validations.add(validation);
         validations.addAll(Arrays.asList(additionalValidations));
 
@@ -129,7 +129,7 @@ public class Validations {
      * @param validations response validations list
      * @return CompositeValidation
      */
-    public static CompositeValidation combine(List<PostResponseValidationProcessor> validations) {
+    public static CompositeValidation combine(List<Validation> validations) {
         return new BaseCompositeValidation(validations);
     }
 
@@ -157,8 +157,8 @@ public class Validations {
      * @param additionalValidations additional response validations
      * @return CompositeValidation
      */
-    public static CompositeValidation combine(PostResponseValidationProcessor validation, PostResponseValidationProcessor... additionalValidations) {
-        List<PostResponseValidationProcessor> validations = new ArrayList<>();
+    public static CompositeValidation combine(Validation validation, Validation... additionalValidations) {
+        List<Validation> validations = new ArrayList<>();
         validations.add(validation);
         validations.addAll(Arrays.asList(additionalValidations));
 
@@ -184,7 +184,7 @@ public class Validations {
      * @param validation response validation
      * @return ResponseConditionalValidation
      */
-    public static ResponseConditionalValidation when(PostResponseValidationProcessor condition, PostResponseValidationProcessor validation) {
+    public static ResponseConditionalValidation when(Validation condition, Validation validation) {
         return new ResponseConditionalValidation(condition, validation);
     }
 
@@ -208,7 +208,7 @@ public class Validations {
      * @param validation response validation
      * @return ConditionalValidation
      */
-    public static ConditionalValidation when(Condition condition, PostResponseValidationProcessor validation) {
+    public static ConditionalValidation when(Condition condition, Validation validation) {
         return new ConditionalValidation(condition, validation);
     }
 
@@ -231,7 +231,7 @@ public class Validations {
      * @param validation response validation
      * @return ConditionalValidation
      */
-    public static ConditionalValidation when(boolean condition, PostResponseValidationProcessor validation) {
+    public static ConditionalValidation when(boolean condition, Validation validation) {
         return new ConditionalValidation(() -> condition, validation);
     }
 
@@ -242,7 +242,7 @@ public class Validations {
      * @param validations response validations list
      * @return CompositeValidation
      */
-    public static CompositeValidation then(List<PostResponseValidationProcessor> validations) {
+    public static CompositeValidation then(List<Validation> validations) {
         return combine(validations);
     }
 
@@ -254,7 +254,7 @@ public class Validations {
      * @param additionalValidations additional response validations
      * @return CompositeValidation
      */
-    public static CompositeValidation then(PostResponseValidationProcessor validation, PostResponseValidationProcessor... additionalValidations) {
+    public static CompositeValidation then(Validation validation, Validation... additionalValidations) {
         return combine(validation, additionalValidations);
     }
 

@@ -13,8 +13,7 @@ public class SpecificationMerger {
         from.getParameters().forEach(param -> to.param(param.getKey(), param.getValue()));
         from.getHeaders().forEach(header -> to.header(header.getKey(), header.getValue()));
 
-        to.processRequest(from.getPreSendProcessors());
-        to.processResponse(from.getPostResponseProcessors());
+        to.process(from.getProcessors());
 
         to.validate(from.getValidations());
 

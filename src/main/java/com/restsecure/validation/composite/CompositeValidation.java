@@ -1,7 +1,8 @@
 package com.restsecure.validation.composite;
 
-import com.restsecure.core.processor.PostResponseValidationProcessor;
+import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.request.RequestContext;
+import com.restsecure.core.response.Response;
 import com.restsecure.core.response.validation.ValidationResult;
 
 import java.util.ArrayList;
@@ -11,41 +12,41 @@ import static com.restsecure.core.response.validation.ValidationStatus.SUCCESS;
 import static com.restsecure.validation.composite.LogicalOperators.AND;
 import static com.restsecure.validation.composite.LogicalOperators.OR;
 
-public abstract class CompositeValidation implements PostResponseValidationProcessor {
+public abstract class CompositeValidation implements Validation {
 
-    protected List<PostResponseValidationProcessor> validationProcessors;
+    protected List<Validation> validations;
 
-    public CompositeValidation(List<PostResponseValidationProcessor> validations) {
-        this.validationProcessors = new ArrayList<>();
-        this.validationProcessors.addAll(validations);
+    public CompositeValidation(List<Validation> validations) {
+        this.validations = new ArrayList<>();
+        this.validations.addAll(validations);
     }
 
     @Override
-    public abstract ValidationResult validate(RequestContext context);
+    public abstract ValidationResult validate(RequestContext context, Response response);
 
-    protected ValidationResult validateAll(RequestContext context) {
-        if (hasLogicalOperators(this.validationProcessors)) {
-            List<PostResponseValidationProcessor> parsedValidations = parseLogicalOperators(this.validationProcessors);
+    protected ValidationResult validateAll(RequestContext context, Response response) {
+        if (hasLogicalOperators(this.validations)) {
+            List<Validation> parsedValidations = parseLogicalOperators(this.validations);
 
             if (hasLogicalOperators(parsedValidations)) {
-                PostResponseValidationProcessor combinedValidation = combineAllInOne(parsedValidations);
-                return combinedValidation.validate(context);
+                Validation combinedValidation = combineAllInOne(parsedValidations);
+                return combinedValidation.validate(context, response);
             }
 
-            return validateWithoutLogical(context);
+            return validateWithoutLogical(context, response);
         }
 
-        return validateWithoutLogical(context);
+        return validateWithoutLogical(context, response);
     }
 
-    private boolean hasLogicalOperators(List<PostResponseValidationProcessor> validations) {
+    private boolean hasLogicalOperators(List<Validation> validations) {
         return validations.contains(AND) || validations.contains(OR);
     }
 
-    private ValidationResult validateWithoutLogical(RequestContext context) {
-        for (PostResponseValidationProcessor validation : this.validationProcessors) {
+    private ValidationResult validateWithoutLogical(RequestContext context, Response response) {
+        for (Validation validation : this.validations) {
 
-            ValidationResult validationResult = validation.validate(context);
+            ValidationResult validationResult = validation.validate(context, response);
 
             if (validationResult.isFail()) {
                 return validationResult;
@@ -55,8 +56,8 @@ public abstract class CompositeValidation implements PostResponseValidationProce
         return new ValidationResult(SUCCESS);
     }
 
-    private PostResponseValidationProcessor combineAllInOne(List<PostResponseValidationProcessor> validations) {
-        List<PostResponseValidationProcessor> combinedValidations = new ArrayList<>();
+    private Validation combineAllInOne(List<Validation> validations) {
+        List<Validation> combinedValidations = new ArrayList<>();
 
         for (int i = 0; i < validations.size(); i++) {
 
@@ -78,20 +79,20 @@ public abstract class CompositeValidation implements PostResponseValidationProce
         }
 
         if (combinedValidations.isEmpty()) {
-            return result -> new ValidationResult(SUCCESS);
+            return (context, response) -> new ValidationResult(SUCCESS);
         } else {
             return combinedValidations.get(0);
         }
 
     }
 
-    private List<PostResponseValidationProcessor> parseLogicalOperators(List<PostResponseValidationProcessor> validations) {
+    private List<Validation> parseLogicalOperators(List<Validation> validations) {
 
         if (validations.isEmpty()) {
             return validations;
         }
 
-        List<PostResponseValidationProcessor> result = new ArrayList<>();
+        List<Validation> result = new ArrayList<>();
 
         for (int i = 0; i < validations.size(); i++) {
 
@@ -120,7 +121,7 @@ public abstract class CompositeValidation implements PostResponseValidationProce
         return result;
     }
 
-    private boolean isLogicalOperator(PostResponseValidationProcessor validation) {
+    private boolean isLogicalOperator(Validation validation) {
         return validation.equals(AND) || validation.equals(OR);
     }
 }

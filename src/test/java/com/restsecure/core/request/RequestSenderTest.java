@@ -28,7 +28,7 @@ public class RequestSenderTest extends BaseTest {
     @BeforeClass
     public void init() {
         RestSecure.globalSpecification
-                .processRequest(bearerAuth(""));
+                .process(bearerAuth(""));
 
         RestSecure.baseUrl = "https://gorest.co.in/public-api";
     }

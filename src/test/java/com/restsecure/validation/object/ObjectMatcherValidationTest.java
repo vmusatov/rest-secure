@@ -4,7 +4,7 @@ import com.restsecure.BaseTest;
 import com.restsecure.core.response.HttpResponse;
 import com.restsecure.core.response.Response;
 import com.restsecure.core.response.ResponseBody;
-import com.restsecure.core.processor.PostResponseValidationProcessor;
+import com.restsecure.core.response.validation.Validation;
 import org.testng.annotations.Test;
 
 import static com.restsecure.BaseTest.UserMatcher.*;
@@ -17,7 +17,7 @@ public class ObjectMatcherValidationTest extends BaseTest {
         Response response = new HttpResponse();
         response.setBody(new ResponseBody(userJson));
 
-        PostResponseValidationProcessor validation = as(User.class, idIs(1), loginIs("UserLogin"), isSubscribe(true));
+        Validation validation = as(User.class, idIs(1), loginIs("UserLogin"), isSubscribe(true));
 
         expectValidationSuccess(validation, response);
     }
@@ -27,7 +27,7 @@ public class ObjectMatcherValidationTest extends BaseTest {
         Response response = new HttpResponse();
         response.setBody(new ResponseBody(userJson));
 
-        PostResponseValidationProcessor validation = as(User.class, idIs(1), loginIs("Wrong login"), isSubscribe(true));
+        Validation validation = as(User.class, idIs(1), loginIs("Wrong login"), isSubscribe(true));
 
 
         expectValidationFailWithErrorText(validation, response, "Expected: User should be <id: anything, login: \"Wrong login\", is_subscribe: anything>");

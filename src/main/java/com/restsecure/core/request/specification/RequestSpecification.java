@@ -4,10 +4,8 @@ import com.restsecure.core.configuration.Config;
 import com.restsecure.core.http.RequestMethod;
 import com.restsecure.core.http.header.Header;
 import com.restsecure.core.http.param.Parameter;
-import com.restsecure.core.processor.BiProcessor;
-import com.restsecure.core.processor.PostResponseProcessor;
-import com.restsecure.core.processor.PostResponseValidationProcessor;
-import com.restsecure.core.processor.PreSendProcessor;
+import com.restsecure.core.processor.Processor;
+import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.response.Response;
 import com.restsecure.core.util.MultiKeyMap;
 import com.restsecure.session.Session;
@@ -166,69 +164,30 @@ public interface RequestSpecification {
     MultiKeyMap<String, Object> getParameters();
 
     /**
-     * Allows you to process request and get some information about request or change request<br><br>
-     *
-     * @param processor            request processor
-     * @param additionalProcessors additional request processors
-     * @return RequestSpecification
-     */
-    RequestSpecification processRequest(PreSendProcessor processor, PreSendProcessor... additionalProcessors);
-
-    /**
-     * Allows you to process request and get some information about request or change request
-     *
-     * @param processors request processors list
-     * @return RequestSpecification
-     */
-    RequestSpecification processRequest(List<PreSendProcessor> processors);
-
-    /**
-     * @return request processors
-     */
-    List<PreSendProcessor> getPreSendProcessors();
-
-    /**
-     * Allows you to process response and get some information about response or change response
-     *
-     * @param processor            response processor
-     * @param additionalProcessors additional response processors
-     * @return RequestSpecification
-     */
-    RequestSpecification processResponse(PostResponseProcessor processor, PostResponseProcessor... additionalProcessors);
-
-    /**
-     * Allows you to process response and get some information about response or change response
-     *
-     * @param processors response processors list
-     * @return RequestSpecification
-     */
-    RequestSpecification processResponse(List<PostResponseProcessor> processors);
-
-    /**
-     * @return response processors
-     */
-    List<PostResponseProcessor> getPostResponseProcessors();
-
-    /**
-     * Allow you to specify BiProcessor to process request and response
-     * For example, a {@link Session} class is a BiProcessor,<br>
+     * Allow you to specify Processor to process request and response
+     * For example, a {@link Session} class is a Processor,<br>
      * which allows it to receive session ID from a response
      *
      * @param processor            processor
      * @param additionalProcessors additional processors
      * @return RequestSpecification
      */
-    RequestSpecification process(BiProcessor processor, BiProcessor... additionalProcessors);
+    RequestSpecification process(Processor processor, Processor... additionalProcessors);
 
     /**
-     * Allow you to specify BiProcessor to process request and response
-     * For example, a {@link Session} class is a BiProcessor,<br>
+     * Allow you to specify Processor to process request and response
+     * For example, a {@link Session} class is a Processor,<br>
      * which allows it to receive session ID from a response
      *
      * @param processors processors
      * @return RequestSpecification
      */
-    RequestSpecification process(List<BiProcessor> processors);
+    RequestSpecification process(List<Processor> processors);
+
+    /**
+     * @return Processors list
+     */
+    List<Processor> getProcessors();
 
     /**
      * Allows you to add a specification from a data class
@@ -302,21 +261,21 @@ public interface RequestSpecification {
      * Validation of the response is added to the request, which verifies that status code is 200 and
      * the user.login field is equal to Sam
      *
-     * @return ResponseValidation
+     * @return RequestSpecification
      */
-    RequestSpecification validate(PostResponseValidationProcessor validation, PostResponseValidationProcessor... additionalValidation);
+    RequestSpecification validate(Validation validation, Validation... additionalValidation);
 
     /**
      * Allows you to add a response validation<br>
      *
-     * @return ResponseValidation
+     * @return RequestSpecification
      */
-    RequestSpecification validate(List<PostResponseValidationProcessor> validations);
+    RequestSpecification validate(List<Validation> validations);
 
     /**
      * @return List<ResponseValidation>
      */
-    List<PostResponseValidationProcessor> getValidations();
+    List<Validation> getValidations();
 
     /**
      * Allows you to send request with specified specification

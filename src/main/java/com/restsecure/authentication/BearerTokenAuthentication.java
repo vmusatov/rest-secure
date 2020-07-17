@@ -1,9 +1,9 @@
 package com.restsecure.authentication;
 
-import com.restsecure.core.processor.PreSendProcessor;
+import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.RequestContext;
 
-public class BearerTokenAuthentication implements PreSendProcessor {
+public class BearerTokenAuthentication implements Processor {
 
     private final String token;
 
@@ -12,7 +12,7 @@ public class BearerTokenAuthentication implements PreSendProcessor {
     }
 
     @Override
-    public void preSendProcess(RequestContext context) {
+    public void processRequest(RequestContext context) {
         context.getSpecification().header("Authorization", "Bearer " + this.token);
     }
 }

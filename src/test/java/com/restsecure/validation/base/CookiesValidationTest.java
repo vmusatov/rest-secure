@@ -1,7 +1,7 @@
 package com.restsecure.validation.base;
 
 import com.restsecure.BaseTest;
-import com.restsecure.core.processor.PostResponseValidationProcessor;
+import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.http.Cookie;
 import com.restsecure.core.response.HttpResponse;
 import com.restsecure.core.response.Response;
@@ -20,7 +20,7 @@ public class CookiesValidationTest extends BaseTest {
         Response response = new HttpResponse();
         response.setCookies(cookiesWithNumberValues);
 
-        PostResponseValidationProcessor validation = cookie("name1", "1");
+        Validation validation = cookie("name1", "1");
         expectValidationSuccess(validation, response);
     }
 
@@ -29,7 +29,7 @@ public class CookiesValidationTest extends BaseTest {
         Response response = new HttpResponse();
         response.setCookies(cookiesWithNumberValues);
 
-        PostResponseValidationProcessor validation = cookie("name2", "1");
+        Validation validation = cookie("name2", "1");
         expectValidationFailWithErrorText(validation, response, "Expected: list containing item [\"name2\", \"1\"]");
     }
 
@@ -38,7 +38,7 @@ public class CookiesValidationTest extends BaseTest {
         Response response = new HttpResponse();
         response.setCookies(cookiesWithNumberValues);
 
-        PostResponseValidationProcessor validation = cookie(new Cookie("name1", "1"));
+        Validation validation = cookie(new Cookie("name1", "1"));
         expectValidationSuccess(validation, response);
     }
 
@@ -47,7 +47,7 @@ public class CookiesValidationTest extends BaseTest {
         Response response = new HttpResponse();
         response.setCookies(cookiesWithNumberValues);
 
-        PostResponseValidationProcessor validation = cookie(new Cookie("name2", "1"));
+        Validation validation = cookie(new Cookie("name2", "1"));
         expectValidationFailWithErrorText(validation, response, "Expected: list containing item [\"name2\", \"1\"]");
     }
 
@@ -56,7 +56,7 @@ public class CookiesValidationTest extends BaseTest {
         Response response = new HttpResponse();
         response.setCookies(cookiesWithNumberValues);
 
-        PostResponseValidationProcessor validation = cookie("name1", containsString("1"));
+        Validation validation = cookie("name1", containsString("1"));
         expectValidationSuccess(validation, response);
     }
 
@@ -65,7 +65,7 @@ public class CookiesValidationTest extends BaseTest {
         Response response = new HttpResponse();
         response.setCookies(cookiesWithNumberValues);
 
-        PostResponseValidationProcessor validation = cookie("name1", containsString("2"));
+        Validation validation = cookie("name1", containsString("2"));
         expectValidationFailWithErrorText(validation, response, "Expected: list containing item [\"name1\", a string containing \"2\"]");
     }
 
@@ -74,7 +74,7 @@ public class CookiesValidationTest extends BaseTest {
         Response response = new HttpResponse();
         response.setCookies(cookiesWithNumberValues);
 
-        PostResponseValidationProcessor validation = cookie("name1", Integer::parseInt, lessThan(2));
+        Validation validation = cookie("name1", Integer::parseInt, lessThan(2));
         expectValidationSuccess(validation, response);
     }
 
@@ -83,7 +83,7 @@ public class CookiesValidationTest extends BaseTest {
         Response response = new HttpResponse();
         response.setCookies(cookiesWithNumberValues);
 
-        PostResponseValidationProcessor validation = cookie("name1", Integer::parseInt, lessThan(1));
+        Validation validation = cookie("name1", Integer::parseInt, lessThan(1));
         expectValidationFailWithErrorText(validation, response, "Expected: list containing item [\"name1\", a value less than <1>]");
     }
 
@@ -92,7 +92,7 @@ public class CookiesValidationTest extends BaseTest {
         Response response = new HttpResponse();
         response.setCookies(cookiesWithStringValues);
 
-        PostResponseValidationProcessor validation = cookies(containsPair("name1", "value1"));
+        Validation validation = cookies(containsPair("name1", "value1"));
         expectValidationSuccess(validation, response);
     }
 
@@ -101,7 +101,7 @@ public class CookiesValidationTest extends BaseTest {
         Response response = new HttpResponse();
         response.setCookies(cookiesWithStringValues);
 
-        PostResponseValidationProcessor validation = cookies(containsPair("name1", "wrong value"));
+        Validation validation = cookies(containsPair("name1", "wrong value"));
         expectValidationFailWithErrorText(validation, response, "Expected: list containing item [\"name1\", \"wrong value\"]");
     }
 }

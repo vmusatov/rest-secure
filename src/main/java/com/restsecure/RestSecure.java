@@ -4,13 +4,11 @@ import com.restsecure.authentication.BasicAuthentication;
 import com.restsecure.authentication.BearerTokenAuthentication;
 import com.restsecure.core.Context;
 import com.restsecure.core.http.RequestMethod;
-import com.restsecure.core.processor.BiProcessor;
-import com.restsecure.core.processor.PreSendProcessor;
+import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.RequestSender;
 import com.restsecure.core.request.specification.RequestSpecification;
 import com.restsecure.core.request.specification.RequestSpecificationImpl;
 import com.restsecure.core.response.Response;
-import com.restsecure.session.Session;
 import lombok.Getter;
 
 import java.util.List;
@@ -137,27 +135,27 @@ public class RestSecure {
     }
 
     /**
-     * Allows you to send multiple requests in one session at once<br>
+     * Allows you to send multiple requests at once<br>
      * For example:
      * <pre>
      *     Session session = new Session();
-     *     Request one = get("url);
-     *     Request two = get("other_url);
+     *     RequestSpecification one = get("url);
+     *     RequestSpecification two = get("other_url);
      *
      *     send(session, one, two);
      * </pre>
      *
-     * @param session         request {@link Session}
+     * @param processor       processor
      * @param spec            RequestSpecification
      * @param additionalSpecs RequestSpecifications list
      * @return last request response
      */
-    public static Response send(BiProcessor session, RequestSpecification spec, RequestSpecification... additionalSpecs) {
-        return RequestSender.send(session, spec, additionalSpecs);
+    public static Response send(Processor processor, RequestSpecification spec, RequestSpecification... additionalSpecs) {
+        return RequestSender.send(processor, spec, additionalSpecs);
     }
 
     /**
-     * Allows you to send multiple requests in one session at once<br>
+     * Allows you to send multiple requests at once<br>
      * For example:
      * <pre>
      *     Session session = new Session();
@@ -169,12 +167,12 @@ public class RestSecure {
      *     send(session, requests);
      * </pre>
      *
-     * @param session request {@link Session}
-     * @param specs   RequestSpecifications list
+     * @param processor processor
+     * @param specs     RequestSpecifications list
      * @return last request response
      */
-    public static Response send(BiProcessor session, List<RequestSpecification> specs) {
-        return RequestSender.send(session, specs);
+    public static Response send(Processor processor, List<RequestSpecification> specs) {
+        return RequestSender.send(processor, specs);
     }
 
     /**
@@ -188,7 +186,7 @@ public class RestSecure {
      * @param password user password
      * @return RequestAuthenticationHandler
      */
-    public static PreSendProcessor basicAuth(String name, String password) {
+    public static Processor basicAuth(String name, String password) {
         return new BasicAuthentication(name, password);
     }
 
@@ -202,7 +200,7 @@ public class RestSecure {
      * @param token access token
      * @return RequestAuthenticationHandler
      */
-    public static PreSendProcessor bearerAuth(String token) {
+    public static Processor bearerAuth(String token) {
         return new BearerTokenAuthentication(token);
     }
 }
