@@ -2,11 +2,12 @@ package com.restsecure.core.request.specification;
 
 import com.restsecure.core.configuration.Config;
 import com.restsecure.core.http.RequestMethod;
+import com.restsecure.core.http.cookie.Cookie;
 import com.restsecure.core.http.header.Header;
 import com.restsecure.core.http.param.Parameter;
 import com.restsecure.core.processor.Processor;
-import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.response.Response;
+import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.util.MultiKeyMap;
 import com.restsecure.session.Session;
 
@@ -157,6 +158,58 @@ public interface RequestSpecification {
      * @return RequestSpecification
      */
     RequestSpecification params(List<Parameter> parameters);
+
+    /**
+     * Allow you to specify request cookies
+     * <pre>
+     *     RequestSpecification spec = get("url").cookie("name", "value");
+     * </pre>
+     *
+     * @param name             cookie name
+     * @param value            cookie value
+     * @param additionalValues additional values
+     * @return RequestSpecification
+     */
+    RequestSpecification cookie(String name, Object value, Object... additionalValues);
+
+    /**
+     * Allow you to specify detailed request cookie
+     * <pre>
+     *      Cookie cookie = Cookie.builder()
+     *          .name("name")
+     *          .value("value")
+     *          .comment("comment")
+     *          .secure(true)
+     *          .build();
+     *
+     *     RequestSpecification spec = get("url").cookie(cookie);
+     * </pre>
+     *
+     * @param cookie Cookie
+     * @return RequestSpecification
+     */
+    RequestSpecification cookie(Cookie cookie);
+
+    /**
+     * Allow you to specify detailed request cookies
+     * <pre>
+     *     List<Cookie> cookies = Arrays.asList(
+     *          new Cookie("name", "value"),
+     *          new Cookie("name2", "value2")
+     *     );
+     *
+     *     RequestSpecification spec = get("url").cookies(cookies);
+     * </pre>
+     *
+     * @param cookies Cookie list
+     * @return RequestSpecification
+     */
+    RequestSpecification cookies(List<Cookie> cookies);
+
+    /**
+     * @return cookies with Object value
+     */
+    MultiKeyMap<String, Object> getCookiesWithValueToSerialize();
 
     /**
      * @return request parameters

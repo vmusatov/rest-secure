@@ -1,6 +1,6 @@
 package com.restsecure.validation.matchers;
 
-import com.restsecure.core.http.Cookie;
+import com.restsecure.core.http.cookie.Cookie;
 import com.restsecure.core.util.NameValueList;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;

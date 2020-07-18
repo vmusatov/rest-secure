@@ -2,12 +2,13 @@ package com.restsecure.core.request.specification;
 
 import com.restsecure.core.configuration.Config;
 import com.restsecure.core.http.RequestMethod;
+import com.restsecure.core.http.cookie.Cookie;
 import com.restsecure.core.http.header.Header;
 import com.restsecure.core.http.param.Parameter;
 import com.restsecure.core.processor.Processor;
-import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.request.RequestSender;
 import com.restsecure.core.response.Response;
+import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.util.MultiKeyMap;
 import lombok.Getter;
 
@@ -25,6 +26,7 @@ public class RequestSpecificationImpl implements RequestSpecification {
 
     private final MultiKeyMap<String, Object> headers;
     private final MultiKeyMap<String, Object> parameters;
+    private final MultiKeyMap<String, Object> cookiesWithValueToSerialize;
 
     private final List<Processor> processors;
     private final List<Validation> validations;
@@ -36,6 +38,7 @@ public class RequestSpecificationImpl implements RequestSpecification {
 
         this.headers = new MultiKeyMap<>();
         this.parameters = new MultiKeyMap<>();
+        this.cookiesWithValueToSerialize = new MultiKeyMap<>();
 
         this.processors = new ArrayList<>();
         this.validations = new ArrayList<>();
@@ -120,6 +123,36 @@ public class RequestSpecificationImpl implements RequestSpecification {
             }
         }
         return this;
+    }
+
+    @Override
+    public RequestSpecification cookie(String name, Object value, Object... additionalValues) {
+        this.cookiesWithValueToSerialize.put(name, value);
+        if (additionalValues != null && additionalValues.length > 0) {
+            for (Object additionalValue : additionalValues) {
+                this.cookiesWithValueToSerialize.put(name, additionalValue);
+            }
+        }
+        return this;
+    }
+
+    @Override
+    public RequestSpecification cookie(Cookie cookie) {
+        header("Cookie", cookie.toString());
+        return this;
+    }
+
+    @Override
+    public RequestSpecification cookies(List<Cookie> cookies) {
+        for (Cookie cookie : cookies) {
+            cookie(cookie);
+        }
+        return this;
+    }
+
+    @Override
+    public MultiKeyMap<String, Object> getCookiesWithValueToSerialize() {
+        return this.cookiesWithValueToSerialize;
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.restsecure.core.response;
 
-import com.restsecure.core.http.Cookie;
+import com.restsecure.core.http.cookie.Cookie;
 import com.restsecure.core.http.header.Header;
 import com.restsecure.core.util.NameValueList;
 

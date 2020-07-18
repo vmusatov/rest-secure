@@ -1,5 +1,6 @@
 package com.restsecure.core.http;
 
+import com.restsecure.core.http.cookie.Cookie;
 import com.restsecure.core.http.header.Header;
 import com.restsecure.core.request.specification.RequestSpecification;
 import com.restsecure.core.util.MultiKeyMap;
@@ -17,8 +18,6 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 import static com.restsecure.core.http.RequestMethod.DELETE;
 import static com.restsecure.core.http.RequestMethod.GET;

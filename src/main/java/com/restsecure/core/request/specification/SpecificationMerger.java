@@ -12,6 +12,7 @@ public class SpecificationMerger {
 
         from.getParameters().forEach(param -> to.param(param.getKey(), param.getValue()));
         from.getHeaders().forEach(header -> to.header(header.getKey(), header.getValue()));
+        from.getCookiesWithValueToSerialize().forEach(cookie -> to.cookie(cookie.getKey(), cookie.getValue()));
 
         to.process(from.getProcessors());
 

@@ -1,6 +1,6 @@
 package com.restsecure;
 
-import com.restsecure.core.http.Cookie;
+import com.restsecure.core.http.cookie.Cookie;
 import com.restsecure.core.http.header.Header;
 import com.restsecure.core.response.validation.Validation;
 import com.restsecure.validation.DefaultValidation;

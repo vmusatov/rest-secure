@@ -16,11 +16,11 @@ public class SerializeHelper {
                 || objectClass.isEnum() || Class.class.isAssignableFrom(objectClass));
     }
 
-    public static void serializeValuesIfNeed(MultiKeyMap<String, Object> headers, SerializeConfig serializeConfig) {
-        headers.forEach(header -> {
-            Object value = header.getValue();
+    public static void serializeValuesIfNeed(MultiKeyMap<String, Object> items, SerializeConfig serializeConfig) {
+        items.forEach(item -> {
+            Object value = item.getValue();
             if (isNeedSerialize(value)) {
-                header.setValue(serializeConfig.getSerializer().serialize(value));
+                item.setValue(serializeConfig.getSerializer().serialize(value));
             }
         });
     }

@@ -1,6 +1,6 @@
 package com.restsecure.session;
 
-import com.restsecure.core.http.Cookie;
+import com.restsecure.core.http.cookie.Cookie;
 import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.request.RequestSender;

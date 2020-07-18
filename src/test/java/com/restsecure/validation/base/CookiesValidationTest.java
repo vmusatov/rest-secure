@@ -2,7 +2,7 @@ package com.restsecure.validation.base;
 
 import com.restsecure.BaseTest;
 import com.restsecure.core.response.validation.Validation;
-import com.restsecure.core.http.Cookie;
+import com.restsecure.core.http.cookie.Cookie;
 import com.restsecure.core.response.HttpResponse;
 import com.restsecure.core.response.Response;
 import org.testng.annotations.Test;
