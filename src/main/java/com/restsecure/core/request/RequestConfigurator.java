@@ -1,7 +1,6 @@
 package com.restsecure.core.request;
 
 import com.restsecure.RestSecure;
-import com.restsecure.core.http.HttpHelper;
 import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.specification.RequestSpecification;
 import com.restsecure.core.request.specification.RequestSpecificationImpl;
@@ -15,7 +14,6 @@ public class RequestConfigurator {
     public static void configure(RequestContext context) {
         mergeWithGlobalSpec(context);
         processRequest(context);
-        setBaseUrlIfNeed(context);
     }
 
     private static void mergeWithGlobalSpec(RequestContext context) {
@@ -24,14 +22,6 @@ public class RequestConfigurator {
                 .mergeWith(context.getSpecification());
 
         context.setSpecification(specification);
-    }
-
-    private static void setBaseUrlIfNeed(RequestContext context) {
-        String domainName = HttpHelper.getDomainName(context.getSpecification().getUrl());
-        if (domainName == null || domainName.isEmpty()) {
-            String url = RestSecure.baseUrl + context.getSpecification().getUrl();
-            context.getSpecification().url(url);
-        }
     }
 
     private static void processRequest(RequestContext context) {

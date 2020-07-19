@@ -26,6 +26,7 @@ public class RequestSpecificationImpl implements RequestSpecification {
 
     private final MultiKeyMap<String, Object> headers;
     private final MultiKeyMap<String, Object> parameters;
+    private final MultiKeyMap<String, Object> routeParams;
     private final MultiKeyMap<String, Object> cookiesWithValueToSerialize;
 
     private final List<Processor> processors;
@@ -38,6 +39,7 @@ public class RequestSpecificationImpl implements RequestSpecification {
 
         this.headers = new MultiKeyMap<>();
         this.parameters = new MultiKeyMap<>();
+        this.routeParams = new MultiKeyMap<>();
         this.cookiesWithValueToSerialize = new MultiKeyMap<>();
 
         this.processors = new ArrayList<>();
@@ -126,6 +128,22 @@ public class RequestSpecificationImpl implements RequestSpecification {
     }
 
     @Override
+    public MultiKeyMap<String, Object> getParameters() {
+        return this.parameters;
+    }
+
+    @Override
+    public RequestSpecification routeParam(String name, Object value) {
+        this.routeParams.put(name, value);
+        return this;
+    }
+
+    @Override
+    public MultiKeyMap<String, Object> getRouteParams() {
+        return this.routeParams;
+    }
+
+    @Override
     public RequestSpecification cookie(String name, Object value, Object... additionalValues) {
         this.cookiesWithValueToSerialize.put(name, value);
         if (additionalValues != null && additionalValues.length > 0) {
@@ -153,11 +171,6 @@ public class RequestSpecificationImpl implements RequestSpecification {
     @Override
     public MultiKeyMap<String, Object> getCookiesWithValueToSerialize() {
         return this.cookiesWithValueToSerialize;
-    }
-
-    @Override
-    public MultiKeyMap<String, Object> getParameters() {
-        return this.parameters;
     }
 
     @Override

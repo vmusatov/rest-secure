@@ -160,6 +160,28 @@ public interface RequestSpecification {
     RequestSpecification params(List<Parameter> parameters);
 
     /**
+     * @return request parameters
+     */
+    MultiKeyMap<String, Object> getParameters();
+
+    /**
+     * Allow you to specify route param, for example:
+     * <pre>
+     *     get("http://localhost/users/{user_id}")
+     *          .routeParam("user_id", 1)
+     * </pre>
+     * @param name param name
+     * @param value param value
+     * @return RequestSpecification
+     */
+    RequestSpecification routeParam(String name, Object value);
+
+    /**
+     * @return route params
+     */
+    MultiKeyMap<String, Object> getRouteParams();
+
+    /**
      * Allow you to specify request cookies
      * <pre>
      *     RequestSpecification spec = get("url").cookie("name", "value");
@@ -210,11 +232,6 @@ public interface RequestSpecification {
      * @return cookies with Object value
      */
     MultiKeyMap<String, Object> getCookiesWithValueToSerialize();
-
-    /**
-     * @return request parameters
-     */
-    MultiKeyMap<String, Object> getParameters();
 
     /**
      * Allow you to specify Processor to process request and response

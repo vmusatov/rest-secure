@@ -130,6 +130,21 @@ public class RequestSpecificationTest {
     }
 
     @Test
+    public void addRouteParamTest() {
+        RequestSpecification spec = new RequestSpecificationImpl();
+        assertThat(spec.getRouteParams().size(), equalTo(0));
+
+        spec.routeParam("name1", "value1");
+        assertThat(spec.getRouteParams().size(), equalTo(1));
+        assertThat(spec.getRouteParams().getFirst("name1"), equalTo("value1"));
+
+        spec.routeParam("name2", "value2");
+        assertThat(spec.getRouteParams().size(), equalTo(2));
+        assertThat(spec.getRouteParams().getFirst("name1"), equalTo("value1"));
+        assertThat(spec.getRouteParams().getFirst("name2"), equalTo("value2"));
+    }
+
+    @Test
     public void addProcessorTest() {
         RequestSpecification specification = new RequestSpecificationImpl();
         assertThat(specification.getProcessors().size(), equalTo(0));
@@ -247,6 +262,20 @@ public class RequestSpecificationTest {
         assertThat(spec2.getParameters().size(), equalTo(2));
         assertThat("Spec not contain specify handler", spec2.getParameters().getFirst("name1").equals("value1"));
         assertThat("Spec not contain specify handler", spec2.getParameters().getFirst("name2").equals("value2"));
+    }
+
+    @Test
+    public void mergeRouteParamsTest() {
+        RequestSpecification spec1 = new RequestSpecificationImpl()
+                .routeParam("name1", "value1");
+        RequestSpecification spec2 = new RequestSpecificationImpl()
+                .routeParam("name2", "value2");
+
+        spec2.mergeWith(spec1);
+
+        assertThat(spec2.getRouteParams().size(), equalTo(2));
+        assertThat("Spec not contain specify handler", spec2.getRouteParams().getFirst("name1").equals("value1"));
+        assertThat("Spec not contain specify handler", spec2.getRouteParams().getFirst("name2").equals("value2"));
     }
 
     @Test
