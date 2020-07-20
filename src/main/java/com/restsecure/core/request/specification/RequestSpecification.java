@@ -1,6 +1,7 @@
 package com.restsecure.core.request.specification;
 
 import com.restsecure.core.configuration.Config;
+import com.restsecure.core.http.Proxy.Proxy;
 import com.restsecure.core.http.RequestMethod;
 import com.restsecure.core.http.cookie.Cookie;
 import com.restsecure.core.http.header.Header;
@@ -170,7 +171,8 @@ public interface RequestSpecification {
      *     get("http://localhost/users/{user_id}")
      *          .routeParam("user_id", 1)
      * </pre>
-     * @param name param name
+     *
+     * @param name  param name
      * @param value param value
      * @return RequestSpecification
      */
@@ -232,6 +234,39 @@ public interface RequestSpecification {
      * @return cookies with Object value
      */
     MultiKeyMap<String, Object> getCookiesWithValueToSerialize();
+
+    /**
+     * Set a proxy without auth for request
+     *
+     * @param host host url
+     * @param port proxy port
+     * @return RequestSpecification
+     */
+    RequestSpecification proxy(String host, int port);
+
+    /**
+     * Set a proxy without auth for request
+     *
+     * @param proxy Proxy
+     * @return RequestSpecification
+     */
+    RequestSpecification proxy(Proxy proxy);
+
+    /**
+     * Set a proxy with auth for request
+     *
+     * @param host     host url
+     * @param port     proxy port
+     * @param username username
+     * @param password password
+     * @return RequestSpecification
+     */
+    RequestSpecification proxy(String host, int port, String username, String password);
+
+    /**
+     * @return Proxy
+     */
+    Proxy getProxy();
 
     /**
      * Allow you to specify Processor to process request and response

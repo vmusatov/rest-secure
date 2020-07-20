@@ -1,6 +1,7 @@
 package com.restsecure.core.request.specification;
 
 import com.restsecure.core.configuration.Config;
+import com.restsecure.core.http.Proxy.Proxy;
 import com.restsecure.core.http.RequestMethod;
 import com.restsecure.core.http.cookie.Cookie;
 import com.restsecure.core.http.header.Header;
@@ -29,6 +30,8 @@ public class RequestSpecificationImpl implements RequestSpecification {
     private final MultiKeyMap<String, Object> routeParams;
     private final MultiKeyMap<String, Object> cookiesWithValueToSerialize;
 
+    private Proxy proxy;
+
     private final List<Processor> processors;
     private final List<Validation> validations;
     private final List<Config> configs;
@@ -41,6 +44,8 @@ public class RequestSpecificationImpl implements RequestSpecification {
         this.parameters = new MultiKeyMap<>();
         this.routeParams = new MultiKeyMap<>();
         this.cookiesWithValueToSerialize = new MultiKeyMap<>();
+
+        this.proxy = null;
 
         this.processors = new ArrayList<>();
         this.validations = new ArrayList<>();
@@ -171,6 +176,24 @@ public class RequestSpecificationImpl implements RequestSpecification {
     @Override
     public MultiKeyMap<String, Object> getCookiesWithValueToSerialize() {
         return this.cookiesWithValueToSerialize;
+    }
+
+    @Override
+    public RequestSpecification proxy(String host, int port) {
+        this.proxy = new Proxy(host, port);
+        return this;
+    }
+
+    @Override
+    public RequestSpecification proxy(Proxy proxy) {
+        this.proxy = proxy;
+        return this;
+    }
+
+    @Override
+    public RequestSpecification proxy(String host, int port, String username, String password) {
+        this.proxy = new Proxy(host, port, username, password);
+        return this;
     }
 
     @Override

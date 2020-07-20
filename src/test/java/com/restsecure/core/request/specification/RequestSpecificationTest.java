@@ -1,6 +1,7 @@
 package com.restsecure.core.request.specification;
 
 import com.restsecure.core.configuration.Config;
+import com.restsecure.core.http.Proxy.Proxy;
 import com.restsecure.core.http.RequestMethod;
 import com.restsecure.core.http.header.Header;
 import com.restsecure.core.http.param.Parameter;
@@ -160,6 +161,45 @@ public class RequestSpecificationTest {
     }
 
     @Test
+    public void addProxyTest() {
+        RequestSpecification spec = new RequestSpecificationImpl();
+        assertThat(spec.getProxy(), is(nullValue()));
+
+        spec.proxy("host", 8090);
+
+        assertThat(spec.getProxy().getHost(), equalTo("host"));
+        assertThat(spec.getProxy().getPort(), equalTo(8090));
+        assertThat(spec.getProxy().needAuth(), equalTo(false));
+        assertThat(spec.getProxy().getUsername(), is(nullValue()));
+        assertThat(spec.getProxy().getPassword(), is(nullValue()));
+    }
+
+    @Test
+    public void addProxyWithAuthTest() {
+        RequestSpecification spec = new RequestSpecificationImpl();
+        assertThat(spec.getProxy(), is(nullValue()));
+
+        spec.proxy("host", 8090, "username", "pass");
+
+        assertThat(spec.getProxy().getHost(), equalTo("host"));
+        assertThat(spec.getProxy().getPort(), equalTo(8090));
+        assertThat(spec.getProxy().needAuth(), equalTo(true));
+        assertThat(spec.getProxy().getUsername(), equalTo("username"));
+        assertThat(spec.getProxy().getPassword(), equalTo("pass"));
+    }
+
+    @Test
+    public void addProxyObjectTest() {
+        RequestSpecification spec = new RequestSpecificationImpl();
+        assertThat(spec.getProxy(), is(nullValue()));
+
+        Proxy proxy = new Proxy("host", 8080);
+        spec.proxy(proxy);
+
+        assertThat(spec.getProxy(), equalTo(proxy));
+    }
+
+    @Test
     public void addProcessorsListTest() {
         RequestSpecification specification = new RequestSpecificationImpl();
         assertThat(specification.getProcessors().size(), equalTo(0));
@@ -305,6 +345,20 @@ public class RequestSpecificationTest {
         assertThat(spec2.getProcessors().size(), equalTo(3));
         assertThat("Spec not contain specify handler", spec2.getProcessors().contains(processor1));
         assertThat("Spec not contain specify handler", spec2.getProcessors().contains(processor2));
+    }
+
+    @Test
+    public void mergeProxyTest() {
+        RequestSpecification spec1 = new RequestSpecificationImpl();
+        spec1.proxy("host1", 8090);
+
+        RequestSpecification spec2 = new RequestSpecificationImpl();
+        spec2.proxy("host2", 8092);
+
+        spec2.mergeWith(spec1);
+
+        assertThat(spec2.getProxy().getHost(), equalTo("host1"));
+        assertThat(spec2.getProxy().getPort(), equalTo(8090));
     }
 
     @Test
