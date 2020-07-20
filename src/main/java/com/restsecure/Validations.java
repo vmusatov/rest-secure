@@ -2,6 +2,7 @@ package com.restsecure;
 
 import com.restsecure.core.http.cookie.Cookie;
 import com.restsecure.core.http.header.Header;
+import com.restsecure.core.http.header.HeaderNames;
 import com.restsecure.core.response.validation.Validation;
 import com.restsecure.validation.DefaultValidation;
 import com.restsecure.validation.base.BodyValidation;
@@ -472,6 +473,42 @@ public class Validations {
      */
     public static <T> HeadersValidation headers(Matcher<? extends Iterable<? extends T>> matcher) {
         return new HeadersValidation(matcher);
+    }
+
+    /**
+     * Allows you to specify the Content-Type header that should contain the response
+     * <pre>
+     *     get("url")
+     *          .param("name", "value")
+     *          .validate(
+     *              contentType("application/json; charset=UTF-8")
+     *          )
+     *          .send();
+     * </pre>
+     *
+     * @param value Content-type header value
+     * @return HeadersValidation
+     */
+    public static HeadersValidation contentType(String value) {
+        return new HeadersValidation(containsPair(HeaderNames.CONTENT_TYPE, value));
+    }
+
+    /**
+     * Allows you to specify the Content-Type header that should contain the response
+     * <pre>
+     *     get("url")
+     *          .param("name", "value")
+     *          .validate(
+     *              contentType(containsString("application/json"))
+     *          )
+     *          .send();
+     * </pre>
+     *
+     * @param valueMatcher Content-type header value matcher
+     * @return HeadersValidation
+     */
+    public static HeadersValidation contentType(Matcher<String> valueMatcher) {
+        return new HeadersValidation(containsPair(HeaderNames.CONTENT_TYPE, valueMatcher));
     }
 
     /**

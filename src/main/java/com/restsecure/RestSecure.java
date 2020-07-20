@@ -4,6 +4,8 @@ import com.restsecure.authentication.BasicAuthentication;
 import com.restsecure.authentication.BearerTokenAuthentication;
 import com.restsecure.core.Context;
 import com.restsecure.core.http.RequestMethod;
+import com.restsecure.core.http.header.Header;
+import com.restsecure.core.http.header.HeaderNames;
 import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.RequestSender;
 import com.restsecure.core.request.specification.RequestSpecification;
@@ -202,5 +204,15 @@ public class RestSecure {
      */
     public static Processor bearerAuth(String token) {
         return new BearerTokenAuthentication(token);
+    }
+
+    /**
+     * Create Accept header with specify value
+     *
+     * @param value header value
+     * @return Header
+     */
+    public static Header accept(String value) {
+        return new Header(HeaderNames.ACCEPT, value);
     }
 }

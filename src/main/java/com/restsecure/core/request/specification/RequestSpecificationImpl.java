@@ -84,8 +84,13 @@ public class RequestSpecificationImpl implements RequestSpecification {
     }
 
     @Override
-    public RequestSpecification header(Header header) {
+    public RequestSpecification header(Header header, Header... additionalHeaders) {
         headers.put(header.getName(), header.getValue());
+        if (additionalHeaders != null && additionalHeaders.length > 0) {
+            for (Header h : additionalHeaders) {
+                headers.put(h.getName(), h.getValue());
+            }
+        }
         return this;
     }
 

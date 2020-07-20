@@ -90,7 +90,7 @@ public interface RequestSpecification {
      * @param header request header
      * @return RequestSpecification
      */
-    RequestSpecification header(Header header);
+    RequestSpecification header(Header header, Header... additionalHeaders);
 
     /**
      * Allows you to specify request headers<br><br>
