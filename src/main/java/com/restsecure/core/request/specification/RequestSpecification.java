@@ -383,6 +383,13 @@ public interface RequestSpecification {
     List<Validation> getValidations();
 
     /**
+     * Syntactic sugar
+     *
+     * @return RequestSpecification
+     */
+    RequestSpecification and();
+
+    /**
      * Allows you to send request with specified specification
      *
      * @return Response

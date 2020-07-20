@@ -264,6 +264,11 @@ public class RequestSpecificationImpl implements RequestSpecification {
     }
 
     @Override
+    public RequestSpecification and() {
+        return this;
+    }
+
+    @Override
     public Response send() {
         return RequestSender.send(this);
     }
