@@ -37,6 +37,7 @@ public class ResponseConfigurator {
 
             response.setHeaders(headers);
             response.setCookies(HttpHelper.getCookiesFromHeaders(headers));
+            response.setStatusLine(httpResponse.getStatusLine().toString());
             response.setStatusCode(httpResponse.getStatusLine().getStatusCode());
 
             DeserializeConfig deserializeConfig = context.getConfig(DeserializeConfig.class);

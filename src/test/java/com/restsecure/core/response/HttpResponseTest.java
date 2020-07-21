@@ -19,6 +19,14 @@ public class HttpResponseTest extends BaseTest {
     }
 
     @Test
+    public void setStatusLineTest() {
+        HttpResponse response = new HttpResponse();
+        response.setStatusLine("status line");
+
+        assertThat(response.getStatusLine(), equalTo("status line"));
+    }
+
+    @Test
     public void setStatusCodeTest() {
         HttpResponse response = new HttpResponse();
         response.setStatusCode(500);

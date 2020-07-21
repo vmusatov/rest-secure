@@ -15,6 +15,9 @@ public class HttpResponse implements Response {
     @Getter
     @Setter
     private int statusCode;
+    @Getter
+    @Setter
+    private String statusLine;
     private NameValueList<Header> headers;
     private NameValueList<Cookie> cookies;
 

@@ -5,10 +5,7 @@ import com.restsecure.core.http.header.Header;
 import com.restsecure.core.http.header.HeaderNames;
 import com.restsecure.core.response.validation.Validation;
 import com.restsecure.validation.DefaultValidation;
-import com.restsecure.validation.base.BodyValidation;
-import com.restsecure.validation.base.CookiesValidation;
-import com.restsecure.validation.base.HeadersValidation;
-import com.restsecure.validation.base.StatusCodeValidation;
+import com.restsecure.validation.base.*;
 import com.restsecure.validation.composite.BaseCompositeValidation;
 import com.restsecure.validation.composite.CompositeValidation;
 import com.restsecure.validation.composite.LogicalOperators;
@@ -257,6 +254,44 @@ public class Validations {
      */
     public static CompositeValidation then(Validation validation, Validation... additionalValidations) {
         return combine(validation, additionalValidations);
+    }
+
+    /**
+     * Allows you to specify the expected response status line<br>
+     * For example:
+     * <pre>
+     *     get("url")
+     *          .param("name", "value")
+     *          .validate(
+     *              statusLine("HTTP/1.1 302 Moved Temporarily")
+     *          )
+     *          .send();
+     * </pre>
+     *
+     * @param expectedStatusLine expectedStatusLine
+     * @return StatusLineValidation
+     */
+    public static StatusLineValidation statusLine(String expectedStatusLine) {
+        return new StatusLineValidation(equalTo(expectedStatusLine));
+    }
+
+    /**
+     * Allows you to specify the expected response status line<br>
+     * For example:
+     * <pre>
+     *     get("url")
+     *          .param("name", "value")
+     *          .validate(
+     *              statusLine(containsString("HTTP/1.1 302"))
+     *          )
+     *          .send();
+     * </pre>
+     *
+     * @param statusLineMatcher statusLineMatcher
+     * @return StatusLineValidation
+     */
+    public static StatusLineValidation statusLine(Matcher<String> statusLineMatcher) {
+        return new StatusLineValidation(statusLineMatcher);
     }
 
     /**

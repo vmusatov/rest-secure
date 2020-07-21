@@ -45,6 +45,18 @@ public interface Response {
     void setCookies(List<Cookie> cookies);
 
     /**
+     * Setting the response status line
+     *
+     * @param statusLine response status line
+     */
+    void setStatusLine(String statusLine);
+
+    /**
+     * @return response status line
+     */
+    String getStatusLine();
+
+    /**
      * @return status code
      */
     int getStatusCode();
