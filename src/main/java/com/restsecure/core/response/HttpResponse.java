@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class HttpResponse implements Response {
     @Getter
@@ -20,6 +21,9 @@ public class HttpResponse implements Response {
     private String statusLine;
     private NameValueList<Header> headers;
     private NameValueList<Cookie> cookies;
+    @Getter
+    @Setter
+    private long time;
 
     public HttpResponse() {
         this.headers = new NameValueList<>();
@@ -44,5 +48,10 @@ public class HttpResponse implements Response {
     @Override
     public void setCookies(List<Cookie> cookies) {
         this.cookies = new NameValueList<>(cookies);
+    }
+
+    @Override
+    public long getTimeIn(TimeUnit timeUnit) {
+        return timeUnit.convert(this.time, TimeUnit.MILLISECONDS);
     }
 }

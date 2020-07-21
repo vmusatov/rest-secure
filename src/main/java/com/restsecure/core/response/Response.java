@@ -5,6 +5,7 @@ import com.restsecure.core.http.header.Header;
 import com.restsecure.core.util.NameValueList;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public interface Response {
 
@@ -67,4 +68,22 @@ public interface Response {
      * @param statusCode response status code
      */
     void setStatusCode(int statusCode);
+
+    /**
+     * Set the response time in milliseconds
+     *
+     * @param time response time
+     */
+    void setTime(long time);
+
+    /**
+     * @return response time in milliseconds
+     */
+    long getTime();
+
+    /**
+     * @param timeUnit time unit
+     * @return response time in specify time unit
+     */
+    long getTimeIn(TimeUnit timeUnit);
 }

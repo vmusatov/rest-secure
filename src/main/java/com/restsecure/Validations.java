@@ -19,6 +19,7 @@ import org.hamcrest.Matcher;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -326,6 +327,44 @@ public class Validations {
      */
     public static StatusCodeValidation statusCode(Matcher<Integer> statusCodeMatcher) {
         return new StatusCodeValidation(statusCodeMatcher);
+    }
+
+    /**
+     * Allows you to specify a matcher to check the expected response time in milliseconds
+     * For example:
+     * <pre>
+     *     get("url")
+     *          .param("name", "value")
+     *          .validate(
+     *              time(lessThan(2000L))
+     *          )
+     *          .send();
+     * </pre>
+     *
+     * @param timeMatcher response time matcher
+     * @return ResponseTimeValidation
+     */
+    public static ResponseTimeValidation time(Matcher<Long> timeMatcher) {
+        return new ResponseTimeValidation(timeMatcher, TimeUnit.MILLISECONDS);
+    }
+
+    /**
+     * Allows you to specify a matcher to check the expected response time in specify time unit
+     * <pre>
+     *     get("url")
+     *          .param("name", "value")
+     *          .validate(
+     *              time(lessThan(2L), TimeUnit.SECONDS)
+     *          )
+     *          .send();
+     * </pre>
+     *
+     * @param timeMatcher response time matcher
+     * @param timeUnit    time unit
+     * @return ResponseTimeValidation
+     */
+    public static ResponseTimeValidation time(Matcher<Long> timeMatcher, TimeUnit timeUnit) {
+        return new ResponseTimeValidation(timeMatcher, timeUnit);
     }
 
     /**

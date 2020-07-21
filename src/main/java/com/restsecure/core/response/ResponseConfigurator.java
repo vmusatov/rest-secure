@@ -33,10 +33,12 @@ public class ResponseConfigurator {
     private static Response parseHttpResponse(CloseableHttpResponse httpResponse, RequestContext context) {
         try (httpResponse) {
             Response response = new HttpResponse();
-            List<Header> headers = parseHeaders(httpResponse);
+            response.setTime(System.currentTimeMillis() - context.getRequestTime());
 
+            List<Header> headers = parseHeaders(httpResponse);
             response.setHeaders(headers);
             response.setCookies(HttpHelper.getCookiesFromHeaders(headers));
+
             response.setStatusLine(httpResponse.getStatusLine().toString());
             response.setStatusCode(httpResponse.getStatusLine().getStatusCode());
 

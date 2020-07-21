@@ -89,6 +89,7 @@ public class RequestSender {
         HttpUriRequest request = RequestFactory.createRequest(context);
 
         try (CloseableHttpClient httpClient = context.getHttpClientBuilder().build(); httpClient) {
+            context.setRequestTime(System.currentTimeMillis());
             CloseableHttpResponse httpResponse = httpClient.execute(request, context.getHttpClientContext());
 
             return ResponseConfigurator.configureResponse(httpResponse, context);
