@@ -42,16 +42,6 @@ public class RestSecure {
     }
 
     /**
-     * Creates a request specification with specified data class
-     *
-     * @param data data class
-     * @return RequestSpecification
-     */
-    public static RequestSpecification request(Object data) {
-        return new RequestSpecificationImpl().data(data);
-    }
-
-    /**
      * Creates a request specification with the get method and the specified URL
      *
      * @param url request url

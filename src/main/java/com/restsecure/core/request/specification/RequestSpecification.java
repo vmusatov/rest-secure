@@ -308,19 +308,6 @@ public interface RequestSpecification {
     List<Processor> getProcessors();
 
     /**
-     * Allows you to add a specification from a data class
-     *
-     * @param data data class
-     * @return RequestSpecification
-     */
-    RequestSpecification data(Object data);
-
-    /**
-     * @return request data
-     */
-    Object getData();
-
-    /**
      * Allow tou to add configuration<br>
      * For example:
      * <pre>

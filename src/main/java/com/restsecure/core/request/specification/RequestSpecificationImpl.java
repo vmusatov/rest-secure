@@ -23,7 +23,6 @@ public class RequestSpecificationImpl implements RequestSpecification {
     private String url;
     private int port;
     private RequestMethod method;
-    private Object data;
 
     private Object body;
 
@@ -40,7 +39,6 @@ public class RequestSpecificationImpl implements RequestSpecification {
 
     public RequestSpecificationImpl() {
         this.url = "";
-        this.data = null;
 
         this.headers = new MultiKeyMap<>();
         this.parameters = new MultiKeyMap<>();
@@ -220,12 +218,6 @@ public class RequestSpecificationImpl implements RequestSpecification {
     @Override
     public RequestSpecification process(List<Processor> processors) {
         this.processors.addAll(processors);
-        return this;
-    }
-
-    @Override
-    public RequestSpecification data(Object data) {
-        this.data = data;
         return this;
     }
 

@@ -9,7 +9,6 @@ import com.restsecure.core.mapping.deserialize.DeserializeConfig;
 import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.response.Response;
-import com.restsecure.data.RequestParam;
 import com.restsecure.session.SessionConfig;
 import org.testng.annotations.Test;
 
@@ -231,20 +230,6 @@ public class RequestSpecificationTest {
     }
 
     @Test
-    public void addDataTest() {
-        RequestSpecification spec = new RequestSpecificationImpl();
-        assertThat(spec.getData(), equalTo(null));
-        RegisterRequestData registerData = new RegisterRequestData();
-        LoginRequestData loginData = new LoginRequestData();
-
-        spec.data(registerData);
-        assertThat(spec.getData(), equalTo(registerData));
-
-        spec.data(loginData);
-        assertThat(spec.getData(), equalTo(loginData));
-    }
-
-    @Test
     public void addConfigTest() {
         RequestSpecification spec = new RequestSpecificationImpl();
         SessionConfig sessionConfig = new SessionConfig();
@@ -383,32 +368,15 @@ public class RequestSpecificationTest {
         assertThat(spec2.getProxy().getPort(), equalTo(8090));
     }
 
-    @Test
-    public void mergeDataTest() {
-        RegisterRequestData registerData = new RegisterRequestData();
-        LoginRequestData loginData = new LoginRequestData();
-
-        RequestSpecification spec1 = new RequestSpecificationImpl().data(registerData);
-        RequestSpecification spec2 = new RequestSpecificationImpl().data(loginData);
-
-        spec2.mergeWith(spec1);
-
-        assertThat(spec2.getData(), equalTo(registerData));
-    }
-
     private static class RegisterRequestData {
-        @RequestParam(name = "user_login")
         private String login;
 
-        @RequestParam(name = "user_pass")
         private String password;
     }
 
     private static class LoginRequestData {
-        @RequestParam(name = "user_login")
         private String login;
 
-        @RequestParam(name = "user_pass")
         private String password;
     }
 

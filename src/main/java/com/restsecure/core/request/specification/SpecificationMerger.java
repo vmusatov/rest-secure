@@ -9,8 +9,6 @@ public class SpecificationMerger {
         to.method(from.getMethod());
         to.port(from.getPort());
 
-        to.data(from.getData());
-
         to.body(from.getBody());
 
         from.getParameters().forEach(param -> to.param(param.getKey(), param.getValue()));
