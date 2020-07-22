@@ -1,9 +1,9 @@
 package com.restsecure.logging.logger;
 
-import com.restsecure.logging.LogInfo;
 import com.restsecure.core.http.header.Header;
 import com.restsecure.core.http.param.Parameter;
 import com.restsecure.core.request.specification.RequestSpecification;
+import com.restsecure.logging.LogInfo;
 
 import java.io.PrintStream;
 import java.util.List;
@@ -36,6 +36,9 @@ public class RequestLogger {
                     case METHOD:
                         addMethod(builder, spec);
                         break;
+                    case BODY:
+                        addBody(builder, spec);
+                        break;
                     case PARAMS:
                         addParams(builder, spec);
                         break;
@@ -54,6 +57,7 @@ public class RequestLogger {
     private static void addAll(StringBuilder builder, RequestSpecification spec) {
         addUrl(builder, spec);
         addMethod(builder, spec);
+        addBody(builder, spec);
         addParams(builder, spec);
         addHeaders(builder, spec);
     }
@@ -67,6 +71,20 @@ public class RequestLogger {
     private static void addMethod(StringBuilder builder, RequestSpecification spec) {
         builder.append("Request method: ")
                 .append(spec.getMethod())
+                .append(lineSeparator());
+    }
+
+    private static void addBody(StringBuilder builder, RequestSpecification spec) {
+        builder.append("Request body: ");
+
+        if (spec.getBody() == null) {
+            builder.append(NONE).append(lineSeparator());
+            return;
+        }
+
+        builder.append(lineSeparator())
+                .append(tabs(1))
+                .append(spec.getBody().toString())
                 .append(lineSeparator());
     }
 

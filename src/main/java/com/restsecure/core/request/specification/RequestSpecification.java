@@ -68,6 +68,19 @@ public interface RequestSpecification {
     RequestMethod getMethod();
 
     /**
+     * Allow you to set request body
+     *
+     * @param body request body
+     * @return RequestSpecification
+     */
+    RequestSpecification body(Object body);
+
+    /**
+     * @return reqeust body
+     */
+    Object getBody();
+
+    /**
      * Allows you to specify request header<br><br>
      * <pre>
      *     RequestSpecification spec = get("url").header("name", "value");

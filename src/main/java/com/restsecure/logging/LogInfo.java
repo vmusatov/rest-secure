@@ -5,6 +5,7 @@ public enum LogInfo {
     TIME,
     URL,
     METHOD,
+    BODY,
     STATUS_CODE,
     PARAMS,
     HEADERS,

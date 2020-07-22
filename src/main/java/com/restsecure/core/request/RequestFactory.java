@@ -1,5 +1,6 @@
 package com.restsecure.core.request;
 
+import com.restsecure.core.mapping.serialize.SerializeConfig;
 import com.restsecure.core.request.exception.RequestConfigurationException;
 import com.restsecure.core.request.specification.RequestSpecification;
 import com.restsecure.core.request.specification.SpecificationValidator;
@@ -22,19 +23,22 @@ public class RequestFactory {
             case DELETE:
                 return createDelete(context.getSpecification());
             case PUT:
-                return createPut(context.getSpecification());
+                return createPut(context);
             case POST:
-                return createPost(context.getSpecification());
+                return createPost(context);
             default:
                 throw new RequestConfigurationException("Unsupported request method " + context.getSpecification().getMethod());
         }
     }
 
-    private static HttpUriRequest createPost(RequestSpecification specification) {
-        URI uri = buildUri(specification);
+    private static HttpUriRequest createPost(RequestContext context) {
+        RequestSpecification spec = context.getSpecification();
+        SerializeConfig serializeConfig = context.getConfig(SerializeConfig.class);
+
+        URI uri = buildUri(spec);
         HttpPost request = new HttpPost(uri);
-        setHeadersToRequest(specification.getHeaders(), request);
-        setEntityToRequest(specification, request);
+        setHeadersToRequest(spec.getHeaders(), request);
+        setEntityToRequest(spec, serializeConfig, request);
 
         return request;
     }
@@ -47,11 +51,14 @@ public class RequestFactory {
         return request;
     }
 
-    private static HttpUriRequest createPut(RequestSpecification specification) {
-        URI uri = buildUri(specification);
+    private static HttpUriRequest createPut(RequestContext context) {
+        RequestSpecification spec = context.getSpecification();
+        SerializeConfig serializeConfig = context.getConfig(SerializeConfig.class);
+
+        URI uri = buildUri(spec);
         HttpPut request = new HttpPut(uri);
-        setHeadersToRequest(specification.getHeaders(), request);
-        setEntityToRequest(specification, request);
+        setHeadersToRequest(spec.getHeaders(), request);
+        setEntityToRequest(spec, serializeConfig, request);
 
         return request;
     }

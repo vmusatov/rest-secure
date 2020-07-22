@@ -49,6 +49,17 @@ public class RequestSpecificationTest {
     }
 
     @Test
+    public void setBodyTest() {
+        RequestSpecification spec = new RequestSpecificationImpl();
+        assertThat(spec.getBody(), is(nullValue()));
+
+        String body = "Some body";
+        spec.body(body);
+
+        assertThat(spec.getBody(), equalTo(body));
+    }
+
+    @Test
     public void addHeaderTest() {
         RequestSpecification spec = new RequestSpecificationImpl();
         assertThat(spec.getHeaders().size(), equalTo(0));
@@ -288,6 +299,17 @@ public class RequestSpecificationTest {
 
         spec2.mergeWith(spec1);
         assertThat(spec2.getMethod(), equalTo(RequestMethod.GET));
+    }
+
+    @Test
+    public void mergeBodyTest() {
+        String body1 = "Some body 1";
+        String body2 = "Some body 2";
+        RequestSpecification spec1 = new RequestSpecificationImpl().body(body1);
+        RequestSpecification spec2 = new RequestSpecificationImpl().body(body2);
+
+        spec2.mergeWith(spec1);
+        assertThat(spec2.getBody(), equalTo(body1));
     }
 
     @Test

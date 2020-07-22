@@ -2,14 +2,18 @@ package com.restsecure.core.http;
 
 import com.restsecure.core.http.cookie.Cookie;
 import com.restsecure.core.http.header.Header;
+import com.restsecure.core.mapping.serialize.SerializeConfig;
+import com.restsecure.core.request.exception.RequestConfigurationException;
 import com.restsecure.core.request.specification.RequestSpecification;
 import com.restsecure.core.util.MultiKeyMap;
 import com.restsecure.core.util.NameValueList;
+import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -57,11 +61,27 @@ public class HttpHelper {
         }
     }
 
-    public static void setEntityToRequest(RequestSpecification specification, HttpEntityEnclosingRequestBase request) {
+    public static void setEntityToRequest(RequestSpecification specification, SerializeConfig serializeConfig, HttpEntityEnclosingRequestBase request) {
         List<NameValuePair> params = HttpHelper.getFilteredParameters(specification.getParameters());
-        request.setEntity(
-                new UrlEncodedFormEntity(params, StandardCharsets.UTF_8)
-        );
+        Object body = specification.getBody();
+
+        if (!params.isEmpty() && body != null) {
+            throw new RequestConfigurationException("You can specify either request body or form parameters");
+        }
+
+        HttpEntity entity = null;
+
+        if (body != null) {
+            entity = new StringEntity(body.toString(), StandardCharsets.UTF_8);
+        }
+
+        if (!params.isEmpty()) {
+            entity = new UrlEncodedFormEntity(params, StandardCharsets.UTF_8);
+        }
+
+        if (entity != null) {
+            request.setEntity(entity);
+        }
     }
 
     public static void setHeadersToRequest(MultiKeyMap<String, Object> headers, HttpUriRequest request) {

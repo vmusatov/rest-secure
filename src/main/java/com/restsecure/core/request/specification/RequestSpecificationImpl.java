@@ -25,6 +25,8 @@ public class RequestSpecificationImpl implements RequestSpecification {
     private RequestMethod method;
     private Object data;
 
+    private Object body;
+
     private final MultiKeyMap<String, Object> headers;
     private final MultiKeyMap<String, Object> parameters;
     private final MultiKeyMap<String, Object> routeParams;
@@ -68,6 +70,12 @@ public class RequestSpecificationImpl implements RequestSpecification {
     @Override
     public RequestSpecification method(RequestMethod method) {
         this.method = method;
+        return this;
+    }
+
+    @Override
+    public RequestSpecification body(Object body) {
+        this.body = body;
         return this;
     }
 

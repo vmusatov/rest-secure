@@ -11,6 +11,8 @@ public class SpecificationMerger {
 
         to.data(from.getData());
 
+        to.body(from.getBody());
+
         from.getParameters().forEach(param -> to.param(param.getKey(), param.getValue()));
         from.getRouteParams().forEach(param -> to.routeParam(param.getKey(), param.getValue()));
         from.getHeaders().forEach(header -> to.header(header.getKey(), header.getValue()));
