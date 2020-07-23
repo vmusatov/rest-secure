@@ -1,7 +1,7 @@
 package com.restsecure;
 
 import com.restsecure.authentication.BasicAuthentication;
-import com.restsecure.authentication.BearerTokenAuthentication;
+import com.restsecure.authentication.BearerAuthentication;
 import com.restsecure.core.Context;
 import com.restsecure.core.http.RequestMethod;
 import com.restsecure.core.http.header.Header;
@@ -171,7 +171,7 @@ public class RestSecure {
      * Creates a basic request authentication<br>
      * For example:
      * <pre>
-     *    RequestSpecification request = get("url").processRequest(basicAuth("username", "userpass"));
+     *    RequestSpecification request = get("url").process(basicAuth("username", "userpass"));
      * </pre>
      *
      * @param name     username
@@ -183,17 +183,17 @@ public class RestSecure {
     }
 
     /**
-     * Creates a  bearer token request authentication<br>
+     * Creates a bearer token request authentication<br>
      * For example:
      * <pre>
-     *    RequestSpecification request = get("url").processRequest(bearerToken("YOUR_TOKEN"));
+     *    RequestSpecification request = get("url").process(bearerAuth("YOUR_TOKEN"));
      * </pre>
      *
      * @param token access token
      * @return RequestAuthenticationHandler
      */
     public static Processor bearerAuth(String token) {
-        return new BearerTokenAuthentication(token);
+        return new BearerAuthentication(token);
     }
 
     /**

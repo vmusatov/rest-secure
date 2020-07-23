@@ -1,5 +1,6 @@
 package com.restsecure.authentication;
 
+import com.restsecure.core.http.header.HeaderNames;
 import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.RequestContext;
 
@@ -19,6 +20,6 @@ public class BasicAuthentication implements Processor {
         String nameAndPass = userName + ":" + password;
         String encoded = Base64.getEncoder().encodeToString(nameAndPass.getBytes());
 
-        context.getSpecification().header("Authorization", "Basic " + encoded);
+        context.getSpecification().header(HeaderNames.AUTHORIZATION, "Basic " + encoded);
     }
 }

@@ -9,6 +9,7 @@
             <package name="com.restsecure.core.request.specification"/>
             <package name="com.restsecure.core.response"/>
 
+            <package name="com.restsecure.authentication"/>
             <package name="com.restsecure.session"/>
             <package name="com.restsecure.data"/>
             <package name="com.restsecure.validation.base"/>
