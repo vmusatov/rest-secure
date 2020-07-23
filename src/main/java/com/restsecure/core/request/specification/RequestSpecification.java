@@ -1,7 +1,7 @@
 package com.restsecure.core.request.specification;
 
 import com.restsecure.core.configuration.Config;
-import com.restsecure.core.http.Proxy.Proxy;
+import com.restsecure.core.http.proxy.Proxy;
 import com.restsecure.core.http.RequestMethod;
 import com.restsecure.core.http.cookie.Cookie;
 import com.restsecure.core.http.header.Header;

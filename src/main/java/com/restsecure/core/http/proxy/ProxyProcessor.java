@@ -1,4 +1,4 @@
-package com.restsecure.core.http.Proxy;
+package com.restsecure.core.http.proxy;
 
 import com.restsecure.core.processor.ProcessAll;
 import com.restsecure.core.processor.Processor;

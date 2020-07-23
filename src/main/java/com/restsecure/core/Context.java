@@ -3,9 +3,9 @@ package com.restsecure.core;
 import com.restsecure.core.processor.ProcessAll;
 import com.restsecure.core.processor.Processor;
 import lombok.Getter;
-import lombok.SneakyThrows;
 import org.reflections.Reflections;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -25,11 +25,10 @@ public class Context {
         scanProcessors();
     }
 
-    @SneakyThrows
     private void scanProcessors() {
-        Set<Class<? extends Processor>> preSendProcessors = scanner.getSubTypesOf(Processor.class);
+        Set<Class<? extends Processor>> processors = scanner.getSubTypesOf(Processor.class);
 
-        for (Class<? extends Processor> processor : preSendProcessors) {
+        for (Class<? extends Processor> processor : processors) {
             if (processor.isAnnotationPresent(ProcessAll.class)) {
                 ProcessAll processAllAnnotation = processor.getAnnotation(ProcessAll.class);
 
@@ -37,9 +36,17 @@ public class Context {
                     continue;
                 }
 
-                Processor instance = processor.getDeclaredConstructor().newInstance();
+                Processor instance = createProcessor(processor);
                 this.processors.add(instance);
             }
+        }
+    }
+
+    private <T extends Processor> T createProcessor(Class<T> processor) {
+        try {
+            return processor.getDeclaredConstructor().newInstance();
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            throw new RuntimeException(e);
         }
     }
 }

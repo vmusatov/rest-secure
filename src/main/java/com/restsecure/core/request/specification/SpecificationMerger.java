@@ -1,6 +1,6 @@
 package com.restsecure.core.request.specification;
 
-import com.restsecure.core.http.Proxy.Proxy;
+import com.restsecure.core.http.proxy.Proxy;
 
 public class SpecificationMerger {
 

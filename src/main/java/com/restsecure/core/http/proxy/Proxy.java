@@ -1,4 +1,4 @@
-package com.restsecure.core.http.Proxy;
+package com.restsecure.core.http.proxy;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
