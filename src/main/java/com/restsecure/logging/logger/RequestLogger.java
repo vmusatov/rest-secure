@@ -27,9 +27,6 @@ public class RequestLogger {
         } else {
             for (LogInfo logInfo : logInfoList) {
                 switch (logInfo) {
-                    case ALL:
-                        addAll(builder, spec);
-                        break;
                     case URL:
                         addUrl(builder, spec);
                         break;
@@ -63,13 +60,13 @@ public class RequestLogger {
     }
 
     private static void addUrl(StringBuilder builder, RequestSpecification spec) {
-        builder.append("Request url: ")
+        builder.append("Url: ")
                 .append(spec.getUrl())
                 .append(lineSeparator());
     }
 
     private static void addMethod(StringBuilder builder, RequestSpecification spec) {
-        builder.append("Request method: ")
+        builder.append("Method: ")
                 .append(spec.getMethod())
                 .append(lineSeparator());
     }

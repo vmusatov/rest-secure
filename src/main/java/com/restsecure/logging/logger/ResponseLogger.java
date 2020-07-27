@@ -1,10 +1,10 @@
 package com.restsecure.logging.logger;
 
-import com.restsecure.logging.LogInfo;
 import com.restsecure.core.http.cookie.Cookie;
 import com.restsecure.core.http.header.Header;
 import com.restsecure.core.request.specification.RequestSpecification;
 import com.restsecure.core.response.Response;
+import com.restsecure.logging.LogInfo;
 
 import java.io.PrintStream;
 import java.util.List;
@@ -23,11 +23,16 @@ public class ResponseLogger {
             addTime(builder);
         }
 
-        builder.append("Response from ")
-                .append(spec.getMethod())
-                .append(" ")
-                .append(spec.getUrl())
-                .append(lineSeparator());
+        if (logInfoList.contains(LogInfo.URL) || logInfoList.contains(LogInfo.METHOD) || logInfoList.contains(LogInfo.ALL)) {
+            builder.append("Response from");
+            if (logInfoList.contains(LogInfo.METHOD) || logInfoList.contains(LogInfo.ALL)) {
+                builder.append(" ").append(spec.getMethod());
+            }
+            if (logInfoList.contains(LogInfo.URL) || logInfoList.contains(LogInfo.ALL)) {
+                builder.append(" ").append(spec.getUrl());
+            }
+            builder.append(lineSeparator());
+        }
 
         if (needLogAll(logInfoList)) {
             addAll(builder, response);
@@ -36,6 +41,9 @@ public class ResponseLogger {
                 switch (logInfo) {
                     case STATUS_CODE:
                         addStatusCode(builder, response);
+                        break;
+                    case BODY:
+                        addBody(builder, response);
                         break;
                     case HEADERS:
                         addHeaders(builder, response);
@@ -54,13 +62,26 @@ public class ResponseLogger {
 
     private static void addAll(StringBuilder builder, Response response) {
         addStatusCode(builder, response);
+        addBody(builder, response);
         addHeaders(builder, response);
         addCookies(builder, response);
+    }
+
+    private static void addUrl(StringBuilder builder, Response response) {
+
     }
 
     private static void addStatusCode(StringBuilder builder, Response response) {
         builder.append("Response status code: ")
                 .append(response.getStatusCode())
+                .append(lineSeparator());
+    }
+
+    public static void addBody(StringBuilder builder, Response response) {
+        builder.append("Response body: ")
+                .append(lineSeparator())
+                .append(tabs(1))
+                .append(response.getBody().getContent())
                 .append(lineSeparator());
     }
 
