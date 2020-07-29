@@ -1,7 +1,7 @@
 package com.restsecure.logging.logger;
 
-import com.restsecure.logging.LogInfo;
 import com.restsecure.core.http.NameAndValue;
+import com.restsecure.logging.LogInfo;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

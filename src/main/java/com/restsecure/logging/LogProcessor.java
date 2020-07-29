@@ -13,20 +13,18 @@ public class LogProcessor implements Processor {
     @Override
     public void processResponse(RequestContext context, Response response) {
         LogConfig logConfig = context.getConfig(LogConfig.class);
-        LogLevel logLevel = logConfig.getLogLevel();
 
-        if (logLevel.equals(LogLevel.RESPONSE) || logLevel.equals(LogLevel.ALL)) {
-            ResponseLogger.log(logConfig.getPrintStream(), response, context.getSpecification(), logConfig.getLogInfoList());
+        if (!logConfig.getRequestLogInfoList().isEmpty()) {
+            ResponseLogger.log(logConfig.getPrintStream(), response, context.getSpecification(), logConfig.getResponseLogInfoList());
         }
     }
 
     @Override
     public void processRequest(RequestContext context) {
         LogConfig logConfig = context.getConfig(LogConfig.class);
-        LogLevel logLevel = logConfig.getLogLevel();
 
-        if (logLevel.equals(LogLevel.REQUEST) || logLevel.equals(LogLevel.ALL)) {
-            RequestLogger.log(logConfig.getPrintStream(), context.getSpecification(), logConfig.getLogInfoList());
+        if (!logConfig.getResponseLogInfoList().isEmpty()) {
+            RequestLogger.log(logConfig.getPrintStream(), context.getSpecification(), logConfig.getRequestLogInfoList());
         }
     }
 
