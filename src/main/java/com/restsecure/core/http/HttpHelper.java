@@ -3,7 +3,7 @@ package com.restsecure.core.http;
 import com.restsecure.core.http.cookie.Cookie;
 import com.restsecure.core.http.header.Header;
 import com.restsecure.core.mapping.serialize.SerializeConfig;
-import com.restsecure.core.request.exception.RequestConfigurationException;
+import com.restsecure.core.exception.RequestConfigurationException;
 import com.restsecure.core.request.specification.RequestSpecification;
 import com.restsecure.core.util.MultiKeyMap;
 import com.restsecure.core.util.NameValueList;

@@ -24,8 +24,8 @@ public class BodyValidation implements Validation {
     @Override
     public ValidationResult validate(RequestContext context, Response response) {
 
-        if (!bodyMatcher.matches(response.getBody().getContent())) {
-            Description description = MatcherUtils.getDescription(BODY_VALIDATION_REASON, response.getBody().getContent(), bodyMatcher);
+        if (!bodyMatcher.matches(response.getBody().asString())) {
+            Description description = MatcherUtils.getDescription(BODY_VALIDATION_REASON, response.getBody().asString(), bodyMatcher);
             return new ValidationResult(FAIL, description.toString());
         }
 

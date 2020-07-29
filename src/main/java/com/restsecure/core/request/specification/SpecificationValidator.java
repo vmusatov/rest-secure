@@ -1,6 +1,6 @@
 package com.restsecure.core.request.specification;
 
-import com.restsecure.core.request.exception.RequestConfigurationException;
+import com.restsecure.core.exception.RequestConfigurationException;
 
 public class SpecificationValidator {
     public static void validate(RequestSpecification spec) {

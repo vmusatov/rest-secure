@@ -1,4 +1,4 @@
-package com.restsecure.core.request.exception;
+package com.restsecure.core.exception;
 
 public class RequestConfigurationException extends RuntimeException {
     public RequestConfigurationException(String message) {

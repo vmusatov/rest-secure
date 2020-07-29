@@ -1,7 +1,7 @@
 package com.restsecure.core.request;
 
 import com.restsecure.core.processor.Processor;
-import com.restsecure.core.request.exception.SendRequestException;
+import com.restsecure.core.exception.SendRequestException;
 import com.restsecure.core.request.specification.RequestSpecification;
 import com.restsecure.core.response.Response;
 import com.restsecure.core.response.ResponseConfigurator;

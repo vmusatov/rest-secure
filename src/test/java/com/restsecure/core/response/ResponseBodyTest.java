@@ -11,7 +11,7 @@ public class ResponseBodyTest extends BaseTest {
     @Test
     public void constructorTest() {
         ResponseBody body = new ResponseBody(userJson);
-        assertThat(body.getContent(), equalTo(userJson));
+        assertThat(body.asString(), equalTo(userJson));
     }
 
     @Test

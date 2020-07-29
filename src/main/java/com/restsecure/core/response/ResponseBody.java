@@ -1,9 +1,12 @@
 package com.restsecure.core.response;
 
 import com.jayway.jsonpath.JsonPath;
+import com.restsecure.core.exception.RestSecureException;
 import com.restsecure.core.mapping.deserialize.DefaultJacksonDeserializer;
 import com.restsecure.core.mapping.deserialize.Deserializer;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.lang.reflect.Type;
 
 public class ResponseBody {
@@ -20,19 +23,35 @@ public class ResponseBody {
         this.deserializer = deserializer;
     }
 
-    public String getContent() {
+    public String asString() {
         return content;
     }
 
+    public byte[] asByteArray() {
+        checkContentNotNull();
+        return content.getBytes();
+    }
+
+    public InputStream asInputStream() {
+        checkContentNotNull();
+        return new ByteArrayInputStream(content.getBytes());
+    }
+
     public <T> T as(Class<T> to) {
-        return this.deserializer.deserialize(content, to);
+        return this.deserializer.deserialize(asString(), to);
     }
 
     public <T> T as(Type to) {
-        return this.deserializer.deserialize(content, to);
+        return this.deserializer.deserialize(asString(), to);
     }
 
     public <T> T get(String path) {
-        return JsonPath.read(content, path);
+        return JsonPath.read(asString(), path);
+    }
+
+    private void checkContentNotNull() {
+        if (content == null) {
+            throw new RestSecureException("Content is null");
+        }
     }
 }

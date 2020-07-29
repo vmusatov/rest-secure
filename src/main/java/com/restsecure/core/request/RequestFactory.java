@@ -1,7 +1,7 @@
 package com.restsecure.core.request;
 
 import com.restsecure.core.mapping.serialize.SerializeConfig;
-import com.restsecure.core.request.exception.RequestConfigurationException;
+import com.restsecure.core.exception.RequestConfigurationException;
 import com.restsecure.core.request.specification.RequestSpecification;
 import com.restsecure.core.request.specification.SpecificationValidator;
 import org.apache.http.client.methods.*;
