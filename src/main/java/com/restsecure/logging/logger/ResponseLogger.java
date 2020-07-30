@@ -81,7 +81,7 @@ public class ResponseLogger {
         builder.append("Response body: ")
                 .append(lineSeparator())
                 .append(tabs(1))
-                .append(response.getBody().getContent())
+                .append(response.getBody().asString())
                 .append(lineSeparator());
     }
 
