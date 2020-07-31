@@ -1,20 +1,20 @@
 package com.restsecure.validation.conditional;
 
 import com.restsecure.core.request.RequestContext;
-import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.response.Response;
+import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.response.validation.ValidationResult;
-
-import static com.restsecure.core.response.validation.ValidationStatus.SUCCESS;
 
 public class ConditionalValidation implements Validation {
 
     private final Condition condition;
     private final Validation validation;
+    private final Validation elseValidation;
 
-    public ConditionalValidation(Condition condition, Validation validation) {
+    public ConditionalValidation(Condition condition, Validation validation, Validation elseValidation) {
         this.condition = condition;
         this.validation = validation;
+        this.elseValidation = elseValidation;
     }
 
     @Override
@@ -22,7 +22,7 @@ public class ConditionalValidation implements Validation {
         if (condition.isTrue()) {
             return validation.validate(context, response);
         } else {
-            return new ValidationResult(SUCCESS);
+            return elseValidation.validate(context, response);
         }
     }
 }

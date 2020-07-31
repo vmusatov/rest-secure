@@ -4,6 +4,8 @@ import com.restsecure.core.http.cookie.Cookie;
 import com.restsecure.core.http.header.Header;
 import com.restsecure.core.http.header.HeaderNames;
 import com.restsecure.core.response.validation.Validation;
+import com.restsecure.core.response.validation.ValidationResult;
+import com.restsecure.core.response.validation.ValidationStatus;
 import com.restsecure.validation.DefaultValidation;
 import com.restsecure.validation.base.*;
 import com.restsecure.validation.composite.BaseCompositeValidation;
@@ -184,13 +186,37 @@ public class Validations {
      * @return ResponseConditionalValidation
      */
     public static ResponseConditionalValidation when(Validation condition, Validation validation) {
-        return new ResponseConditionalValidation(condition, validation);
+        return new ResponseConditionalValidation(condition, validation, (ctx, resp) -> new ValidationResult(ValidationStatus.SUCCESS));
     }
 
     /**
      * Conditional validation will be performed only if the condition is met.
-     * In this case, the condition is the functional interface Condition with the method
-     * <pre>boolean isTrue();</pre>
+     * In this case, the condition is the validation of the answer - if the validation in the condition was successful,
+     * then the first specified validation will be called, otherwise the second specified validation will be called.
+     * <pre>
+     *     RequestSpecification getUser = get("/users")
+     *          .param("id", id)
+     *          .validate(
+     *              when(statusCode(400), then(
+     *                  body("error.message", containString("One of the specified parameters is invalid."))
+     *              ), orElse(
+     *                  body("result.id", equalTo(id))
+     *              ))
+     *          );
+     * </pre>
+     * Here we check that the server returned an error only if the status code is 400
+     *
+     * @param condition  validation condition
+     * @param validation response validation
+     * @return ResponseConditionalValidation
+     */
+    public static ResponseConditionalValidation when(Validation condition, Validation validation, Validation elseValidation) {
+        return new ResponseConditionalValidation(condition, validation, elseValidation);
+    }
+
+    /**
+     * Conditional validation will be performed only if the condition is met.
+     * In this case, the condition is the functional interface Condition with the method <pre>boolean isTrue();</pre>
      * if the method returns true, the specified validation will be called, otherwise the validation will be considered successful
      * <pre>
      *     RequestSpecification getUser = get("/users")
@@ -208,7 +234,32 @@ public class Validations {
      * @return ConditionalValidation
      */
     public static ConditionalValidation when(Condition condition, Validation validation) {
-        return new ConditionalValidation(condition, validation);
+        return new ConditionalValidation(condition, validation, (ctx, resp) -> new ValidationResult(ValidationStatus.SUCCESS));
+    }
+
+    /**
+     * Conditional validation will be performed only if the condition is met.
+     * In this case, the condition is the functional interface Condition with the method <pre>boolean isTrue();</pre>
+     * if the method returns true, the specified validation will be called, otherwise the second specified validation will be called.
+     * <pre>
+     *     RequestSpecification getUser = get("/users")
+     *          .param("id", id)
+     *          .validate(
+     *              when(() -> id < 0, then(
+     *                  body("error.message", containString("One of the specified parameters is invalid."))
+     *              ), orElse(
+     *                  body("result.id", equalTo(id))
+     *              ))
+     *          );
+     * </pre>
+     * Here we check that the server returned an error only if the id less then 0
+     *
+     * @param condition  validation condition
+     * @param validation response validation
+     * @return ConditionalValidation
+     */
+    public static ConditionalValidation when(Condition condition, Validation validation, Validation elseValidation) {
+        return new ConditionalValidation(condition, validation, elseValidation);
     }
 
     /**
@@ -231,7 +282,32 @@ public class Validations {
      * @return ConditionalValidation
      */
     public static ConditionalValidation when(boolean condition, Validation validation) {
-        return new ConditionalValidation(() -> condition, validation);
+        return new ConditionalValidation(() -> condition, validation, (ctx, resp) -> new ValidationResult(ValidationStatus.SUCCESS));
+    }
+
+    /**
+     * Conditional validation will be performed only if the condition is met.
+     * In this case, the condition is boolean value
+     * if condition is true, the specified validation will be called, otherwise the second specified validation will be called.
+     * <pre>
+     *     RequestSpecification getUser = get("/users")
+     *          .param("id", id)
+     *          .validate(
+     *              when(id < 0, then(
+     *                  body("error.message", containString("One of the specified parameters is invalid."))
+     *              ), orElse(
+     *                  body("result.id", equalTo(id))
+     *              ))
+     *          );
+     * </pre>
+     * Here we check that the server returned an error only if the id less then 0
+     *
+     * @param condition  validation condition
+     * @param validation response validation
+     * @return ConditionalValidation
+     */
+    public static ConditionalValidation when(boolean condition, Validation validation, Validation elseValidation) {
+        return new ConditionalValidation(() -> condition, validation, elseValidation);
     }
 
     /**
@@ -254,6 +330,29 @@ public class Validations {
      * @return CompositeValidation
      */
     public static CompositeValidation then(Validation validation, Validation... additionalValidations) {
+        return combine(validation, additionalValidations);
+    }
+
+    /**
+     * It is a composite validation. Syntactic sugar for conditional validation
+     * Allow you to create construction when-then-orElse
+     *
+     * @param validations response validations list
+     * @return CompositeValidation
+     */
+    public static CompositeValidation orElse(List<Validation> validations) {
+        return combine(validations);
+    }
+
+    /**
+     * It is a composite validation. Syntactic sugar for conditional validation
+     * Allow you to create construction when-then-orElse
+     *
+     * @param validation            response validation
+     * @param additionalValidations additional response validations
+     * @return CompositeValidation
+     */
+    public static CompositeValidation orElse(Validation validation, Validation... additionalValidations) {
         return combine(validation, additionalValidations);
     }
 
