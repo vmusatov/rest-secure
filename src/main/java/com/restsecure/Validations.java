@@ -11,8 +11,8 @@ import com.restsecure.validation.base.*;
 import com.restsecure.validation.composite.BaseCompositeValidation;
 import com.restsecure.validation.composite.CompositeValidation;
 import com.restsecure.validation.composite.LogicalOperators;
+import com.restsecure.validation.conditional.BaseConditionalValidation;
 import com.restsecure.validation.conditional.Condition;
-import com.restsecure.validation.conditional.ConditionalValidation;
 import com.restsecure.validation.conditional.ResponseConditionalValidation;
 import com.restsecure.validation.object.ObjectMatcherValidation;
 import com.restsecure.validation.object.ObjectValidation;
@@ -206,8 +206,9 @@ public class Validations {
      * </pre>
      * Here we check that the server returned an error only if the status code is 400
      *
-     * @param condition  validation condition
-     * @param validation response validation
+     * @param condition      validation condition
+     * @param validation     response validation
+     * @param elseValidation else response validation
      * @return ResponseConditionalValidation
      */
     public static ResponseConditionalValidation when(Validation condition, Validation validation, Validation elseValidation) {
@@ -233,8 +234,8 @@ public class Validations {
      * @param validation response validation
      * @return ConditionalValidation
      */
-    public static ConditionalValidation when(Condition condition, Validation validation) {
-        return new ConditionalValidation(condition, validation, (ctx, resp) -> new ValidationResult(ValidationStatus.SUCCESS));
+    public static BaseConditionalValidation when(Condition condition, Validation validation) {
+        return new BaseConditionalValidation(condition, validation, (ctx, resp) -> new ValidationResult(ValidationStatus.SUCCESS));
     }
 
     /**
@@ -254,12 +255,13 @@ public class Validations {
      * </pre>
      * Here we check that the server returned an error only if the id less then 0
      *
-     * @param condition  validation condition
-     * @param validation response validation
+     * @param condition      validation condition
+     * @param validation     response validation
+     * @param elseValidation else response validation
      * @return ConditionalValidation
      */
-    public static ConditionalValidation when(Condition condition, Validation validation, Validation elseValidation) {
-        return new ConditionalValidation(condition, validation, elseValidation);
+    public static BaseConditionalValidation when(Condition condition, Validation validation, Validation elseValidation) {
+        return new BaseConditionalValidation(condition, validation, elseValidation);
     }
 
     /**
@@ -281,8 +283,8 @@ public class Validations {
      * @param validation response validation
      * @return ConditionalValidation
      */
-    public static ConditionalValidation when(boolean condition, Validation validation) {
-        return new ConditionalValidation(() -> condition, validation, (ctx, resp) -> new ValidationResult(ValidationStatus.SUCCESS));
+    public static BaseConditionalValidation when(boolean condition, Validation validation) {
+        return new BaseConditionalValidation(() -> condition, validation, (ctx, resp) -> new ValidationResult(ValidationStatus.SUCCESS));
     }
 
     /**
@@ -302,12 +304,13 @@ public class Validations {
      * </pre>
      * Here we check that the server returned an error only if the id less then 0
      *
-     * @param condition  validation condition
-     * @param validation response validation
+     * @param condition      validation condition
+     * @param validation     response validation
+     * @param elseValidation else response validation
      * @return ConditionalValidation
      */
-    public static ConditionalValidation when(boolean condition, Validation validation, Validation elseValidation) {
-        return new ConditionalValidation(() -> condition, validation, elseValidation);
+    public static BaseConditionalValidation when(boolean condition, Validation validation, Validation elseValidation) {
+        return new BaseConditionalValidation(() -> condition, validation, elseValidation);
     }
 
     /**

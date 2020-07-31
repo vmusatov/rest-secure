@@ -16,4 +16,8 @@ public class ValidationResult {
     public boolean isFail() {
         return this.status.equals(ValidationStatus.FAIL);
     }
+
+    public boolean isSuccess() {
+        return this.status.equals(ValidationStatus.SUCCESS);
+    }
 }

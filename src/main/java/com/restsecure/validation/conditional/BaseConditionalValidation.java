@@ -4,17 +4,17 @@ import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.response.Response;
 import com.restsecure.core.response.validation.Validation;
 
-public class ResponseConditionalValidation extends ConditionalValidation {
+public class BaseConditionalValidation extends ConditionalValidation {
 
-    private final Validation conditional;
+    private final Condition condition;
 
-    public ResponseConditionalValidation(Validation conditional, Validation validation, Validation elseValidation) {
+    public BaseConditionalValidation(Condition condition, Validation validation, Validation elseValidation) {
         super(validation, elseValidation);
-        this.conditional = conditional;
+        this.condition = condition;
     }
 
     @Override
     boolean isConditionMet(RequestContext context, Response response) {
-        return conditional.validate(context, response).isSuccess();
+        return condition.isTrue();
     }
 }
