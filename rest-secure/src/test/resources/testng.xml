@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="Unit tests" parallel="classes" thread-count="1">
-    <test name="tests">
+<suite name="Unit tests" parallel="classes">
+    <test name="test">
         <packages>
             <package name="com.restsecure.core.request"/>
             <package name="com.restsecure.core.mapping.deserialize"/>
