@@ -21,6 +21,7 @@ public class SpecificationMerger {
         to.process(from.getProcessors());
         to.validate(from.getValidations());
         to.config(from.getConfigs());
+        to.data(from.getData());
     }
 
     private static void mergeProxy(RequestSpecification from, RequestSpecification to) {

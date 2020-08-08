@@ -1,11 +1,11 @@
 package com.restsecure.core.request.specification;
 
 import com.restsecure.core.configuration.Config;
-import com.restsecure.core.http.proxy.Proxy;
 import com.restsecure.core.http.RequestMethod;
 import com.restsecure.core.http.cookie.Cookie;
 import com.restsecure.core.http.header.Header;
 import com.restsecure.core.http.param.Parameter;
+import com.restsecure.core.http.proxy.Proxy;
 import com.restsecure.core.processor.Processor;
 import com.restsecure.core.response.Response;
 import com.restsecure.core.response.validation.Validation;
@@ -306,6 +306,27 @@ public interface RequestSpecification {
      * @return Processors list
      */
     List<Processor> getProcessors();
+
+    /**
+     * Allow you to specify request data classes
+     *
+     * @param data data class
+     * @return RequestSpecification
+     */
+    RequestSpecification data(Object data, Object... additionalData);
+
+    /**
+     * Allow you to specify request data classes
+     *
+     * @param data data classes list
+     * @return RequestSpecification
+     */
+    RequestSpecification data(List<Object> data);
+
+    /**
+     * @return data class
+     */
+    List<Object> getData();
 
     /**
      * Allow tou to add configuration<br>
