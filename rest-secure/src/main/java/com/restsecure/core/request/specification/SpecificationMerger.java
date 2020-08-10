@@ -19,7 +19,7 @@ public class SpecificationMerger {
         mergeProxy(from, to);
 
         to.process(from.getProcessors());
-        to.validate(from.getValidations());
+        to.expect(from.getValidations());
         to.config(from.getConfigs());
         to.data(from.getData());
     }

@@ -377,8 +377,8 @@ public interface RequestSpecification {
      * For example:
      * <pre>
      *     get("/getUser")
-     *              .param("name", "Sam")
-     *          .validate(
+     *          .param("name", "Sam")
+     *          .expect(
      *              statusCode(200),
      *              body("user.login", equalTo("Sam"))
      *          )
@@ -389,14 +389,14 @@ public interface RequestSpecification {
      *
      * @return RequestSpecification
      */
-    RequestSpecification validate(Validation validation, Validation... additionalValidation);
+    RequestSpecification expect(Validation validation, Validation... additionalValidation);
 
     /**
      * Allows you to add a response validation<br>
      *
      * @return RequestSpecification
      */
-    RequestSpecification validate(List<Validation> validations);
+    RequestSpecification expect(List<Validation> validations);
 
     /**
      * @return List<ResponseValidation>

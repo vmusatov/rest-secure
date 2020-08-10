@@ -57,7 +57,7 @@ public class RequestSenderTest extends BaseTest {
                         .param("last_name", lastName)
                         .param("email", email)
                         .param("phone", phone)
-                        .validate(
+                        .expect(
                                 statusCode(302),
                                 header("X-Rate-Limit-Limit", Integer::parseInt, equalTo(60)),
                                 body("result.first_name", equalTo(firstName))

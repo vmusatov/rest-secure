@@ -42,7 +42,7 @@ public class Validations {
      * <pre>
      *     RequestSpecification getUser = get("/users")
      *          .param("id", id)
-     *          .validate(
+     *          .expect(
      *              byDefault(
      *                  body("user.id", equalTo(id));
      *              )
@@ -54,7 +54,7 @@ public class Validations {
      * To do this, we can add new validations and in this case default validation will not be executed
      *
      * <pre>
-     *     getUser.validate(
+     *     getUser.expect(
      *          statusCode(400),
      *          body("error.message", containString("One of the specified parameters is invalid."))
      *     )
@@ -76,7 +76,7 @@ public class Validations {
      * <pre>
      *     RequestSpecification getUser = get("/users")
      *          .param("id", id)
-     *          .validate(
+     *          .expect(
      *              byDefault(
      *                  body("user.id", equalTo(id));
      *              )
@@ -88,7 +88,7 @@ public class Validations {
      * To do this, we can add new validations and in this case default validation will not be executed
      *
      * <pre>
-     *     getUser.validate(
+     *     getUser.expect(
      *          statusCode(400),
      *          body("error.message", containString("One of the specified parameters is invalid."))
      *     )
@@ -113,7 +113,7 @@ public class Validations {
      * <pre>
      *     RequestSpecification getUser = get("/users")
      *          .param("id", id)
-     *          .validate(
+     *          .expect(
      *              when(
      *                  combine(
      *                      statusCode(greaterThan(400)), statusCode(lessThan(500)),
@@ -140,7 +140,7 @@ public class Validations {
      * <pre>
      *     RequestSpecification getUser = get("/users")
      *          .param("id", id)
-     *          .validate(
+     *          .expect(
      *              when(
      *                  combine(
      *                      statusCode(greaterThan(400)), statusCode(lessThan(500)),
@@ -173,7 +173,7 @@ public class Validations {
      * <pre>
      *     RequestSpecification getUser = get("/users")
      *          .param("id", id)
-     *          .validate(
+     *          .expect(
      *              when(statusCode(400), then(
      *                  body("error.message", containString("One of the specified parameters is invalid."))
      *              ))
@@ -196,7 +196,7 @@ public class Validations {
      * <pre>
      *     RequestSpecification getUser = get("/users")
      *          .param("id", id)
-     *          .validate(
+     *          .expect(
      *              when(statusCode(400), then(
      *                  body("error.message", containString("One of the specified parameters is invalid."))
      *              ), orElse(
@@ -222,7 +222,7 @@ public class Validations {
      * <pre>
      *     RequestSpecification getUser = get("/users")
      *          .param("id", id)
-     *          .validate(
+     *          .expect(
      *              when(() -> id < 0, then(
      *                  body("error.message", containString("One of the specified parameters is invalid."))
      *              ))
@@ -245,7 +245,7 @@ public class Validations {
      * <pre>
      *     RequestSpecification getUser = get("/users")
      *          .param("id", id)
-     *          .validate(
+     *          .expect(
      *              when(() -> id < 0, then(
      *                  body("error.message", containString("One of the specified parameters is invalid."))
      *              ), orElse(
@@ -271,7 +271,7 @@ public class Validations {
      * <pre>
      *     RequestSpecification getUser = get("/users")
      *          .param("id", id)
-     *          .validate(
+     *          .expect(
      *              when(id < 0, then(
      *                  body("error.message", containString("One of the specified parameters is invalid."))
      *              ))
@@ -294,7 +294,7 @@ public class Validations {
      * <pre>
      *     RequestSpecification getUser = get("/users")
      *          .param("id", id)
-     *          .validate(
+     *          .expect(
      *              when(id < 0, then(
      *                  body("error.message", containString("One of the specified parameters is invalid."))
      *              ), orElse(
@@ -365,7 +365,7 @@ public class Validations {
      * <pre>
      *     get("url")
      *          .param("name", "value")
-     *          .validate(
+     *          .expect(
      *              statusLine("HTTP/1.1 302 Moved Temporarily")
      *          )
      *          .send();
@@ -384,7 +384,7 @@ public class Validations {
      * <pre>
      *     get("url")
      *          .param("name", "value")
-     *          .validate(
+     *          .expect(
      *              statusLine(containsString("HTTP/1.1 302"))
      *          )
      *          .send();
@@ -403,7 +403,7 @@ public class Validations {
      * <pre>
      *     get("url")
      *          .param("name", "value")
-     *          .validate(statusCode(200))
+     *          .expect(statusCode(200))
      *          .send();
      * </pre>
      *
@@ -420,7 +420,7 @@ public class Validations {
      * <pre>
      *     get("url")
      *          .param("name", "value")
-     *          .validate(statusCode(lessThan(300)))
+     *          .expect(statusCode(lessThan(300)))
      *          .send();
      * </pre>
      *
@@ -437,7 +437,7 @@ public class Validations {
      * <pre>
      *     get("url")
      *          .param("name", "value")
-     *          .validate(
+     *          .expect(
      *              time(lessThan(2000L))
      *          )
      *          .send();
@@ -455,7 +455,7 @@ public class Validations {
      * <pre>
      *     get("url")
      *          .param("name", "value")
-     *          .validate(
+     *          .expect(
      *              time(lessThan(2L), TimeUnit.SECONDS)
      *          )
      *          .send();
@@ -474,7 +474,7 @@ public class Validations {
      * <pre>
      *     get("url")
      *          .param("name", "value")
-     *          .validate(cookie("name", "value"))
+     *          .expect(cookie("name", "value"))
      *          .send();
      * </pre>
      *
@@ -492,7 +492,7 @@ public class Validations {
      *     Cookie expectedCookie = new Cookie("name", "value");
      *     get("url")
      *          .param("name", "value")
-     *          .validate(cookie(expectedCookie))
+     *          .expect(cookie(expectedCookie))
      *          .send();
      * </pre>
      *
@@ -508,7 +508,7 @@ public class Validations {
      * <pre>
      *     get("url")
      *          .param("name", "value")
-     *          .validate(cookie("name", containsString("value")))
+     *          .expect(cookie("name", containsString("value")))
      *          .send();
      * </pre>
      *
@@ -526,7 +526,7 @@ public class Validations {
      * <pre>
      *     get("url")
      *          .param("name", "value")
-     *          .validate(cookie("name", Integer::parseInt, lessThan(1000)))
+     *          .expect(cookie("name", Integer::parseInt, lessThan(1000)))
      *          .send();
      * </pre>
      *
@@ -545,7 +545,7 @@ public class Validations {
      * <pre>
      *     get("url")
      *          .param("name", "value")
-     *          .validate(
+     *          .expect(
      *              cookies(containsName("name")),
      *              cookies(containsValue("value")),
      *              cookies(containsPair("name2", "value2"))
@@ -565,7 +565,7 @@ public class Validations {
      * <pre>
      *     get("url")
      *          .param("name", "value")
-     *          .validate(header("name", "value"))
+     *          .expect(header("name", "value"))
      *          .send();
      * </pre>
      *
@@ -583,7 +583,7 @@ public class Validations {
      *     Header header = new Header("name", "value");
      *     get("url")
      *          .param("name", "value")
-     *          .validate(header(header))
+     *          .expect(header(header))
      *          .send();
      * </pre>
      *
@@ -599,7 +599,7 @@ public class Validations {
      * <pre>
      *     get("url")
      *          .param("name", "value")
-     *          .validate(header("name", containsString("value")))
+     *          .expect(header("name", containsString("value")))
      *          .send();
      * </pre>
      *
@@ -617,7 +617,7 @@ public class Validations {
      * <pre>
      *     get("url")
      *          .param("name", "value")
-     *          .validate(header("Content-Length", Integer::parseInt, lessThan(1000)))
+     *          .expect(header("Content-Length", Integer::parseInt, lessThan(1000)))
      *          .send();
      * </pre>
      *
@@ -636,7 +636,7 @@ public class Validations {
      * <pre>
      *     get("url")
      *          .param("name", "value")
-     *          .validate(
+     *          .expect(
      *              headers(containsName("name"))
      *              headers(containsValue("value"))
      *              headers(containsPair("name2", "value2"))
@@ -656,7 +656,7 @@ public class Validations {
      * <pre>
      *     get("url")
      *          .param("name", "value")
-     *          .validate(
+     *          .expect(
      *              contentType("application/json; charset=UTF-8")
      *          )
      *          .send();
@@ -674,7 +674,7 @@ public class Validations {
      * <pre>
      *     get("url")
      *          .param("name", "value")
-     *          .validate(
+     *          .expect(
      *              contentType(containsString("application/json"))
      *          )
      *          .send();
@@ -693,7 +693,7 @@ public class Validations {
      * <pre>
      *     get("/users")
      *          .param("id", "1")
-     *          .validate(body("user.login", equalTo("username")))
+     *          .expect(body("user.login", equalTo("username")))
      *          .send();
      * </pre>
      *
@@ -711,7 +711,7 @@ public class Validations {
      * <pre>
      *     get("/users")
      *          .param("id", "1")
-     *          .validate(
+     *          .expect(
      *              as(User.class, user -> user.getName().equal("username"), "username validation")
      *          )
      *          .send();
@@ -732,7 +732,7 @@ public class Validations {
      * <pre>
      *     get("/users")
      *          .param("id", "1")
-     *          .validate(
+     *          .expect(
      *              as(User.class, user -> user.getName().equal("username"), "username validation")
      *          )
      *          .send();
@@ -752,11 +752,8 @@ public class Validations {
      * <pre>
      *     get("/users")
      *          .param("id", "1")
-     *          .validate(
-     *              as(User.class,
-     *                  idIs(1),
-     *                  loginIs("login")
-     *              )
+     *          .expect(
+     *              as(User.class, idIs(1), loginIs("login"))
      *          )
      *          .send();
      * </pre>

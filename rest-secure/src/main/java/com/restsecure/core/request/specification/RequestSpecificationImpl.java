@@ -261,14 +261,14 @@ public class RequestSpecificationImpl implements RequestSpecification {
     }
 
     @Override
-    public RequestSpecification validate(Validation validation, Validation... additionalValidation) {
+    public RequestSpecification expect(Validation validation, Validation... additionalValidation) {
         this.validations.add(validation);
         this.validations.addAll(Arrays.asList(additionalValidation));
         return this;
     }
 
     @Override
-    public RequestSpecification validate(List<Validation> validations) {
+    public RequestSpecification expect(List<Validation> validations) {
         this.validations.addAll(validations);
         return this;
     }
