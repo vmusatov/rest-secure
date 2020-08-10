@@ -23,9 +23,10 @@ public class ResponseTimeValidation implements Validation {
 
     @Override
     public ValidationResult validate(RequestContext context, Response response) {
+        long time = response.getTimeIn(timeUnit);
 
-        if (!timeMatcher.matches(response.getTimeIn(timeUnit))) {
-            return new ValidationResult(ValidationStatus.FAIL, "Expected response time is " + timeMatcher + ", but found " + response.getTimeIn(timeUnit));
+        if (!timeMatcher.matches(time)) {
+            return new ValidationResult(ValidationStatus.FAIL, "Expected response time is " + timeMatcher + ", but found " + time);
         }
 
         return new ValidationResult(SUCCESS);

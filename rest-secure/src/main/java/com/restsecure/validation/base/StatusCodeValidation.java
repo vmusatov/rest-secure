@@ -19,9 +19,10 @@ public class StatusCodeValidation implements Validation {
 
     @Override
     public ValidationResult validate(RequestContext context, Response response) {
+        int statusCode = response.getStatusCode();
 
-        if (!statusCodeMatcher.matches(response.getStatusCode())) {
-            return new ValidationResult(ValidationStatus.FAIL, "Expected status code is " + statusCodeMatcher + ", but found " + response.getStatusCode());
+        if (!statusCodeMatcher.matches(statusCode)) {
+            return new ValidationResult(ValidationStatus.FAIL, "Expected status code is " + statusCodeMatcher + ", but found " + statusCode);
         }
 
         return new ValidationResult(SUCCESS);

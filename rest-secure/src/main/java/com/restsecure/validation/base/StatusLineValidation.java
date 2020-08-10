@@ -19,9 +19,10 @@ public class StatusLineValidation implements Validation {
 
     @Override
     public ValidationResult validate(RequestContext context, Response response) {
+        String statusLine = response.getStatusLine();
 
-        if (!statusLineMatcher.matches(response.getStatusLine())) {
-            return new ValidationResult(ValidationStatus.FAIL, "Expected status line is " + statusLineMatcher + ", but found " + response.getStatusLine());
+        if (!statusLineMatcher.matches(statusLine)) {
+            return new ValidationResult(ValidationStatus.FAIL, "Expected status line is " + statusLineMatcher + ", but found " + statusLine);
         }
 
         return new ValidationResult(SUCCESS);

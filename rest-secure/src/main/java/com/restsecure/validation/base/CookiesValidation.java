@@ -1,10 +1,12 @@
 package com.restsecure.validation.base;
 
-import com.restsecure.core.response.validation.Validation;
+import com.restsecure.core.http.cookie.Cookie;
 import com.restsecure.core.request.RequestContext;
-import com.restsecure.core.response.validation.ValidationResult;
-import com.restsecure.validation.matchers.MatcherUtils;
 import com.restsecure.core.response.Response;
+import com.restsecure.core.response.validation.Validation;
+import com.restsecure.core.response.validation.ValidationResult;
+import com.restsecure.core.util.NameValueList;
+import com.restsecure.validation.matchers.MatcherUtils;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 
@@ -23,9 +25,10 @@ public class CookiesValidation implements Validation {
 
     @Override
     public ValidationResult validate(RequestContext context, Response response) {
+        NameValueList<Cookie> cookies = response.getCookies();
 
-        if (!cookiesMatcher.matches(response.getCookies())) {
-            Description description = MatcherUtils.getDescription(COOKIE_VALIDATION_REASON, response.getCookies(), cookiesMatcher);
+        if (!cookiesMatcher.matches(cookies)) {
+            Description description = MatcherUtils.getDescription(COOKIE_VALIDATION_REASON, cookies, cookiesMatcher);
             return new ValidationResult(FAIL, description.toString());
         }
 
