@@ -1,11 +1,13 @@
 package com.restsecure.core.util;
 
+import com.restsecure.core.exception.RestSecureException;
 import com.restsecure.core.http.NameAndValue;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class NameValueList<T extends NameAndValue> implements Iterable<T> {
 
@@ -57,7 +59,17 @@ public class NameValueList<T extends NameAndValue> implements Iterable<T> {
 
     public T getFirst(String name) {
         for (T item : items) {
-            if (item.getName().equals(name)) {
+            if (itemHasName(item, name)) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    public T getLast(String name) {
+        for (int i = items.size() - 1; i > 0; i--) {
+            T item = items.get(i);
+            if (itemHasName(item, name)) {
                 return item;
             }
         }
@@ -67,33 +79,64 @@ public class NameValueList<T extends NameAndValue> implements Iterable<T> {
     public NameValueList<T> getAll(String name) {
         NameValueList<T> result = new NameValueList<>();
         for (T item : items) {
-            if (item.getName().equals(name)) {
+            if (itemHasName(item, name)) {
                 result.add(item);
             }
         }
         return result;
     }
 
-    public String getValue(String name) {
+    public String getFirstValue(String name) {
         T item = getFirst(name);
         if (item == null) {
-            return null;
+            throw new RestSecureException("Not found item with name " + name);
         }
         return item.getValue();
     }
 
+    public <E> E getFirstValue(String name, Function<String, E> parsingFunction) {
+        String value = getFirstValue(name);
+        return parsingFunction.apply(value);
+    }
+
+    public String getLastValue(String name) {
+        T item = getLast(name);
+        if (item == null) {
+            throw new RestSecureException("Not found item with name " + name);
+        }
+        return item.getValue();
+    }
+
+    public <E> E getLastValue(String name, Function<String, E> parsingFunction) {
+        String value = getLastValue(name);
+        return parsingFunction.apply(value);
+    }
+
     public List<String> getAllValues(String name) {
-        List<String> result = new LinkedList<>();
+        List<String> result = new ArrayList<>();
         List<T> findItems = getAll(name).asList();
 
         for (T item : findItems) {
             result.add(item.getValue());
         }
+
         return result;
+    }
+
+    public <E> List<E> getAllValues(String name, Function<String, E> parsingFunction) {
+        List<String> values = getAllValues(name);
+
+        return values.stream()
+                .map(parsingFunction)
+                .collect(Collectors.toList());
     }
 
     public List<T> asList() {
         return items;
+    }
+
+    private boolean itemHasName(T item, String name) {
+        return item != null && item.getName().equals(name);
     }
 
     @Override

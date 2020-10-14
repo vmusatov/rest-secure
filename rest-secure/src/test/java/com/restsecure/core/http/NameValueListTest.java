@@ -23,13 +23,15 @@ public class NameValueListTest {
         headersList.add(new Header("repeatName", "value2"));
         headersList.add(new Header("name3", "value3"));
         headersList.add(new Header("repeatName", "value4"));
+        headersList.add(new Header("name4", "100"));
+        headersList.add(new Header("name4", "200"));
     }
 
     @Test
     public void constructorWithListTest() {
         NameValueList<Header> list = new NameValueList<>(headersList);
 
-        assertThat(list.size(), equalTo(4));
+        assertThat(list.size(), equalTo(headersList.size()));
         assertThat(list.getFirst("repeatName").getValue(), equalTo("value2"));
     }
 
@@ -38,7 +40,7 @@ public class NameValueListTest {
         NameValueList<Header> headersNameValueList = new NameValueList<>(headersList);
         NameValueList<Header> list = new NameValueList<>(headersNameValueList);
 
-        assertThat(list.size(), equalTo(4));
+        assertThat(list.size(), equalTo(headersList.size()));
         assertThat(list.getFirst("repeatName").getValue(), equalTo("value2"));
     }
 
@@ -76,7 +78,7 @@ public class NameValueListTest {
         NameValueList<Header> list = new NameValueList<>();
         list.addAll(headersList);
 
-        assertThat(list.size(), equalTo(4));
+        assertThat(list.size(), equalTo(headersList.size()));
         assertThat(list.getFirst("repeatName").getValue(), equalTo("value2"));
     }
 
@@ -86,7 +88,7 @@ public class NameValueListTest {
         NameValueList<Header> list = new NameValueList<>();
         list.addAll(headersList);
 
-        assertThat(list.size(), equalTo(4));
+        assertThat(list.size(), equalTo(headersList.size()));
         assertThat(list.getFirst("repeatName").getValue(), equalTo("value2"));
     }
 
@@ -131,11 +133,31 @@ public class NameValueListTest {
     }
 
     @Test
-    public void getValueTest() {
+    public void getFirstValueTest() {
         NameValueList<Header> list = new NameValueList<>(headersList);
 
-        assertThat(list.getValue("name1"), equalTo("value1"));
-        assertThat(list.getValue("name3"), equalTo("value3"));
+        assertThat(list.getFirstValue("name1"), equalTo("value1"));
+        assertThat(list.getFirstValue("name3"), equalTo("value3"));
+    }
+
+    @Test
+    public void getFirstValueAsIntTest() {
+        NameValueList<Header> list = new NameValueList<>(headersList);
+        assertThat(list.getFirstValue("name4", Integer::parseInt), equalTo(100));
+    }
+
+    @Test
+    public void getLastValueTest() {
+        NameValueList<Header> list = new NameValueList<>(headersList);
+
+        assertThat(list.getLastValue("repeatName"), equalTo("value4"));
+        assertThat(list.getLastValue("name3"), equalTo("value3"));
+    }
+
+    @Test
+    public void getLastValueAsIntTest() {
+        NameValueList<Header> list = new NameValueList<>(headersList);
+        assertThat(list.getLastValue("name4", Integer::parseInt), equalTo(200));
     }
 
     @Test
@@ -155,12 +177,37 @@ public class NameValueListTest {
     }
 
     @Test
+    public void getAllValuesAsIntTest() {
+        NameValueList<Header> list = new NameValueList<>(headersList);
+        List<Integer> valuesList = list.getAllValues("name4", Integer::parseInt);
+
+        assertThat(valuesList.size(), equalTo(2));
+        assertThat(valuesList.contains(100), equalTo(true));
+        assertThat(valuesList.contains(200), equalTo(true));
+
+        list.add(new Header("name4", "300"));
+        valuesList = list.getAllValues("name4", Integer::parseInt);
+
+        assertThat(valuesList.size(), equalTo(3));
+        assertThat(valuesList.contains(300), equalTo(true));
+    }
+
+    @Test
     public void getFirstTest() {
         NameValueList<Header> list = new NameValueList<>(headersList);
         Header expectedHeader = new Header("repeatName", "value2");
 
         assertThat(list.getFirst("repeatName"), equalTo(expectedHeader));
         assertThat(list.getFirst("wrongName"), equalTo(null));
+    }
+
+    @Test
+    public void getLastTest() {
+        NameValueList<Header> list = new NameValueList<>(headersList);
+        Header expectedHeader = new Header("repeatName", "value4");
+
+        assertThat(list.getLast("repeatName"), equalTo(expectedHeader));
+        assertThat(list.getLast("wrongName"), equalTo(null));
     }
 
     @Test
