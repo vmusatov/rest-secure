@@ -1,5 +1,6 @@
 package com.restsecure.core.request;
 
+import com.restsecure.core.apache.ApacheConfig;
 import com.restsecure.core.processor.Processor;
 import com.restsecure.core.exception.SendRequestException;
 import com.restsecure.core.request.specification.RequestSpecification;
@@ -7,7 +8,9 @@ import com.restsecure.core.response.Response;
 import com.restsecure.core.response.ResponseConfigurator;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -88,9 +91,13 @@ public class RequestSender {
         RequestContext context = new RequestContext(spec);
         HttpUriRequest request = RequestFactory.createRequest(context);
 
-        try (CloseableHttpClient httpClient = context.getHttpClientBuilder().build(); httpClient) {
+        ApacheConfig apacheConfig = context.getConfig(ApacheConfig.class);
+        HttpClientBuilder httpClientBuilder = apacheConfig.getHttpClientBuilder();
+        HttpClientContext httpClientContext = apacheConfig.getHttpClientContext();
+
+        try (CloseableHttpClient httpClient = httpClientBuilder.build(); httpClient) {
             context.setRequestTime(System.currentTimeMillis());
-            CloseableHttpResponse httpResponse = httpClient.execute(request, context.getHttpClientContext());
+            CloseableHttpResponse httpResponse = httpClient.execute(request, httpClientContext);
 
             return ResponseConfigurator.configureResponse(httpResponse, context);
         } catch (IOException e) {

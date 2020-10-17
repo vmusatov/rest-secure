@@ -1,5 +1,6 @@
 package com.restsecure.core.http.proxy;
 
+import com.restsecure.core.apache.ApacheConfig;
 import com.restsecure.core.processor.ProcessAll;
 import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.RequestContext;
@@ -12,6 +13,7 @@ import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.BasicAuthCache;
 import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.DefaultProxyRoutePlanner;
 
 @ProcessAll
@@ -28,7 +30,12 @@ public class ProxyProcessor implements Processor {
         HttpHost host = new HttpHost(proxy.getHost(), proxy.getPort());
         DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(host);
 
+        ApacheConfig apacheConfig = context.getConfig(ApacheConfig.class);
+        HttpClientBuilder httpClientBuilder = apacheConfig.getHttpClientBuilder();
+
         if (proxy.needAuth()) {
+            HttpClientContext httpClientContext = apacheConfig.getHttpClientContext();
+
             CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
             credentialsProvider.setCredentials(new AuthScope(host), new UsernamePasswordCredentials(proxy.getUsername(), proxy.getPassword()));
 
@@ -37,11 +44,10 @@ public class ProxyProcessor implements Processor {
 
             authCache.put(host, basicAuth);
 
-            HttpClientContext httpClientContext = context.getHttpClientContext();
             httpClientContext.setCredentialsProvider(credentialsProvider);
             httpClientContext.setAuthCache(authCache);
         }
 
-        context.getHttpClientBuilder().setRoutePlanner(routePlanner);
+        httpClientBuilder.setRoutePlanner(routePlanner);
     }
 }

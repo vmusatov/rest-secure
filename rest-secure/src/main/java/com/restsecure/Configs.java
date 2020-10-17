@@ -1,5 +1,6 @@
 package com.restsecure;
 
+import com.restsecure.core.apache.ApacheConfig;
 import com.restsecure.core.configuration.ConfigFactory;
 import com.restsecure.core.http.header.HeadersConfig;
 import com.restsecure.core.mapping.deserialize.DeserializeConfig;
@@ -8,6 +9,10 @@ import com.restsecure.logging.LogConfig;
 import com.restsecure.session.SessionConfig;
 
 public class Configs {
+
+    public static ApacheConfig apacheConfig() {
+        return ConfigFactory.createDefaultConfig(ApacheConfig.class);
+    }
 
     /**
      * Create a new HeadersConfig instance with default settings
