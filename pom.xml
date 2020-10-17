@@ -12,6 +12,7 @@
 
     <modules>
         <module>rest-secure</module>
+        <module>test-utils</module>
     </modules>
 
     <properties>
