@@ -13,6 +13,7 @@ import com.restsecure.core.util.MultiKeyMap;
 import com.restsecure.session.Session;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Allows you to configure request
@@ -122,6 +123,14 @@ public interface RequestSpecification {
     RequestSpecification headers(List<Header> headers);
 
     /**
+     * Allows you to specify request headers
+     *
+     * @param headers request headers
+     * @return RequestSpecification
+     */
+    RequestSpecification headers(Map<String, ?> headers);
+
+    /**
      * @return request headers
      */
     MultiKeyMap<String, Object> getHeaders();
@@ -172,6 +181,14 @@ public interface RequestSpecification {
      * @return RequestSpecification
      */
     RequestSpecification params(List<Parameter> parameters);
+
+    /**
+     * Allows you to specify request parameters
+     *
+     * @param parameters request parameters
+     * @return RequestSpecification
+     */
+    RequestSpecification params(Map<String, ?> parameters);
 
     /**
      * @return request parameters
@@ -242,6 +259,14 @@ public interface RequestSpecification {
      * @return RequestSpecification
      */
     RequestSpecification cookies(List<Cookie> cookies);
+
+    /**
+     * Allow you to specify request cookies
+     *
+     * @param cookies request cookies
+     * @return RequestSpecification
+     */
+    RequestSpecification cookies(Map<String, ?> cookies);
 
     /**
      * @return cookies with Object value

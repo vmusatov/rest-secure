@@ -16,6 +16,7 @@ import lombok.Getter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 public class RequestSpecificationImpl implements RequestSpecification {
@@ -112,6 +113,14 @@ public class RequestSpecificationImpl implements RequestSpecification {
     }
 
     @Override
+    public RequestSpecification headers(Map<String, ?> headers) {
+        for (Map.Entry<String, ?> header : headers.entrySet()) {
+            header(header.getKey(), header.getValue());
+        }
+        return this;
+    }
+
+    @Override
     public MultiKeyMap<String, Object> getHeaders() {
         return this.headers;
     }
@@ -139,6 +148,14 @@ public class RequestSpecificationImpl implements RequestSpecification {
             for (Parameter param : parameters) {
                 param(param);
             }
+        }
+        return this;
+    }
+
+    @Override
+    public RequestSpecification params(Map<String, ?> parameters) {
+        for (Map.Entry<String, ?> param : parameters.entrySet()) {
+            param(param.getKey(), param.getValue());
         }
         return this;
     }
@@ -180,6 +197,14 @@ public class RequestSpecificationImpl implements RequestSpecification {
     public RequestSpecification cookies(List<Cookie> cookies) {
         for (Cookie cookie : cookies) {
             cookie(cookie);
+        }
+        return this;
+    }
+
+    @Override
+    public RequestSpecification cookies(Map<String, ?> cookies) {
+        for (Map.Entry<String, ?> cookie : cookies.entrySet()) {
+            cookie(cookie.getKey(), cookie.getValue());
         }
         return this;
     }
