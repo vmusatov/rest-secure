@@ -196,6 +196,39 @@ public interface RequestSpecification {
     MultiKeyMap<String, Object> getParameters();
 
     /**
+     * Allows you to specify query parameters
+     *
+     * @return RequestSpecification
+     */
+    RequestSpecification queryParam(String name, Object... value);
+
+    /**
+     * Allows you to specify query parameters
+     *
+     * @return
+     */
+    RequestSpecification queryParam(Parameter param);
+
+    /**
+     * Allows you to specify query parameters
+     *
+     * @return RequestSpecification
+     */
+    RequestSpecification queryParams(List<Parameter> params);
+
+    /**
+     * Allows you to specify query parameters
+     *
+     * @return RequestSpecification
+     */
+    RequestSpecification queryParams(Map<String, ?> params);
+
+    /**
+     * @return RequestSpecification
+     */
+    MultiKeyMap<String, Object> getQueryParams();
+
+    /**
      * Allow you to specify route param, for example:
      * <pre>
      *     get("http://localhost/users/{user_id}")

@@ -1,11 +1,11 @@
 package com.restsecure.core.request.specification;
 
 import com.restsecure.core.configuration.Config;
-import com.restsecure.core.http.proxy.Proxy;
 import com.restsecure.core.http.RequestMethod;
 import com.restsecure.core.http.cookie.Cookie;
 import com.restsecure.core.http.header.Header;
 import com.restsecure.core.http.param.Parameter;
+import com.restsecure.core.http.proxy.Proxy;
 import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.RequestSender;
 import com.restsecure.core.response.Response;
@@ -29,6 +29,7 @@ public class RequestSpecificationImpl implements RequestSpecification {
 
     private final MultiKeyMap<String, Object> headers;
     private final MultiKeyMap<String, Object> parameters;
+    private final MultiKeyMap<String, Object> queryParams;
     private final MultiKeyMap<String, Object> routeParams;
     private final MultiKeyMap<String, Object> cookiesWithValueToSerialize;
 
@@ -44,6 +45,7 @@ public class RequestSpecificationImpl implements RequestSpecification {
 
         this.headers = new MultiKeyMap<>();
         this.parameters = new MultiKeyMap<>();
+        this.queryParams = new MultiKeyMap<>();
         this.routeParams = new MultiKeyMap<>();
         this.cookiesWithValueToSerialize = new MultiKeyMap<>();
 
@@ -163,6 +165,42 @@ public class RequestSpecificationImpl implements RequestSpecification {
     @Override
     public MultiKeyMap<String, Object> getParameters() {
         return this.parameters;
+    }
+
+    @Override
+    public RequestSpecification queryParam(String name, Object... value) {
+        if (value.length > 0) {
+            for (Object val : value) {
+                this.queryParams.put(name, val);
+            }
+        } else {
+            this.queryParams.put(name, "");
+        }
+        return this;
+    }
+
+    @Override
+    public RequestSpecification queryParam(Parameter param) {
+        queryParam(param.getName(), param.getValue());
+        return this;
+    }
+
+    @Override
+    public RequestSpecification queryParams(List<Parameter> parameters) {
+        if (parameters != null && !parameters.isEmpty()) {
+            for (Parameter param : parameters) {
+                queryParam(param);
+            }
+        }
+        return this;
+    }
+
+    @Override
+    public RequestSpecification queryParams(Map<String, ?> parameters) {
+        for (Map.Entry<String, ?> param : parameters.entrySet()) {
+            queryParam(param.getKey(), param.getValue());
+        }
+        return this;
     }
 
     @Override

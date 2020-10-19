@@ -1,10 +1,10 @@
 package com.restsecure.core.request.specification;
 
 import com.restsecure.core.configuration.Config;
-import com.restsecure.core.http.proxy.Proxy;
 import com.restsecure.core.http.RequestMethod;
 import com.restsecure.core.http.header.Header;
 import com.restsecure.core.http.param.Parameter;
+import com.restsecure.core.http.proxy.Proxy;
 import com.restsecure.core.mapping.deserialize.DeserializeConfig;
 import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.RequestContext;
@@ -13,7 +13,9 @@ import com.restsecure.session.SessionConfig;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -138,6 +140,63 @@ public class RequestSpecificationTest {
         assertThat(spec.getParameters().getFirst("name"), equalTo("value"));
         assertThat(spec.getParameters().getFirst("name2"), equalTo("value2"));
         assertThat(spec.getParameters().getFirst("name3"), equalTo("value3"));
+    }
+
+    @Test
+    public void addQueryParamTest() {
+        RequestSpecification spec = new RequestSpecificationImpl();
+        assertThat(spec.getQueryParams().size(), equalTo(0));
+
+        Parameter param = new Parameter("name", "value");
+        spec.queryParam(param);
+
+        assertThat(spec.getQueryParams().size(), equalTo(1));
+        assertThat(spec.getQueryParams().getFirst("name"), equalTo("value"));
+    }
+
+    @Test
+    public void addQueryParamAsNameAndValueTest() {
+        RequestSpecification spec = new RequestSpecificationImpl();
+        assertThat(spec.getQueryParams().size(), equalTo(0));
+
+        Parameter param = new Parameter("name", "value");
+        spec.queryParam(param.getName(), param.getValue());
+
+        assertThat(spec.getQueryParams().size(), equalTo(1));
+        assertThat(spec.getQueryParams().getFirst("name"), equalTo("value"));
+    }
+
+    @Test
+    public void addQueryParamsAsMapTest() {
+        RequestSpecification spec = new RequestSpecificationImpl();
+        assertThat(spec.getQueryParams().size(), equalTo(0));
+
+        Map<String, String> queryParams = new HashMap<>();
+        queryParams.put("name", "value");
+        queryParams.put("name2", "value2");
+
+        spec.queryParams(queryParams);
+
+        assertThat(spec.getQueryParams().size(), equalTo(2));
+        assertThat(spec.getQueryParams().getFirst("name"), equalTo("value"));
+        assertThat(spec.getQueryParams().getFirst("name2"), equalTo("value2"));
+    }
+
+    @Test
+    public void addQueryParamsTest() {
+        RequestSpecification spec = new RequestSpecificationImpl();
+        assertThat(spec.getQueryParams().size(), equalTo(0));
+
+        Parameter param1 = new Parameter("name", "value");
+        Parameter param2 = new Parameter("name2", "value2");
+        Parameter param3 = new Parameter("name3", "value3");
+        List<Parameter> params = Arrays.asList(param1, param2, param3);
+        spec.queryParams(params);
+
+        assertThat(spec.getQueryParams().size(), equalTo(3));
+        assertThat(spec.getQueryParams().getFirst("name"), equalTo("value"));
+        assertThat(spec.getQueryParams().getFirst("name2"), equalTo("value2"));
+        assertThat(spec.getQueryParams().getFirst("name3"), equalTo("value3"));
     }
 
     @Test

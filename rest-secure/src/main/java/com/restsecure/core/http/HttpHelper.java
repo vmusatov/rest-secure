@@ -30,7 +30,12 @@ public class HttpHelper {
 
     public static List<NameValuePair> getFilteredParameters(MultiKeyMap<String, Object> parameters) {
         List<NameValuePair> pairs = new ArrayList<>();
-        parameters.forEach(param -> pairs.add(new BasicNameValuePair(param.getKey(), param.getValue().toString())));
+        parameters.forEach(param -> {
+            if (param.getValue() == null) {
+                param.setValue("");
+            }
+            pairs.add(new BasicNameValuePair(param.getKey(), param.getValue().toString()));
+        });
 
         return pairs;
     }
@@ -47,8 +52,10 @@ public class HttpHelper {
             URIBuilder uriBuilder = new URIBuilder(specification.getUrl());
             RequestMethod method = specification.getMethod();
 
+            uriBuilder.addParameters(getFilteredParameters(specification.getQueryParams()));
+
             if (!isHaveBody(method)) {
-                uriBuilder.setParameters(getFilteredParameters(specification.getParameters()));
+                uriBuilder.addParameters(getFilteredParameters(specification.getParameters()));
             }
 
             if (specification.getPort() != 0) {
