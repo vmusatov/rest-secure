@@ -44,8 +44,7 @@ public class Session implements Processor {
 
     @Override
     public void processRequest(RequestContext context) {
-        SessionConfig sessionConfig = context.getConfig(SessionConfig.class);
-        String sessionIdName = sessionConfig.getSessionIdName();
+        String sessionIdName = context.getConfigValue(SessionIdNameConfig.class);
 
         if (sessionIdValue != null && !sessionIdValue.isEmpty()) {
             context.getSpecification().header("Cookie", sessionIdName + "=" + sessionIdValue);
@@ -59,9 +58,9 @@ public class Session implements Processor {
             return;
         }
 
-        SessionConfig sessionConfig = context.getConfig(SessionConfig.class);
+        String sessionIdName = context.getConfigValue(SessionIdNameConfig.class);
 
-        Cookie sessionCookie = responseCookies.getFirst(sessionConfig.getSessionIdName());
+        Cookie sessionCookie = responseCookies.getFirst(sessionIdName);
         if (sessionCookie != null) {
             sessionIdValue = sessionCookie.getValue();
         }

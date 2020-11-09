@@ -20,14 +20,14 @@ public class SessionTest {
         Session session = new Session();
         RequestSpecification spec = new RequestSpecificationImpl();
         Response response = new HttpResponse();
-        response.setCookies(Collections.singletonList(new Cookie(SessionConfig.DEFAULT_SESSION_ID_NAME, "session_value")));
+        response.setCookies(Collections.singletonList(new Cookie(SessionIdNameConfig.DEFAULT_SESSION_ID_NAME, "session_value")));
 
         RequestContext context = new RequestContext(spec);
 
         session.processResponse(context, response);
         session.processRequest(context);
 
-        Header expectedHeader = new Header("Cookie", SessionConfig.DEFAULT_SESSION_ID_NAME + "=session_value");
+        Header expectedHeader = new Header("Cookie", SessionIdNameConfig.DEFAULT_SESSION_ID_NAME + "=session_value");
         assertThat("request not contain session cookie", spec.getHeaders().getFirst(expectedHeader.getName()).equals(expectedHeader.getValue()));
     }
 }

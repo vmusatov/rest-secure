@@ -13,10 +13,7 @@ import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.util.MultiKeyMap;
 import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Getter
 public class RequestSpecificationImpl implements RequestSpecification {
@@ -37,7 +34,7 @@ public class RequestSpecificationImpl implements RequestSpecification {
 
     private final List<Processor> processors;
     private final List<Validation> validations;
-    private final List<Config> configs;
+    private final List<Config<?>> configs;
     private final List<Object> data;
 
     public RequestSpecificationImpl() {
@@ -300,20 +297,20 @@ public class RequestSpecificationImpl implements RequestSpecification {
     }
 
     @Override
-    public RequestSpecification config(Config config, Config... additionalConfigs) {
+    public RequestSpecification config(Config<?> config, Config<?>... additionalConfigs) {
         this.configs.add(config);
         this.configs.addAll(Arrays.asList(additionalConfigs));
         return this;
     }
 
     @Override
-    public RequestSpecification config(List<Config> configs) {
+    public RequestSpecification config(List<Config<?>> configs) {
         this.configs.addAll(configs);
         return this;
     }
 
     @Override
-    public List<Config> getConfigs() {
+    public List<Config<?>> getConfigs() {
         return this.configs;
     }
 

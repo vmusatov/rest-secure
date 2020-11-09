@@ -4,27 +4,35 @@ import com.restsecure.core.processor.ProcessAll;
 import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.response.Response;
+import com.restsecure.logging.config.LogPrintStreamConfig;
+import com.restsecure.logging.config.RequestLogConfig;
+import com.restsecure.logging.config.ResponseLogConfig;
 import com.restsecure.logging.logger.RequestLogger;
 import com.restsecure.logging.logger.ResponseLogger;
+
+import java.io.PrintStream;
+import java.util.List;
 
 @ProcessAll
 public class LogProcessor implements Processor {
 
     @Override
     public void processResponse(RequestContext context, Response response) {
-        LogConfig logConfig = context.getConfig(LogConfig.class);
+        PrintStream ps = context.getConfigValue(LogPrintStreamConfig.class);
+        List<LogInfo> logInfo = context.getConfigValue(ResponseLogConfig.class);
 
-        if (!logConfig.getRequestLogInfoList().isEmpty()) {
-            ResponseLogger.log(logConfig.getPrintStream(), response, context.getSpecification(), logConfig.getResponseLogInfoList());
+        if (!logInfo.isEmpty()) {
+            ResponseLogger.log(ps, response, context.getSpecification(), logInfo);
         }
     }
 
     @Override
     public void processRequest(RequestContext context) {
-        LogConfig logConfig = context.getConfig(LogConfig.class);
+        PrintStream ps = context.getConfigValue(LogPrintStreamConfig.class);
+        List<LogInfo> logInfo = context.getConfigValue(RequestLogConfig.class);
 
-        if (!logConfig.getResponseLogInfoList().isEmpty()) {
-            RequestLogger.log(logConfig.getPrintStream(), context.getSpecification(), logConfig.getRequestLogInfoList());
+        if (!logInfo.isEmpty()) {
+            RequestLogger.log(ps, context.getSpecification(), logInfo);
         }
     }
 

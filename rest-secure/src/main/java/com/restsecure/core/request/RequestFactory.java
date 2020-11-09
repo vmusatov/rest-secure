@@ -1,6 +1,5 @@
 package com.restsecure.core.request;
 
-import com.restsecure.core.mapping.serialize.SerializeConfig;
 import com.restsecure.core.exception.RequestConfigurationException;
 import com.restsecure.core.request.specification.RequestSpecification;
 import com.restsecure.core.request.specification.SpecificationValidator;
@@ -33,12 +32,11 @@ public class RequestFactory {
 
     private static HttpUriRequest createPost(RequestContext context) {
         RequestSpecification spec = context.getSpecification();
-        SerializeConfig serializeConfig = context.getConfig(SerializeConfig.class);
 
         URI uri = buildUri(spec);
         HttpPost request = new HttpPost(uri);
         setHeadersToRequest(spec.getHeaders(), request);
-        setEntityToRequest(spec, serializeConfig, request);
+        setEntityToRequest(spec, request);
 
         return request;
     }
@@ -53,12 +51,11 @@ public class RequestFactory {
 
     private static HttpUriRequest createPut(RequestContext context) {
         RequestSpecification spec = context.getSpecification();
-        SerializeConfig serializeConfig = context.getConfig(SerializeConfig.class);
 
         URI uri = buildUri(spec);
         HttpPut request = new HttpPut(uri);
         setHeadersToRequest(spec.getHeaders(), request);
-        setEntityToRequest(spec, serializeConfig, request);
+        setEntityToRequest(spec, request);
 
         return request;
     }

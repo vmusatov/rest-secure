@@ -1,5 +1,7 @@
 package com.restsecure.core.configuration;
 
+import com.restsecure.core.exception.RestSecureException;
+
 import java.util.List;
 
 public class ConfigFactory {
@@ -10,14 +12,18 @@ public class ConfigFactory {
      * @param configClass config class
      * @return specified config
      */
-    public static <T extends Config> T createDefaultConfig(Class<T> configClass) {
+    public static <T extends Config<?>> T createDefaultConfig(Class<T> configClass) {
         try {
             T config = configClass.getDeclaredConstructor().newInstance();
-            config.reset();
+            config.initDefault();
 
             return config;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        }
+        catch (NoSuchMethodException e) {
+            throw new RestSecureException("No default constructor found. To create a config, the " + configClass + " class must have a default constructor.");
+        }
+        catch (Exception e) {
+            throw new RestSecureException(e);
         }
     }
 
@@ -28,8 +34,8 @@ public class ConfigFactory {
      * @param configClass specified config
      * @return specified config
      */
-    public static <T extends Config> T getConfig(List<Config> configs, Class<T> configClass) {
-        for (Config config : configs) {
+    public static <T extends Config<?>> T getConfig(List<Config<?>> configs, Class<T> configClass) {
+        for (Config<?> config : configs) {
             if (configClass.isInstance(config)) {
                 return (T) config;
             }
@@ -47,7 +53,7 @@ public class ConfigFactory {
      * @param configClass specified config
      * @return specified config
      */
-    public static <T extends Config> T getConfigOrCreateDefault(List<Config> configs, Class<T> configClass) {
+    public static <T extends Config<?>> T getConfigOrCreateDefault(List<Config<?>> configs, Class<T> configClass) {
         T config = getConfig(configs, configClass);
 
         if (config == null) {

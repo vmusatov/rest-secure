@@ -1,9 +1,11 @@
 package com.restsecure.core.response;
 
 import com.restsecure.RestSecure;
+import com.restsecure.core.configuration.configs.DeserializerConfig;
+import com.restsecure.core.exception.RestSecureException;
 import com.restsecure.core.http.HttpHelper;
 import com.restsecure.core.http.header.Header;
-import com.restsecure.core.mapping.deserialize.DeserializeConfig;
+import com.restsecure.core.mapping.deserialize.Deserializer;
 import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.response.validation.Validation;
@@ -42,12 +44,12 @@ public class ResponseConfigurator {
             response.setStatusLine(httpResponse.getStatusLine().toString());
             response.setStatusCode(httpResponse.getStatusLine().getStatusCode());
 
-            DeserializeConfig deserializeConfig = context.getConfig(DeserializeConfig.class);
-            response.setBody(new ResponseBody(getBodyContent(httpResponse), deserializeConfig.getDeserializer()));
+            Deserializer deserializer = context.getConfigValue(DeserializerConfig.class);
+            response.setBody(new ResponseBody(getBodyContent(httpResponse), deserializer));
 
             return response;
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RestSecureException(e);
         }
     }
 
@@ -62,7 +64,7 @@ public class ResponseConfigurator {
         try {
             return EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
         } catch (IOException e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RestSecureException(e.getMessage());
         }
     }
 

@@ -47,7 +47,7 @@ public class RequestSenderTest extends BaseTest {
         RestSecure.baseUrl = "";
     }
 
-    @Test
+    @Test(enabled = false)
     public void sendOneRequestTest() {
 
         Response response = RequestSender.send(
@@ -69,7 +69,7 @@ public class RequestSenderTest extends BaseTest {
         deleteUser(response.getBody().get("result.id"));
     }
 
-    @Test
+    @Test(enabled = false)
     public void sendMultipleRequestsTest() {
 
         Response response = RequestSender.send(
@@ -89,7 +89,7 @@ public class RequestSenderTest extends BaseTest {
         deleteUser(response.getBody().get("result[0].id"));
     }
 
-    @Test
+    @Test(enabled = false)
     public void sendRequestsListTest() {
 
         List<RequestSpecification> requests = Arrays.asList(

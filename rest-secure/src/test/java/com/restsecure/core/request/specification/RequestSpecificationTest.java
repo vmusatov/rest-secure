@@ -1,15 +1,15 @@
 package com.restsecure.core.request.specification;
 
 import com.restsecure.core.configuration.Config;
+import com.restsecure.core.configuration.configs.DeserializerConfig;
 import com.restsecure.core.http.RequestMethod;
 import com.restsecure.core.http.header.Header;
 import com.restsecure.core.http.param.Parameter;
 import com.restsecure.core.http.proxy.Proxy;
-import com.restsecure.core.mapping.deserialize.DeserializeConfig;
 import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.response.Response;
-import com.restsecure.session.SessionConfig;
+import com.restsecure.session.SessionIdNameConfig;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
@@ -291,7 +291,7 @@ public class RequestSpecificationTest {
     @Test
     public void addConfigTest() {
         RequestSpecification spec = new RequestSpecificationImpl();
-        SessionConfig sessionConfig = new SessionConfig();
+        SessionIdNameConfig sessionConfig = new SessionIdNameConfig();
         spec.config(sessionConfig);
 
         assertThat(spec.getConfigs(), contains(sessionConfig));
@@ -300,10 +300,10 @@ public class RequestSpecificationTest {
     @Test
     public void addConfigsListTest() {
         RequestSpecification spec = new RequestSpecificationImpl();
-        SessionConfig sessionConfig = new SessionConfig();
-        DeserializeConfig deserializeConfig = new DeserializeConfig();
+        SessionIdNameConfig sessionConfig = new SessionIdNameConfig();
+        DeserializerConfig deserializeConfig = new DeserializerConfig();
 
-        List<Config> configs = Arrays.asList(sessionConfig, deserializeConfig);
+        List<Config<?>> configs = Arrays.asList(sessionConfig, deserializeConfig);
         spec.config(configs);
 
         assertThat(spec.getConfigs().size(), equalTo(2));

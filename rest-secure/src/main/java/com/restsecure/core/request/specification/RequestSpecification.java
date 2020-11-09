@@ -400,7 +400,7 @@ public interface RequestSpecification {
      * @param additionalConfigs additional configs
      * @return RequestSpecification
      */
-    RequestSpecification config(Config config, Config... additionalConfigs);
+    RequestSpecification config(Config<?> config, Config<?>... additionalConfigs);
 
     /**
      * Allow tou to add configuration<br>
@@ -415,12 +415,12 @@ public interface RequestSpecification {
      * @param configs configs list
      * @return RequestSpecification
      */
-    RequestSpecification config(List<Config> configs);
+    RequestSpecification config(List<Config<?>> configs);
 
     /**
      * @return Configs list
      */
-    List<Config> getConfigs();
+    List<Config<?>> getConfigs();
 
     /**
      * Allows you to merge another specification into the current

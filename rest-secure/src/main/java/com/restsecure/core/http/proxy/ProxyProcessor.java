@@ -1,6 +1,7 @@
 package com.restsecure.core.http.proxy;
 
-import com.restsecure.core.apache.ApacheConfig;
+import com.restsecure.core.configuration.configs.HttpClientBuilderConfig;
+import com.restsecure.core.configuration.configs.HttpClientContextConfig;
 import com.restsecure.core.processor.ProcessAll;
 import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.RequestContext;
@@ -30,11 +31,10 @@ public class ProxyProcessor implements Processor {
         HttpHost host = new HttpHost(proxy.getHost(), proxy.getPort());
         DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(host);
 
-        ApacheConfig apacheConfig = context.getConfig(ApacheConfig.class);
-        HttpClientBuilder httpClientBuilder = apacheConfig.getHttpClientBuilder();
+        HttpClientBuilder httpClientBuilder = context.getConfigValue(HttpClientBuilderConfig.class);
 
         if (proxy.needAuth()) {
-            HttpClientContext httpClientContext = apacheConfig.getHttpClientContext();
+            HttpClientContext httpClientContext = context.getConfigValue(HttpClientContextConfig.class);
 
             CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
             credentialsProvider.setCredentials(new AuthScope(host), new UsernamePasswordCredentials(proxy.getUsername(), proxy.getPassword()));

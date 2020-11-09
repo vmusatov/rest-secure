@@ -9,9 +9,8 @@ public class SessionConfigTest {
 
     @Test
     public void setSessionIdNameTest() {
-        SessionConfig config = new SessionConfig();
-        config.setSessionIdName("PHPSESSID");
-
-        assertThat(config.getSessionIdName(), equalTo("PHPSESSID"));
+        SessionIdNameConfig config = new SessionIdNameConfig();
+        config.setValue("PHPSESSID");
+        assertThat(config.getValue(), equalTo("PHPSESSID"));
     }
 }

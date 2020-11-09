@@ -11,7 +11,7 @@ import java.util.List;
 public class RequestContext {
     @Getter
     private RequestSpecification specification;
-    private List<Config> configs;
+    private List<Config<?>> configs;
     @Getter
     @Setter
     private long requestTime;
@@ -21,7 +21,12 @@ public class RequestContext {
         this.configs = specification.getConfigs();
     }
 
-    public <T extends Config> T getConfig(Class<T> configClass) {
+    public <T, E extends Config<T>> T getConfigValue(Class<E> configClass) {
+        Config<T> config = getConfig(configClass);
+        return config.getValue();
+    }
+
+    public <T extends Config<?>> T getConfig(Class<T> configClass) {
         T config = ConfigFactory.getConfig(this.configs, configClass);
 
         if (config == null) {

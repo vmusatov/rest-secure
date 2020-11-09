@@ -1,8 +1,9 @@
 package com.restsecure.core.request;
 
-import com.restsecure.core.apache.ApacheConfig;
-import com.restsecure.core.processor.Processor;
+import com.restsecure.core.configuration.configs.HttpClientBuilderConfig;
+import com.restsecure.core.configuration.configs.HttpClientContextConfig;
 import com.restsecure.core.exception.SendRequestException;
+import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.specification.RequestSpecification;
 import com.restsecure.core.response.Response;
 import com.restsecure.core.response.ResponseConfigurator;
@@ -91,9 +92,8 @@ public class RequestSender {
         RequestContext context = new RequestContext(spec);
         HttpUriRequest request = RequestFactory.createRequest(context);
 
-        ApacheConfig apacheConfig = context.getConfig(ApacheConfig.class);
-        HttpClientBuilder httpClientBuilder = apacheConfig.getHttpClientBuilder();
-        HttpClientContext httpClientContext = apacheConfig.getHttpClientContext();
+        HttpClientBuilder httpClientBuilder = context.getConfigValue(HttpClientBuilderConfig.class);
+        HttpClientContext httpClientContext = context.getConfigValue(HttpClientContextConfig.class);
 
         try (CloseableHttpClient httpClient = httpClientBuilder.build(); httpClient) {
             context.setRequestTime(System.currentTimeMillis());
