@@ -35,6 +35,34 @@ public class Validations {
     public static final Validation OR = LogicalOperators.OR;
 
     /**
+     * Create a validation that always succeeds
+     *
+     * @return Validation
+     */
+    public static Validation success() {
+        return (ctx, resp) -> new ValidationResult(ValidationStatus.SUCCESS);
+    }
+
+    /**
+     * Create a validation that always fails
+     *
+     * @return Validation
+     */
+    public static Validation fail() {
+        return (ctx, resp) -> new ValidationResult(ValidationStatus.FAIL);
+    }
+
+    /**
+     * Create a validation that always fails
+     *
+     * @param msg error message
+     * @return Validation
+     */
+    public static Validation fail(String msg) {
+        return (ctx, resp) -> new ValidationResult(ValidationStatus.FAIL, msg);
+    }
+
+    /**
      * The default validation.
      * The RequestSpecification can contain only one default validation, if more than one is specified, only the last one is executed.
      * If non-default validation is added, default validations will not be executed
