@@ -751,7 +751,7 @@ public class Validations {
      * @return ResponseValidation
      */
     public static <E> ObjectValidation<E> as(Class<E> responseClass, Predicate<E> predicate, String reason) {
-        return new ObjectValidation<>(responseClass, predicate, reason);
+        return new ObjectValidation<>("", responseClass, predicate, reason);
     }
 
     /**
@@ -761,17 +761,60 @@ public class Validations {
      *     get("/users")
      *          .param("id", "1")
      *          .expect(
-     *              as(User.class, user -> user.getName().equal("username"), "username validation")
+     *              as(Phone.class, "user.phone", phone -> phone.getCode().equal("+7"), "username validation")
      *          )
      *          .send();
      * </pre>
      *
-     * @param responseClass response calss
+     * @param responseClass response class
+     * @param path          json path
+     * @param predicate     Predicate
+     * @param reason        validation reason
+     * @return ResponseValidation
+     */
+    public static <E> ObjectValidation<E> as(Class<E> responseClass, String path, Predicate<E> predicate, String reason) {
+        return new ObjectValidation<>(path, responseClass, predicate, reason);
+    }
+
+    /**
+     * Allows you to specify predicates for checking the response<br>
+     * For example:
+     * <pre>
+     *     get("/users")
+     *          .param("id", "1")
+     *          .expect(
+     *              as(User.class, user -> user.getName().equal("username"))
+     *          )
+     *          .send();
+     * </pre>
+     *
+     * @param responseClass response class
      * @param predicate     predicate
      * @return ResponseValidation
      */
     public static <E> ObjectValidation<E> as(Class<E> responseClass, Predicate<E> predicate) {
-        return new ObjectValidation<>(responseClass, predicate, null);
+        return new ObjectValidation<>("", responseClass, predicate, null);
+    }
+
+    /**
+     * Allows you to specify predicates for checking the response<br>
+     * For example:
+     * <pre>
+     *     get("/users")
+     *          .param("id", "1")
+     *          .expect(
+     *              as(Phone.class, "user.phone", phone -> phone.getCode().equal("+7"))
+     *          )
+     *          .send();
+     * </pre>
+     *
+     * @param responseClass response class
+     * @param path          json path
+     * @param predicate     predicate
+     * @return ResponseValidation
+     */
+    public static <E> ObjectValidation<E> as(Class<E> responseClass, String path, Predicate<E> predicate) {
+        return new ObjectValidation<>(path, responseClass, predicate, null);
     }
 
     /**
@@ -797,6 +840,33 @@ public class Validations {
         matchers.add(matcher);
         matchers.addAll(Arrays.asList(additionalMatchers));
 
-        return new ObjectMatcherValidation<>(responseClass, matchers);
+        return new ObjectMatcherValidation<>("", responseClass, matchers);
+    }
+
+    /**
+     * Allows you to specify predicates for checking the response<br>
+     * For example:
+     * <pre>
+     *     get("/users")
+     *          .param("id", "1")
+     *          .expect(
+     *              as(Phone.class, "user.phone", phoneCodeIs("+7"), phoneNumberIs("9998887766"))
+     *          )
+     *          .send();
+     * </pre>
+     *
+     * @param responseClass      response class
+     * @param path               json path
+     * @param matcher            response class matcher
+     * @param additionalMatchers additional response class matchers
+     * @return ResponseValidation
+     */
+    @SafeVarargs
+    public static <E> ObjectMatcherValidation<E> as(Class<E> responseClass, String path, Matcher<E> matcher, Matcher<E>... additionalMatchers) {
+        List<Matcher<E>> matchers = new ArrayList<>();
+        matchers.add(matcher);
+        matchers.addAll(Arrays.asList(additionalMatchers));
+
+        return new ObjectMatcherValidation<>(path, responseClass, matchers);
     }
 }

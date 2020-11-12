@@ -13,8 +13,8 @@ public class ObjectValidation<T> extends ResponseObjectValidation<T> {
     private final String reason;
     private final Predicate<T> predicate;
 
-    public ObjectValidation(Class<T> responseClass, Predicate<T> predicate, String reason) {
-        super(responseClass);
+    public ObjectValidation(String path, Class<T> responseClass, Predicate<T> predicate, String reason) {
+        super(path, responseClass);
         this.predicate = predicate;
         this.reason = reason;
     }
@@ -23,7 +23,7 @@ public class ObjectValidation<T> extends ResponseObjectValidation<T> {
     public ValidationResult validate(RequestContext context, T responseObject) {
         if (!predicate.test(responseObject)) {
             if (reason == null) {
-                return new ValidationResult(ValidationStatus.FAIL, "Wrong value " + responseObject);
+                return new ValidationResult(ValidationStatus.FAIL);
             } else {
                 return new ValidationResult(ValidationStatus.FAIL, reason);
             }

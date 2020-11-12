@@ -12,7 +12,6 @@ import lombok.Data;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.testng.asserts.SoftAssert;
 
 import java.util.Arrays;
 import java.util.List;

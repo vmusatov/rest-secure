@@ -1,8 +1,8 @@
 package com.restsecure.validation.object;
 
 import com.restsecure.core.request.RequestContext;
-import com.restsecure.validation.matchers.MatcherUtils;
 import com.restsecure.core.response.validation.ValidationResult;
+import com.restsecure.validation.matchers.MatcherUtils;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 
@@ -15,8 +15,8 @@ public class ObjectMatcherValidation<T> extends ResponseObjectValidation<T> {
 
     private final List<Matcher<T>> matchers;
 
-    public ObjectMatcherValidation(Class<T> responseClass, List<Matcher<T>> matchers) {
-        super(responseClass);
+    public ObjectMatcherValidation(String path, Class<T> responseClass, List<Matcher<T>> matchers) {
+        super(path, responseClass);
         this.matchers = matchers;
     }
 

@@ -72,7 +72,7 @@ public class Configs {
      * @param context HttpClientContext
      * @return HttpClientContextConfig
      */
-    public static Config<HttpClientContext> httpClientBuilder(HttpClientContext context) {
+    public static Config<HttpClientContext> httpClientContext(HttpClientContext context) {
         HttpClientContextConfig config = new HttpClientContextConfig();
         config.setValue(context);
         return config;
