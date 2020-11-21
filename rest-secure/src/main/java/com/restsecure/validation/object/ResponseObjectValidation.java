@@ -8,13 +8,14 @@ import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.response.Response;
 import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.response.validation.ValidationResult;
+import com.restsecure.validation.config.BaseJsonPathConfig;
 
 import java.util.LinkedHashMap;
 
 public abstract class ResponseObjectValidation<T> implements Validation {
 
     protected final Class<T> responseClass;
-    private final String path;
+    private String path;
 
     public ResponseObjectValidation(String path, Class<T> responseClass) {
         this.responseClass = responseClass;
@@ -25,7 +26,13 @@ public abstract class ResponseObjectValidation<T> implements Validation {
 
     @Override
     public ValidationResult validate(RequestContext context, Response response) {
-        if (this.path == null || this.path.isEmpty()) {
+        String basePath = context.getConfigValue(BaseJsonPathConfig.class);
+
+        if (basePath != null && !basePath.isEmpty()) {
+            this.path = basePath + path;
+        }
+
+        if (this.path.isEmpty()) {
             return validate(context, response.getBody().as(responseClass));
         }
 

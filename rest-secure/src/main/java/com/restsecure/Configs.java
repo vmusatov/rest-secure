@@ -9,6 +9,7 @@ import com.restsecure.logging.config.LogPrintStreamConfig;
 import com.restsecure.logging.config.RequestLogConfig;
 import com.restsecure.logging.config.ResponseLogConfig;
 import com.restsecure.session.SessionIdNameConfig;
+import com.restsecure.validation.config.BaseJsonPathConfig;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.impl.client.HttpClientBuilder;
 
@@ -183,6 +184,19 @@ public class Configs {
     public static Config<List<LogInfo>> responseLogInfo(LogInfo... logInfo) {
         ResponseLogConfig config = new ResponseLogConfig();
         config.setValue(Arrays.asList(logInfo));
+        return config;
+    }
+
+
+    /**
+     * Create a BaseJsonPathConfig with specified value
+     *
+     * @param path base json path
+     * @return BaseJsonPathConfig
+     */
+    public static Config<String> baseJsonPath(String path) {
+        BaseJsonPathConfig config = new BaseJsonPathConfig();
+        config.setValue(path);
         return config;
     }
 }
