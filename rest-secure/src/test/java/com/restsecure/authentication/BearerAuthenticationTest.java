@@ -2,8 +2,6 @@ package com.restsecure.authentication;
 
 import com.restsecure.core.http.header.HeaderNames;
 import com.restsecure.core.request.RequestContext;
-import com.restsecure.core.request.specification.RequestSpecification;
-import com.restsecure.core.request.specification.RequestSpecificationImpl;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -16,9 +14,10 @@ public class BearerAuthenticationTest {
         String token = "my_token";
 
         BearerAuthentication auth = new BearerAuthentication(token);
-        RequestSpecification spec = new RequestSpecificationImpl();
-        auth.processRequest(new RequestContext(spec));
 
-        assertThat(spec.getHeaders().getFirst(HeaderNames.AUTHORIZATION), equalTo("Bearer " + token));
+        RequestContext context = new RequestContext();
+        auth.processRequest(context);
+
+        assertThat(context.getSpecification().getHeaders().getFirst(HeaderNames.AUTHORIZATION), equalTo("Bearer " + token));
     }
 }

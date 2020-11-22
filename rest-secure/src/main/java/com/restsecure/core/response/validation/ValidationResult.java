@@ -11,6 +11,7 @@ public class ValidationResult {
 
     public ValidationResult(ValidationStatus status) {
         this.status = status;
+        errorText = "";
     }
 
     public boolean isFail() {

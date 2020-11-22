@@ -34,7 +34,7 @@ public class ObjectValidationTest extends BaseTest {
         response.setBody(new ResponseBody(userJson));
 
         Validation validation = as(User.class, user -> user.getId() == 2);
-        expectValidationFailWithErrorText(validation, response, "Wrong value");
+        expectValidationFailWithErrorText(validation, response, "");
     }
 
     @Test

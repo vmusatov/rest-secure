@@ -1,11 +1,16 @@
 package com.restsecure.core.request;
 
+import com.restsecure.RestSecure;
 import com.restsecure.core.exception.RequestConfigurationException;
+import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.specification.RequestSpecification;
 import com.restsecure.core.request.specification.SpecificationValidator;
 import org.apache.http.client.methods.*;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 import static com.restsecure.core.http.HttpHelper.*;
 
@@ -13,7 +18,7 @@ public class RequestFactory {
 
     public static HttpUriRequest createRequest(RequestContext context) {
 
-        RequestConfigurator.configure(context);
+        processRequest(context);
         SpecificationValidator.validate(context.getSpecification());
 
         switch (context.getSpecification().getMethod()) {
@@ -28,6 +33,16 @@ public class RequestFactory {
             default:
                 throw new RequestConfigurationException("Unsupported request method " + context.getSpecification().getMethod());
         }
+    }
+
+    private static void processRequest(RequestContext context) {
+        List<Processor> processors = new ArrayList<>();
+        processors.addAll(RestSecure.getContext().getProcessors());
+        processors.addAll(context.getSpecification().getProcessors());
+
+        processors.stream()
+                .sorted(Comparator.comparingInt(Processor::getRequestProcessOrder))
+                .forEach(processor -> processor.processRequest(context));
     }
 
     private static HttpUriRequest createPost(RequestContext context) {

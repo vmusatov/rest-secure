@@ -1,8 +1,10 @@
 package com.restsecure.core.request;
 
+import com.restsecure.RestSecure;
 import com.restsecure.core.configuration.Config;
 import com.restsecure.core.configuration.ConfigFactory;
 import com.restsecure.core.request.specification.RequestSpecification;
+import com.restsecure.core.request.specification.RequestSpecificationImpl;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,9 +18,23 @@ public class RequestContext {
     @Setter
     private long requestTime;
 
+    public RequestContext() {
+        init(null);
+    }
+
     public RequestContext(RequestSpecification specification) {
-        this.specification = specification;
-        this.configs = specification.getConfigs();
+        init(specification);
+    }
+
+    private void init(RequestSpecification specification) {
+        this.specification = new RequestSpecificationImpl();
+
+        if (specification != null) {
+            this.specification.mergeWith(specification);
+        }
+        this.specification.mergeWith(RestSecure.globalSpecification);
+
+        this.configs = this.specification.getConfigs();
     }
 
     public <T, E extends Config<T>> T getConfigValue(Class<E> configClass) {
@@ -35,10 +51,5 @@ public class RequestContext {
         }
 
         return config;
-    }
-
-    public void setSpecification(RequestSpecification spec) {
-        this.specification = spec;
-        this.configs = spec.getConfigs();
     }
 }

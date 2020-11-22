@@ -2,8 +2,6 @@ package com.restsecure.authentication;
 
 import com.restsecure.core.http.header.HeaderNames;
 import com.restsecure.core.request.RequestContext;
-import com.restsecure.core.request.specification.RequestSpecification;
-import com.restsecure.core.request.specification.RequestSpecificationImpl;
 import org.testng.annotations.Test;
 
 import java.util.Base64;
@@ -20,10 +18,10 @@ public class BasicAuthenticationTest {
         String encoded = Base64.getEncoder().encodeToString((userName + ":" + pass).getBytes());
 
         BasicAuthentication auth = new BasicAuthentication(userName, pass);
-        RequestSpecification spec = new RequestSpecificationImpl();
 
-        auth.processRequest(new RequestContext(spec));
+        RequestContext context = new RequestContext();
+        auth.processRequest(context);
 
-        assertThat(spec.getHeaders().getFirst(HeaderNames.AUTHORIZATION), equalTo("Basic " + encoded));
+        assertThat(context.getSpecification().getHeaders().getFirst(HeaderNames.AUTHORIZATION), equalTo("Basic " + encoded));
     }
 }

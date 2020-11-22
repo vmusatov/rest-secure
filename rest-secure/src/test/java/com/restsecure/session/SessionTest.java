@@ -3,8 +3,6 @@ package com.restsecure.session;
 import com.restsecure.core.http.cookie.Cookie;
 import com.restsecure.core.http.header.Header;
 import com.restsecure.core.request.RequestContext;
-import com.restsecure.core.request.specification.RequestSpecification;
-import com.restsecure.core.request.specification.RequestSpecificationImpl;
 import com.restsecure.core.response.HttpResponse;
 import com.restsecure.core.response.Response;
 import org.testng.annotations.Test;
@@ -18,16 +16,15 @@ public class SessionTest {
     @Test
     public void sessionTest() {
         Session session = new Session();
-        RequestSpecification spec = new RequestSpecificationImpl();
         Response response = new HttpResponse();
         response.setCookies(Collections.singletonList(new Cookie(SessionIdNameConfig.DEFAULT_SESSION_ID_NAME, "session_value")));
 
-        RequestContext context = new RequestContext(spec);
+        RequestContext context = new RequestContext();
 
         session.processResponse(context, response);
         session.processRequest(context);
 
         Header expectedHeader = new Header("Cookie", SessionIdNameConfig.DEFAULT_SESSION_ID_NAME + "=session_value");
-        assertThat("request not contain session cookie", spec.getHeaders().getFirst(expectedHeader.getName()).equals(expectedHeader.getValue()));
+        assertThat("request not contain session cookie", context.getSpecification().getHeaders().getFirst(expectedHeader.getName()).equals(expectedHeader.getValue()));
     }
 }
