@@ -3,10 +3,12 @@ package com.restsecure.core.request;
 import com.restsecure.BaseTest;
 import com.restsecure.MockServer;
 import com.restsecure.RestSecure;
+import com.restsecure.core.http.RequestMethod;
 import com.restsecure.core.http.cookie.Cookie;
 import com.restsecure.core.http.header.Header;
 import com.restsecure.core.request.specification.RequestSpecification;
 import com.restsecure.core.response.validation.Validation;
+import com.restsecure.validation.conditional.ContextCondition;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -50,7 +52,7 @@ public class RequestSenderTest extends BaseTest {
     @Test()
     public void sendOneRequestTest() {
         RequestSender.send(
-                RestSecure.get(MockServer.GET_PATH).expect(checkMockServerResponse())
+                RestSecure.get(MockServer.GET_PATH).expect(checkResponse())
         );
 
         assertThat(MockServer.requestCount, equalTo(1));
@@ -59,44 +61,48 @@ public class RequestSenderTest extends BaseTest {
     @Test()
     public void sendMultipleRequestsTest() {
         RequestSender.send(
-                RestSecure.get(MockServer.GET_PATH)
-                        .expect(checkMockServerResponse()),
-                RestSecure.post(MockServer.POST_PATH)
-                        .expect(checkMockServerResponse()),
-                RestSecure.put(MockServer.PUT_PATH)
-                        .expect(checkMockServerResponse()),
-                RestSecure.delete(MockServer.DELETE_PATH).
-                        expect(checkMockServerResponse())
+                RestSecure.get(MockServer.GET_PATH).expect(checkResponse()),
+                RestSecure.post(MockServer.POST_PATH).expect(checkResponse()),
+                RestSecure.put(MockServer.PUT_PATH).expect(checkResponse()),
+                RestSecure.delete(MockServer.DELETE_PATH).expect(checkResponse()),
+                RestSecure.head(MockServer.HEAD_PATH).expect(checkResponse()),
+                RestSecure.trace(MockServer.TRACE_PATH).expect(checkResponse()),
+                RestSecure.options(MockServer.OPTIONS_PATH).expect(checkResponse()),
+                RestSecure.patch(MockServer.PATCH_PATH).expect(checkResponse())
         );
 
-        assertThat(MockServer.requestCount, equalTo(4));
+        assertThat(MockServer.requestCount, equalTo(8));
     }
 
     @Test()
     public void sendRequestsListTest() {
         List<RequestSpecification> requests = Arrays.asList(
-                RestSecure.get(MockServer.GET_PATH)
-                        .expect(checkMockServerResponse()),
-                RestSecure.post(MockServer.POST_PATH)
-                        .expect(checkMockServerResponse()),
-                RestSecure.put(MockServer.PUT_PATH)
-                        .expect(checkMockServerResponse()),
-                RestSecure.delete(MockServer.DELETE_PATH).
-                        expect(checkMockServerResponse())
+                RestSecure.get(MockServer.GET_PATH).expect(checkResponse()),
+                RestSecure.post(MockServer.POST_PATH).expect(checkResponse()),
+                RestSecure.put(MockServer.PUT_PATH).expect(checkResponse()),
+                RestSecure.delete(MockServer.DELETE_PATH).expect(checkResponse()),
+                RestSecure.head(MockServer.HEAD_PATH).expect(checkResponse()),
+                RestSecure.trace(MockServer.TRACE_PATH).expect(checkResponse()),
+                RestSecure.options(MockServer.OPTIONS_PATH).expect(checkResponse()),
+                RestSecure.patch(MockServer.PATCH_PATH).expect(checkResponse())
         );
 
         RequestSender.send(requests);
 
-        assertThat(MockServer.requestCount, equalTo(4));
+        assertThat(MockServer.requestCount, equalTo(8));
     }
 
-    private Validation checkMockServerResponse() {
+    private Validation checkResponse() {
+        ContextCondition needCheckBody = ctx -> ctx.getSpecification().getMethod() != RequestMethod.HEAD;
+
         return combine(
                 statusCode(expectStatusCode),
                 statusLine(expectStatusLine),
                 headers(containsPair(expectHeader)),
                 cookies(containsPair(expectCookie)),
-                body("data", equalTo(expectBody))
+                when(needCheckBody, then(
+                        body("data", equalTo(expectBody))
+                ))
         );
     }
 }

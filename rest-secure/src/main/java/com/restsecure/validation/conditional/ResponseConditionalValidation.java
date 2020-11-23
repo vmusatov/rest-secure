@@ -4,7 +4,7 @@ import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.response.Response;
 import com.restsecure.core.response.validation.Validation;
 
-public class ResponseConditionalValidation extends ConditionalValidation {
+public class ResponseConditionalValidation extends AbstractConditionalValidation {
 
     private final Validation conditional;
 

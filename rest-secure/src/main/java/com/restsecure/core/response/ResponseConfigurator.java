@@ -10,6 +10,7 @@ import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.response.validation.ValidationResult;
+import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.util.EntityUtils;
 
@@ -62,7 +63,11 @@ public class ResponseConfigurator {
 
     private static String getBodyContent(org.apache.http.HttpResponse response) {
         try {
-            return EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
+            HttpEntity entity = response.getEntity();
+            if (entity == null) {
+                return "";
+            }
+            return EntityUtils.toString(entity, StandardCharsets.UTF_8);
         } catch (IOException e) {
             throw new RestSecureException(e.getMessage());
         }

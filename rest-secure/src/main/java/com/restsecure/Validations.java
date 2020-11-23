@@ -11,9 +11,7 @@ import com.restsecure.validation.base.*;
 import com.restsecure.validation.composite.BaseCompositeValidation;
 import com.restsecure.validation.composite.CompositeValidation;
 import com.restsecure.validation.composite.LogicalOperators;
-import com.restsecure.validation.conditional.BaseConditionalValidation;
-import com.restsecure.validation.conditional.Condition;
-import com.restsecure.validation.conditional.ResponseConditionalValidation;
+import com.restsecure.validation.conditional.*;
 import com.restsecure.validation.object.ObjectMatcherValidation;
 import com.restsecure.validation.object.ObjectValidation;
 import org.hamcrest.Matcher;
@@ -262,8 +260,8 @@ public class Validations {
      * @param validation response validation
      * @return ConditionalValidation
      */
-    public static BaseConditionalValidation when(Condition condition, Validation validation) {
-        return new BaseConditionalValidation(condition, validation, (ctx, resp) -> new ValidationResult(ValidationStatus.SUCCESS));
+    public static ConditionalValidation when(Condition condition, Validation validation) {
+        return new ConditionalValidation(condition, validation, (ctx, resp) -> new ValidationResult(ValidationStatus.SUCCESS));
     }
 
     /**
@@ -288,8 +286,8 @@ public class Validations {
      * @param elseValidation else response validation
      * @return ConditionalValidation
      */
-    public static BaseConditionalValidation when(Condition condition, Validation validation, Validation elseValidation) {
-        return new BaseConditionalValidation(condition, validation, elseValidation);
+    public static ConditionalValidation when(Condition condition, Validation validation, Validation elseValidation) {
+        return new ConditionalValidation(condition, validation, elseValidation);
     }
 
     /**
@@ -311,8 +309,8 @@ public class Validations {
      * @param validation response validation
      * @return ConditionalValidation
      */
-    public static BaseConditionalValidation when(boolean condition, Validation validation) {
-        return new BaseConditionalValidation(() -> condition, validation, (ctx, resp) -> new ValidationResult(ValidationStatus.SUCCESS));
+    public static ConditionalValidation when(boolean condition, Validation validation) {
+        return new ConditionalValidation(() -> condition, validation, (ctx, resp) -> new ValidationResult(ValidationStatus.SUCCESS));
     }
 
     /**
@@ -337,8 +335,57 @@ public class Validations {
      * @param elseValidation else response validation
      * @return ConditionalValidation
      */
-    public static BaseConditionalValidation when(boolean condition, Validation validation, Validation elseValidation) {
-        return new BaseConditionalValidation(() -> condition, validation, elseValidation);
+    public static ConditionalValidation when(boolean condition, Validation validation, Validation elseValidation) {
+        return new ConditionalValidation(() -> condition, validation, elseValidation);
+    }
+
+    /**
+     * Conditional validation will be performed only if the condition is met.
+     * In this case, the condition is the functional interface Condition with the method <pre>boolean isTrue(RequestContext context);</pre>
+     * if condition is true, the specified validation will be called.
+     * <pre>
+     *     RequestSpecification getUser = get("/users")
+     *          .param("id", id)
+     *          .expect(
+     *              when(ctx -> ctx.getSpecification.getUrl().isEmpty(), then(
+     *                  fail("Request url cant be empty")
+     *              ))
+     *          );
+     * </pre>
+     * Here we check that the server returned an error only if the request url not empty
+     *
+     * @param condition  validation condition
+     * @param validation response validation
+     * @return ContextConditionalValidation
+     */
+    public static ContextConditionalValidation when(ContextCondition condition, Validation validation) {
+        return new ContextConditionalValidation(condition, validation, (ctx, resp) -> new ValidationResult(ValidationStatus.SUCCESS));
+    }
+
+    /**
+     * Conditional validation will be performed only if the condition is met.
+     * In this case, the condition is the functional interface Condition with the method <pre>boolean isTrue(RequestContext context);</pre>
+     * if condition is true, the specified validation will be called, otherwise the second specified validation will be called.
+     * <pre>
+     *     RequestSpecification getUser = get("/users")
+     *          .param("id", id)
+     *          .expect(
+     *              when(ctx -> ctx.getSpecification.getUrl().isEmpty(), then(
+     *                  fail("Request url cant be empty")
+     *              ), orElse(
+     *                  body("result.id", equalTo(id))
+     *              ))
+     *          );
+     * </pre>
+     * Here we check response body only if the request url not empty
+     *
+     * @param condition      validation condition
+     * @param validation     response validation
+     * @param elseValidation else response validation
+     * @return ContextConditionalValidation
+     */
+    public static ContextConditionalValidation when(ContextCondition condition, Validation validation, Validation elseValidation) {
+        return new ContextConditionalValidation(condition, validation, elseValidation);
     }
 
     /**

@@ -17,19 +17,27 @@ import static com.restsecure.core.http.HttpHelper.*;
 public class RequestFactory {
 
     public static HttpUriRequest createRequest(RequestContext context) {
-
         processRequest(context);
-        SpecificationValidator.validate(context.getSpecification());
+        RequestSpecification spec = context.getSpecification();
+        SpecificationValidator.validate(spec);
 
         switch (context.getSpecification().getMethod()) {
             case GET:
-                return createGet(context.getSpecification());
+                return createGet(spec);
             case DELETE:
-                return createDelete(context.getSpecification());
+                return createDelete(spec);
             case PUT:
-                return createPut(context);
+                return createPut(spec);
             case POST:
-                return createPost(context);
+                return createPost(spec);
+            case HEAD:
+                return createHead(spec);
+            case TRACE:
+                return createTrace(spec);
+            case OPTIONS:
+                return createOptions(spec);
+            case PATCH:
+                return createPatch(spec);
             default:
                 throw new RequestConfigurationException("Unsupported request method " + context.getSpecification().getMethod());
         }
@@ -45,13 +53,11 @@ public class RequestFactory {
                 .forEach(processor -> processor.processRequest(context));
     }
 
-    private static HttpUriRequest createPost(RequestContext context) {
-        RequestSpecification spec = context.getSpecification();
-
-        URI uri = buildUri(spec);
+    private static HttpUriRequest createPost(RequestSpecification specification) {
+        URI uri = buildUri(specification);
         HttpPost request = new HttpPost(uri);
-        setHeadersToRequest(spec.getHeaders(), request);
-        setEntityToRequest(spec, request);
+        setHeadersToRequest(specification.getHeaders(), request);
+        setEntityToRequest(specification, request);
 
         return request;
     }
@@ -64,13 +70,11 @@ public class RequestFactory {
         return request;
     }
 
-    private static HttpUriRequest createPut(RequestContext context) {
-        RequestSpecification spec = context.getSpecification();
-
-        URI uri = buildUri(spec);
+    private static HttpUriRequest createPut(RequestSpecification specification) {
+        URI uri = buildUri(specification);
         HttpPut request = new HttpPut(uri);
-        setHeadersToRequest(spec.getHeaders(), request);
-        setEntityToRequest(spec, request);
+        setHeadersToRequest(specification.getHeaders(), request);
+        setEntityToRequest(specification, request);
 
         return request;
     }
@@ -79,6 +83,39 @@ public class RequestFactory {
         URI uri = buildUri(specification);
         HttpDelete request = new HttpDelete(uri);
         setHeadersToRequest(specification.getHeaders(), request);
+
+        return request;
+    }
+
+    private static HttpUriRequest createHead(RequestSpecification specification) {
+        URI uri = buildUri(specification);
+        HttpHead request = new HttpHead(uri);
+        setHeadersToRequest(specification.getHeaders(), request);
+
+        return request;
+    }
+
+    private static HttpUriRequest createTrace(RequestSpecification specification) {
+        URI uri = buildUri(specification);
+        HttpTrace request = new HttpTrace(uri);
+        setHeadersToRequest(specification.getHeaders(), request);
+
+        return request;
+    }
+
+    private static HttpUriRequest createOptions(RequestSpecification specification) {
+        URI uri = buildUri(specification);
+        HttpOptions request = new HttpOptions(uri);
+        setHeadersToRequest(specification.getHeaders(), request);
+
+        return request;
+    }
+
+    private static HttpUriRequest createPatch(RequestSpecification specification) {
+        URI uri = buildUri(specification);
+        HttpPatch request = new HttpPatch(uri);
+        setHeadersToRequest(specification.getHeaders(), request);
+        setEntityToRequest(specification, request);
 
         return request;
     }

@@ -25,6 +25,10 @@ public class MockServer {
     public static final String POST_PATH = HOST + "/post";
     public static final String PUT_PATH = HOST + "/put";
     public static final String DELETE_PATH = HOST + "/delete";
+    public static final String HEAD_PATH = HOST + "/head";
+    public static final String TRACE_PATH = HOST + "/trace";
+    public static final String OPTIONS_PATH = HOST + "/options";
+    public static final String PATCH_PATH = HOST + "/patch";
 
     public static int requestCount;
 
@@ -41,6 +45,10 @@ public class MockServer {
         Spark.post("/post", generateResponse());
         Spark.put("/put", generateResponse());
         Spark.delete("/delete", generateResponse());
+        Spark.head("/head", generateResponse());
+        Spark.trace("/trace", generateResponse());
+        Spark.options("/options", generateResponse());
+        Spark.patch("/patch", generateResponse());
     }
 
     public static void reset() {

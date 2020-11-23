@@ -90,6 +90,54 @@ public class RestSecure {
     }
 
     /**
+     * Creates a request specification with the head method and the specified URL
+     *
+     * @param url request url
+     * @return RequestSpecification
+     */
+    public static RequestSpecification head(String url) {
+        return request()
+                .url(url)
+                .method(RequestMethod.HEAD);
+    }
+
+    /**
+     * Creates a request specification with the trace method and the specified URL
+     *
+     * @param url request url
+     * @return RequestSpecification
+     */
+    public static RequestSpecification trace(String url) {
+        return request()
+                .url(url)
+                .method(RequestMethod.TRACE);
+    }
+
+    /**
+     * Creates a request specification with the options method and the specified URL
+     *
+     * @param url request url
+     * @return RequestSpecification
+     */
+    public static RequestSpecification options(String url) {
+        return request()
+                .url(url)
+                .method(RequestMethod.OPTIONS);
+    }
+
+    /**
+     * Creates a request specification with the patch method and the specified URL
+     *
+     * @param url request url
+     * @return RequestSpecification
+     */
+    public static RequestSpecification patch(String url) {
+        return request()
+                .url(url)
+                .method(RequestMethod.PATCH);
+    }
+
+    /**
      * Allows you to send multiple requests at once<br>
      * For example:
      * <pre>
