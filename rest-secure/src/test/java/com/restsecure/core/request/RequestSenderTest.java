@@ -1,11 +1,12 @@
 package com.restsecure.core.request;
 
 import com.restsecure.BaseTest;
-import com.restsecure.GenerateDataHelper;
+import com.restsecure.MockServer;
 import com.restsecure.RestSecure;
+import com.restsecure.core.http.cookie.Cookie;
+import com.restsecure.core.http.header.Header;
 import com.restsecure.core.request.specification.RequestSpecification;
-import com.restsecure.core.request.specification.RequestSpecificationImpl;
-import com.restsecure.core.response.Response;
+import com.restsecure.core.response.validation.Validation;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -14,106 +15,88 @@ import org.testng.annotations.Test;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.restsecure.RestSecure.*;
+import static com.restsecure.Matchers.containsPair;
+import static com.restsecure.RestSecure.request;
 import static com.restsecure.Validations.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 public class RequestSenderTest extends BaseTest {
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String phone;
+
+    private int expectStatusCode = 200;
+    private String expectStatusLine = "HTTP/1.1 200 OK";
+    private String expectBody = "some body";
+    private Header expectHeader = new Header("header", "header_value");
+    private Cookie expectCookie = new Cookie("cookie", "cookie_value");
 
     @BeforeClass
-    public void init() {
-        RestSecure.globalSpecification
-                .process(bearerAuth(""));
-
-        RestSecure.baseUrl = "https://gorest.co.in/public-api";
+    public void resetGlobalSpec() {
+        RestSecure.globalSpecification = request();
     }
 
     @BeforeMethod
-    public void initData() {
-        firstName = GenerateDataHelper.getRandomString(5);
-        lastName = GenerateDataHelper.getRandomString(5);
-        email = GenerateDataHelper.getRandomEmail(5);
-        phone = GenerateDataHelper.getRandomPhone();
+    public void setup() {
+        MockServer.reset();
+        MockServer.addResponseCookie("cookie", "cookie_value");
+        MockServer.addResponseHeader("header", "header_value");
+        MockServer.setResponseBody("{ \"data\": \"some body\" }");
     }
 
     @AfterClass
-    public void reset() {
-        RestSecure.globalSpecification = new RequestSpecificationImpl();
-        RestSecure.baseUrl = "";
+    public void teardown() {
+        MockServer.reset();
     }
 
-    @Test(enabled = false)
+    @Test()
     public void sendOneRequestTest() {
-
-        Response response = RequestSender.send(
-                post("/users")
-                        .param("gender", "male")
-                        .param("first_name", firstName)
-                        .param("last_name", lastName)
-                        .param("email", email)
-                        .param("phone", phone)
-                        .expect(
-                                statusCode(302),
-                                header("X-Rate-Limit-Limit", Integer::parseInt, equalTo(60)),
-                                body("result.first_name", equalTo(firstName))
-                        )
-        );
-
-        assertThat(response.getBody().get("result.first_name"), equalTo(firstName));
-
-        deleteUser(response.getBody().get("result.id"));
-    }
-
-    @Test(enabled = false)
-    public void sendMultipleRequestsTest() {
-
-        Response response = RequestSender.send(
-                post("/users")
-                        .param("gender", "male")
-                        .param("first_name", firstName)
-                        .param("last_name", lastName)
-                        .param("email", email)
-                        .param("phone", phone),
-
-                get("/users")
-                        .param("first_name", firstName)
-        );
-
-        assertThat(response.getBody().get("result[0].first_name"), equalTo(firstName));
-
-        deleteUser(response.getBody().get("result[0].id"));
-    }
-
-    @Test(enabled = false)
-    public void sendRequestsListTest() {
-
-        List<RequestSpecification> requests = Arrays.asList(
-                post("/users")
-                        .param("gender", "male")
-                        .param("first_name", firstName)
-                        .param("last_name", lastName)
-                        .param("email", email)
-                        .param("phone", phone),
-
-                get("/users")
-                        .param("first_name", firstName)
-        );
-
-        Response response = RequestSender.send(requests);
-
-        assertThat(response.getBody().get("result[0].first_name"), equalTo(firstName));
-
-        deleteUser(response.getBody().get("result[0].id"));
-    }
-
-    private void deleteUser(String id) {
         RequestSender.send(
-                delete("/users/" + id)
+                RestSecure.get(MockServer.GET_PATH).expect(checkMockServerResponse())
+        );
+
+        assertThat(MockServer.requestCount, equalTo(1));
+    }
+
+    @Test()
+    public void sendMultipleRequestsTest() {
+        RequestSender.send(
+                RestSecure.get(MockServer.GET_PATH)
+                        .expect(checkMockServerResponse()),
+                RestSecure.post(MockServer.POST_PATH)
+                        .expect(checkMockServerResponse()),
+                RestSecure.put(MockServer.PUT_PATH)
+                        .expect(checkMockServerResponse()),
+                RestSecure.delete(MockServer.DELETE_PATH).
+                        expect(checkMockServerResponse())
+        );
+
+        assertThat(MockServer.requestCount, equalTo(4));
+    }
+
+    @Test()
+    public void sendRequestsListTest() {
+        List<RequestSpecification> requests = Arrays.asList(
+                RestSecure.get(MockServer.GET_PATH)
+                        .expect(checkMockServerResponse()),
+                RestSecure.post(MockServer.POST_PATH)
+                        .expect(checkMockServerResponse()),
+                RestSecure.put(MockServer.PUT_PATH)
+                        .expect(checkMockServerResponse()),
+                RestSecure.delete(MockServer.DELETE_PATH).
+                        expect(checkMockServerResponse())
+        );
+
+        RequestSender.send(requests);
+
+        assertThat(MockServer.requestCount, equalTo(4));
+    }
+
+    private Validation checkMockServerResponse() {
+        return combine(
+                statusCode(expectStatusCode),
+                statusLine(expectStatusLine),
+                headers(containsPair(expectHeader)),
+                cookies(containsPair(expectCookie)),
+                body("data", equalTo(expectBody))
         );
     }
 }

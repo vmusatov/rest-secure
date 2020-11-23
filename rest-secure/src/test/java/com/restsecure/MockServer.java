@@ -1,23 +1,32 @@
-package com.restsecure.tu;
+package com.restsecure;
 
 import com.restsecure.core.http.header.Header;
 import com.restsecure.core.mapping.serialize.DefaultJacksonSerializer;
 import com.restsecure.core.mapping.serialize.SerializeHelper;
 import org.eclipse.jetty.util.UrlEncoded;
 import spark.Route;
+import spark.Spark;
 
 import javax.servlet.http.Cookie;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import static spark.Spark.*;
 
 public class MockServer {
+    private static final String EMPTY_RESPONSE = "Empty response";
+
     public static final int PORT = 8081;
     public static final String HOST = "http://localhost:" + PORT;
+    public static final String GET_PATH = HOST + "/get";
+    public static final String POST_PATH = HOST + "/post";
+    public static final String PUT_PATH = HOST + "/put";
+    public static final String DELETE_PATH = HOST + "/delete";
 
-    private static final String EMPTY_RESPONSE = "Empty response";
+    public static int requestCount;
 
     private static String responseBody = EMPTY_RESPONSE;
     private static List<Cookie> responseCookies = new ArrayList<>();
@@ -25,7 +34,17 @@ public class MockServer {
 
     private static final DefaultJacksonSerializer serializer = new DefaultJacksonSerializer();
 
+    static {
+        Spark.port(PORT);
+        Spark.before((a, b) -> requestCount++);
+        Spark.get("/get", generateResponse());
+        Spark.post("/post", generateResponse());
+        Spark.put("/put", generateResponse());
+        Spark.delete("/delete", generateResponse());
+    }
+
     public static void reset() {
+        requestCount = 0;
         responseBody = EMPTY_RESPONSE;
         responseCookies.clear();
         responseHeaders.clear();
@@ -52,20 +71,14 @@ public class MockServer {
     }
 
     private static Route generateResponse() {
-        return ((request, response) -> {
+        return (request, response) -> {
             responseCookies.forEach(c -> response.raw().addCookie(c));
             responseHeaders.forEach(h -> response.header(h.getName(), h.getValue()));
 
             return responseBody;
-        });
+        };
     }
 
     public static void main(String[] args) {
-        port(PORT);
-
-        get("/get", generateResponse());
-        post("/post", generateResponse());
-        put("/put", generateResponse());
-        delete("/delete", generateResponse());
     }
 }

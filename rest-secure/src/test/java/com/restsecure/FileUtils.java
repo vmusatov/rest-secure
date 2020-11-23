@@ -1,4 +1,4 @@
-package com.restsecure.tu;
+package com.restsecure;
 
 import java.io.BufferedReader;
 import java.io.File;

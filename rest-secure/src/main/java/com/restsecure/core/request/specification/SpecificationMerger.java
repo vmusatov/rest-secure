@@ -5,9 +5,17 @@ import com.restsecure.core.http.proxy.Proxy;
 public class SpecificationMerger {
 
     public static void merge(RequestSpecification from, RequestSpecification to) {
-        to.url(from.getUrl());
-        to.method(from.getMethod());
-        to.port(from.getPort());
+        if (from.getUrl() != null && !from.getUrl().isEmpty()) {
+            to.url(from.getUrl());
+        }
+
+        if (from.getMethod() != null) {
+            to.method(from.getMethod());
+        }
+
+        if (from.getPort() > 0) {
+            to.port(from.getPort());
+        }
 
         to.body(from.getBody());
 

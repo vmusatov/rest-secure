@@ -324,7 +324,7 @@ public class RequestSpecificationTest {
         RequestSpecification spec2 = new RequestSpecificationImpl().url("example2.com");
 
         spec2.mergeWith(spec1);
-        assertThat(spec2.getUrl(), equalTo(""));
+        assertThat(spec2.getUrl(), equalTo("example2.com"));
     }
 
     @Test
