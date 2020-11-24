@@ -21,6 +21,11 @@ public class JsonMatcher extends TypeSafeMatcher<String> {
     @Override
     protected boolean matchesSafely(String json) {
         String jsonPath = basePath + path;
+
+        if (jsonPath.isEmpty()) {
+            return valueMatcher.matches(json);
+        }
+
         Object read = JsonPath.read(json, jsonPath);
         return valueMatcher.matches(read);
     }

@@ -763,7 +763,7 @@ public class Validations {
     }
 
     /**
-     * Allows you to specify matchers to checking the response as json<br>
+     * Allows you to specify matchers to checking the response value by json path<br>
      * For example:
      * <pre>
      *     get("/users")
@@ -778,6 +778,23 @@ public class Validations {
      */
     public static BodyValidation body(String path, Matcher<?> matcher) {
         return new BodyValidation(valueByPathIs(path, matcher));
+    }
+
+    /**
+     * Allows you to specify matchers to checking the response<br>
+     * For example:
+     * <pre>
+     *     get("/users")
+     *          .param("id", "1")
+     *          .expect(body(equalTo("some body")))
+     *          .send();
+     * </pre>
+     *
+     * @param matcher value matcher
+     * @return BodyValidation
+     */
+    public static BodyValidation body(Matcher<?> matcher) {
+        return new BodyValidation(valueByPathIs("", matcher));
     }
 
     /**

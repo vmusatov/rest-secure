@@ -41,7 +41,7 @@ public class RequestSenderTest extends BaseTest {
         MockServer.reset();
         MockServer.addResponseCookie("cookie", "cookie_value");
         MockServer.addResponseHeader("header", "header_value");
-        MockServer.setResponseBody("{ \"data\": \"some body\" }");
+        MockServer.setResponseBody("some body");
     }
 
     @AfterClass
@@ -101,7 +101,7 @@ public class RequestSenderTest extends BaseTest {
                 headers(containsPair(expectHeader)),
                 cookies(containsPair(expectCookie)),
                 when(needCheckBody, then(
-                        body("data", equalTo(expectBody))
+                        body(equalTo(expectBody))
                 ))
         );
     }
