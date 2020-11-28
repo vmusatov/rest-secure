@@ -51,11 +51,16 @@ public class RequestSenderTest extends BaseTest {
 
     @Test()
     public void sendOneRequestTest() {
-        RequestSender.send(
-                RestSecure.get(MockServer.GET_PATH).expect(checkResponse())
-        );
+        RequestSender.send(RestSecure.get(MockServer.GET_PATH).expect(checkResponse()));
+        RequestSender.send(RestSecure.post(MockServer.POST_PATH).expect(checkResponse()));
+        RequestSender.send(RestSecure.put(MockServer.PUT_PATH).expect(checkResponse()));
+        RequestSender.send(RestSecure.delete(MockServer.DELETE_PATH).expect(checkResponse()));
+        RequestSender.send(RestSecure.head(MockServer.HEAD_PATH).expect(checkResponse()));
+        RequestSender.send(RestSecure.trace(MockServer.TRACE_PATH).expect(checkResponse()));
+        RequestSender.send(RestSecure.options(MockServer.OPTIONS_PATH).expect(checkResponse()));
+        RequestSender.send(RestSecure.patch(MockServer.PATCH_PATH).expect(checkResponse()));
 
-        assertThat(MockServer.requestCount, equalTo(1));
+        assertThat(MockServer.requestCount, equalTo(8));
     }
 
     @Test()

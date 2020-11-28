@@ -202,6 +202,7 @@ public class RequestSpecificationImpl implements RequestSpecification {
 
     @Override
     public RequestSpecification routeParam(String name, Object value) {
+        this.routeParams.deleteAllWithKey(name);
         this.routeParams.put(name, value);
         return this;
     }
@@ -298,15 +299,24 @@ public class RequestSpecificationImpl implements RequestSpecification {
 
     @Override
     public RequestSpecification config(Config<?> config, Config<?>... additionalConfigs) {
-        this.configs.add(config);
-        this.configs.addAll(Arrays.asList(additionalConfigs));
+        addConfig(config);
+        for (Config<?> cfg : additionalConfigs) {
+            addConfig(cfg);
+        }
         return this;
     }
 
     @Override
     public RequestSpecification config(List<Config<?>> configs) {
-        this.configs.addAll(configs);
+        for (Config<?> config : configs) {
+            addConfig(config);
+        }
         return this;
+    }
+
+    private void addConfig(Config<?> config) {
+        this.configs.removeIf(c -> c.getClass() == config.getClass());
+        this.configs.add(config);
     }
 
     @Override

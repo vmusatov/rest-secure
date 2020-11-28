@@ -28,11 +28,11 @@ public class RequestContext {
 
     private void init(RequestSpecification specification) {
         this.specification = new RequestSpecificationImpl();
+        this.specification.mergeWith(RestSecure.globalSpecification);
 
         if (specification != null) {
             this.specification.mergeWith(specification);
         }
-        this.specification.mergeWith(RestSecure.globalSpecification);
 
         this.configs = this.specification.getConfigs();
     }
