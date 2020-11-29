@@ -8,6 +8,7 @@
             <package name="com.restsecure.core.http"/>
             <package name="com.restsecure.core.request.specification"/>
             <package name="com.restsecure.core.response"/>
+            <package name="com.restsecure.core.util"/>
 
             <package name="com.restsecure.authentication"/>
             <package name="com.restsecure.session"/>

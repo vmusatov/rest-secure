@@ -24,7 +24,6 @@ public class MultiKeyMap<T, E> implements Iterable<MultiKeyMap.Entity<T, E>> {
                 return item.getValue();
             }
         }
-
         return null;
     }
 
@@ -35,7 +34,6 @@ public class MultiKeyMap<T, E> implements Iterable<MultiKeyMap.Entity<T, E>> {
                 return item.getValue();
             }
         }
-
         return null;
     }
 
@@ -46,8 +44,16 @@ public class MultiKeyMap<T, E> implements Iterable<MultiKeyMap.Entity<T, E>> {
                 result.add(item.getValue());
             }
         }
-
         return result;
+    }
+
+    public boolean containsKey(T key) {
+        for (Entity<T, E> item : items) {
+            if (item.getKey().equals(key)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void deleteAllWithKey(T key) {

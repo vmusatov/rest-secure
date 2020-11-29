@@ -1,4 +1,4 @@
-package com.restsecure.core.http;
+package com.restsecure.core.util;
 
 import com.restsecure.core.http.header.Header;
 import com.restsecure.core.util.NameValueList;
@@ -86,9 +86,9 @@ public class NameValueListTest {
     public void addAllWithMultiValueListTest() {
         NameValueList<Header> headersNameValueList = new NameValueList<>(headersList);
         NameValueList<Header> list = new NameValueList<>();
-        list.addAll(headersList);
+        list.addAll(headersNameValueList);
 
-        assertThat(list.size(), equalTo(headersList.size()));
+        assertThat(list.size(), equalTo(headersNameValueList.size()));
         assertThat(list.getFirst("repeatName").getValue(), equalTo("value2"));
     }
 

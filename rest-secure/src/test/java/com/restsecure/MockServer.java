@@ -8,27 +8,25 @@ import spark.Route;
 import spark.Spark;
 
 import javax.servlet.http.Cookie;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-
-import static spark.Spark.*;
 
 public class MockServer {
     private static final String EMPTY_RESPONSE = "Empty response";
 
     public static final int PORT = 8081;
-    public static final String HOST = "http://localhost:" + PORT;
-    public static final String GET_PATH = HOST + "/get";
-    public static final String POST_PATH = HOST + "/post";
-    public static final String PUT_PATH = HOST + "/put";
-    public static final String DELETE_PATH = HOST + "/delete";
-    public static final String HEAD_PATH = HOST + "/head";
-    public static final String TRACE_PATH = HOST + "/trace";
-    public static final String OPTIONS_PATH = HOST + "/options";
-    public static final String PATCH_PATH = HOST + "/patch";
+
+    public static final String HOST = "http://localhost";
+    public static final String HOST_WITH_PORT = HOST + ":" + PORT;
+
+    public static final String GET_PATH = HOST_WITH_PORT + "/get";
+    public static final String POST_PATH = HOST_WITH_PORT + "/post";
+    public static final String PUT_PATH = HOST_WITH_PORT + "/put";
+    public static final String DELETE_PATH = HOST_WITH_PORT + "/delete";
+    public static final String HEAD_PATH = HOST_WITH_PORT + "/head";
+    public static final String TRACE_PATH = HOST_WITH_PORT + "/trace";
+    public static final String OPTIONS_PATH = HOST_WITH_PORT + "/options";
+    public static final String PATCH_PATH = HOST_WITH_PORT + "/patch";
 
     public static int requestCount;
 
