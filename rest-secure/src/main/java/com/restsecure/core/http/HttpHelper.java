@@ -1,6 +1,7 @@
 package com.restsecure.core.http;
 
 import com.restsecure.core.exception.RequestConfigurationException;
+import com.restsecure.core.exception.RestSecureException;
 import com.restsecure.core.http.cookie.Cookie;
 import com.restsecure.core.http.header.Header;
 import com.restsecure.core.request.specification.RequestSpecification;
@@ -22,8 +23,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.restsecure.core.http.RequestMethod.DELETE;
-import static com.restsecure.core.http.RequestMethod.GET;
+import static com.restsecure.core.http.RequestMethod.*;
 
 public class HttpHelper {
 
@@ -40,30 +40,17 @@ public class HttpHelper {
     }
 
     public static boolean isHaveBody(RequestMethod method) {
-        if (method.equals(GET) || method.equals(DELETE)) {
+        if (method.equals(GET) || method.equals(DELETE) || method.equals(HEAD) || method.equals(TRACE) || method.equals(OPTIONS)) {
             return false;
         }
         return true;
     }
 
-    public static URI buildUri(RequestSpecification specification) {
+    public static URI toURI(String str) {
         try {
-            URIBuilder uriBuilder = new URIBuilder(specification.getUrl());
-            RequestMethod method = specification.getMethod();
-
-            uriBuilder.addParameters(getFilteredParameters(specification.getQueryParams()));
-
-            if (!isHaveBody(method)) {
-                uriBuilder.addParameters(getFilteredParameters(specification.getParameters()));
-            }
-
-            if (specification.getPort() != 0) {
-                uriBuilder.setPort(specification.getPort());
-            }
-
-            return uriBuilder.build();
+            return new URIBuilder(str).build();
         } catch (URISyntaxException e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RestSecureException(e);
         }
     }
 
@@ -116,7 +103,7 @@ public class HttpHelper {
             }
             return domain.startsWith("www.") ? domain.substring(4) : domain;
         } catch (URISyntaxException e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RestSecureException(e.getMessage());
         }
     }
 }

@@ -21,7 +21,7 @@ public class RequestFactory {
         RequestSpecification spec = context.getSpecification();
         SpecificationValidator.validate(spec);
 
-        switch (context.getSpecification().getMethod()) {
+        switch (spec.getMethod()) {
             case GET:
                 return createGet(spec);
             case DELETE:
@@ -39,7 +39,7 @@ public class RequestFactory {
             case PATCH:
                 return createPatch(spec);
             default:
-                throw new RequestConfigurationException("Unsupported request method " + context.getSpecification().getMethod());
+                throw new RequestConfigurationException("Unsupported request method " + spec.getMethod());
         }
     }
 
@@ -54,7 +54,7 @@ public class RequestFactory {
     }
 
     private static HttpUriRequest createPost(RequestSpecification specification) {
-        URI uri = buildUri(specification);
+        URI uri = toURI(specification.getUrl());
         HttpPost request = new HttpPost(uri);
         setHeadersToRequest(specification.getHeaders(), request);
         setEntityToRequest(specification, request);
@@ -63,7 +63,7 @@ public class RequestFactory {
     }
 
     private static HttpUriRequest createGet(RequestSpecification specification) {
-        URI uri = buildUri(specification);
+        URI uri = toURI(specification.getUrl());
         HttpGet request = new HttpGet(uri);
         setHeadersToRequest(specification.getHeaders(), request);
 
@@ -71,7 +71,7 @@ public class RequestFactory {
     }
 
     private static HttpUriRequest createPut(RequestSpecification specification) {
-        URI uri = buildUri(specification);
+        URI uri = toURI(specification.getUrl());
         HttpPut request = new HttpPut(uri);
         setHeadersToRequest(specification.getHeaders(), request);
         setEntityToRequest(specification, request);
@@ -80,7 +80,7 @@ public class RequestFactory {
     }
 
     private static HttpUriRequest createDelete(RequestSpecification specification) {
-        URI uri = buildUri(specification);
+        URI uri = toURI(specification.getUrl());
         HttpDelete request = new HttpDelete(uri);
         setHeadersToRequest(specification.getHeaders(), request);
 
@@ -88,7 +88,7 @@ public class RequestFactory {
     }
 
     private static HttpUriRequest createHead(RequestSpecification specification) {
-        URI uri = buildUri(specification);
+        URI uri = toURI(specification.getUrl());
         HttpHead request = new HttpHead(uri);
         setHeadersToRequest(specification.getHeaders(), request);
 
@@ -96,7 +96,7 @@ public class RequestFactory {
     }
 
     private static HttpUriRequest createTrace(RequestSpecification specification) {
-        URI uri = buildUri(specification);
+        URI uri = toURI(specification.getUrl());
         HttpTrace request = new HttpTrace(uri);
         setHeadersToRequest(specification.getHeaders(), request);
 
@@ -104,7 +104,7 @@ public class RequestFactory {
     }
 
     private static HttpUriRequest createOptions(RequestSpecification specification) {
-        URI uri = buildUri(specification);
+        URI uri = toURI(specification.getUrl());
         HttpOptions request = new HttpOptions(uri);
         setHeadersToRequest(specification.getHeaders(), request);
 
@@ -112,7 +112,7 @@ public class RequestFactory {
     }
 
     private static HttpUriRequest createPatch(RequestSpecification specification) {
-        URI uri = buildUri(specification);
+        URI uri = toURI(specification.getUrl());
         HttpPatch request = new HttpPatch(uri);
         setHeadersToRequest(specification.getHeaders(), request);
         setEntityToRequest(specification, request);
