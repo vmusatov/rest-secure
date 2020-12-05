@@ -101,7 +101,7 @@ public class RequestSender {
 
             return ResponseConfigurator.configureResponse(httpResponse, context);
         } catch (IOException e) {
-            throw new SendRequestException(e);
+            throw new SendRequestException(e.getMessage());
         }
     }
 }
