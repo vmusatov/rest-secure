@@ -22,10 +22,11 @@ public abstract class ResponseObjectValidation<T> implements Validation {
         this.path = path;
     }
 
-    protected abstract ValidationResult validate(RequestContext context, T responseObject);
+    protected abstract ValidationResult validate(T responseObject);
 
     @Override
-    public ValidationResult validate(RequestContext context, Response response) {
+    public ValidationResult validate(Response response) {
+        RequestContext context = response.getContext();
         String basePath = context.getConfigValue(BaseJsonPathConfig.class);
 
         if (basePath != null && !basePath.isEmpty()) {
@@ -33,7 +34,7 @@ public abstract class ResponseObjectValidation<T> implements Validation {
         }
 
         if (this.path.isEmpty()) {
-            return validate(context, response.getBody().as(responseClass));
+            return validate(response.getBody().as(responseClass));
         }
 
         Serializer serializer = context.getConfigValue(SerializerConfig.class);
@@ -42,7 +43,7 @@ public abstract class ResponseObjectValidation<T> implements Validation {
         LinkedHashMap<String, String> value = response.getBody().get(this.path);
         String json = serializer.serialize(value);
 
-        return validate(context, deserializer.deserialize(json, responseClass));
+        return validate(deserializer.deserialize(json, responseClass));
 
     }
 }

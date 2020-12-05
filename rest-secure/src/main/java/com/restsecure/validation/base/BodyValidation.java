@@ -1,6 +1,5 @@
 package com.restsecure.validation.base;
 
-import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.response.Response;
 import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.response.validation.ValidationResult;
@@ -23,9 +22,9 @@ public class BodyValidation implements Validation {
     }
 
     @Override
-    public ValidationResult validate(RequestContext context, Response response) {
+    public ValidationResult validate(Response response) {
         String body = response.getBody().asString();
-        String basePath = context.getConfigValue(BaseJsonPathConfig.class);
+        String basePath = response.getContext().getConfigValue(BaseJsonPathConfig.class);
 
         if (basePath != null && !basePath.isEmpty()) {
             bodyMatcher.setBasePath(basePath);

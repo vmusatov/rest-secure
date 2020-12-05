@@ -1,6 +1,5 @@
 package com.restsecure.validation.base;
 
-import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.response.Response;
 import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.response.validation.ValidationResult;
@@ -22,7 +21,7 @@ public class ResponseTimeValidation implements Validation {
     }
 
     @Override
-    public ValidationResult validate(RequestContext context, Response response) {
+    public ValidationResult validate(Response response) {
         long time = response.getTimeIn(timeUnit);
 
         if (!timeMatcher.matches(time)) {

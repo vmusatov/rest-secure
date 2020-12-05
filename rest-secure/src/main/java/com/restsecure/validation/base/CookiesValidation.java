@@ -1,7 +1,6 @@
 package com.restsecure.validation.base;
 
 import com.restsecure.core.http.cookie.Cookie;
-import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.response.Response;
 import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.response.validation.ValidationResult;
@@ -24,7 +23,7 @@ public class CookiesValidation implements Validation {
     }
 
     @Override
-    public ValidationResult validate(RequestContext context, Response response) {
+    public ValidationResult validate(Response response) {
         NameValueList<Cookie> cookies = response.getCookies();
 
         if (!cookiesMatcher.matches(cookies)) {

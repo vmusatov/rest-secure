@@ -2,6 +2,7 @@ package com.restsecure.core.response;
 
 import com.restsecure.core.http.cookie.Cookie;
 import com.restsecure.core.http.header.Header;
+import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.util.NameValueList;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,30 +20,28 @@ public class HttpResponse implements Response {
     @Getter
     @Setter
     private String statusLine;
+    @Getter
     private NameValueList<Header> headers;
+    @Getter
     private NameValueList<Cookie> cookies;
     @Getter
     @Setter
     private long time;
+    @Getter
+    @Setter
+    private RequestContext context;
 
     public HttpResponse() {
         this.headers = new NameValueList<>();
         this.cookies = new NameValueList<>();
-    }
-
-    @Override
-    public NameValueList<Header> getHeaders() {
-        return headers;
+        this.context = new RequestContext();
+        this.body = new ResponseBody("");
+        this.statusLine = "";
     }
 
     @Override
     public void setHeaders(List<Header> headers) {
         this.headers = new NameValueList<>(headers);
-    }
-
-    @Override
-    public NameValueList<Cookie> getCookies() {
-        return this.cookies;
     }
 
     @Override

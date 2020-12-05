@@ -20,7 +20,7 @@ public class ObjectValidation<T> extends ResponseObjectValidation<T> {
     }
 
     @Override
-    public ValidationResult validate(RequestContext context, T responseObject) {
+    public ValidationResult validate(T responseObject) {
         if (!predicate.test(responseObject)) {
             if (reason == null) {
                 return new ValidationResult(ValidationStatus.FAIL);

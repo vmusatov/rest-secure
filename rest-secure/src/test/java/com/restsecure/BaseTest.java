@@ -74,12 +74,12 @@ public class BaseTest {
     );
 
     protected void expectValidationSuccess(Validation validation, Response response) {
-        ValidationResult result = validation.validate(new RequestContext(), response);
+        ValidationResult result = validation.validate(response);
         assertThat(result.getStatus(), equalTo(ValidationStatus.SUCCESS));
     }
 
     protected void expectValidationFailWithErrorText(Validation validation, Response response, String expectedText) {
-        ValidationResult result = validation.validate(new RequestContext(), response);
+        ValidationResult result = validation.validate(response);
 
         assertThat(result.getStatus(), equalTo(ValidationStatus.FAIL));
         assertThat(result.getErrorText(), containsString(expectedText));

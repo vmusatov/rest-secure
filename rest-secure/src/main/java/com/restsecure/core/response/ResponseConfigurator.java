@@ -48,6 +48,8 @@ public class ResponseConfigurator {
             Deserializer deserializer = context.getConfigValue(DeserializerConfig.class);
             response.setBody(new ResponseBody(getBodyContent(httpResponse), deserializer));
 
+            response.setContext(context);
+
             return response;
         } catch (IOException e) {
             throw new RestSecureException(e);
@@ -75,7 +77,7 @@ public class ResponseConfigurator {
 
     private static void validateResponse(RequestContext context, Response response) {
         for (Validation validation : context.getSpecification().getValidations()) {
-            ValidationResult result = validation.validate(context, response);
+            ValidationResult result = validation.validate(response);
 
             if (result.isFail()) {
                 throw new AssertionError(result.getErrorText());

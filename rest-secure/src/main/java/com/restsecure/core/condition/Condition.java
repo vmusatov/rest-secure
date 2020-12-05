@@ -1,4 +1,4 @@
-package com.restsecure.validation.conditional;
+package com.restsecure.core.condition;
 
 @FunctionalInterface
 public interface Condition {

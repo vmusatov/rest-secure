@@ -1,8 +1,7 @@
 package com.restsecure.validation.composite;
 
-import com.restsecure.core.request.RequestContext;
-import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.response.Response;
+import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.response.validation.ValidationException;
 import com.restsecure.core.response.validation.ValidationResult;
 
@@ -23,10 +22,10 @@ class DoubleValidation implements Validation {
     }
 
     @Override
-    public ValidationResult validate(RequestContext context, Response response) {
+    public ValidationResult validate(Response response) {
 
-        ValidationResult result1 = validation1.validate(context, response);
-        ValidationResult result2 = validation2.validate(context, response);
+        ValidationResult result1 = validation1.validate(response);
+        ValidationResult result2 = validation2.validate(response);
 
         if (logicalOperator.equals(AND)) {
             if (result1.isFail()) {

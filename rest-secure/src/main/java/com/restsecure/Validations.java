@@ -1,5 +1,7 @@
 package com.restsecure;
 
+import com.restsecure.core.condition.Condition;
+import com.restsecure.core.condition.ContextCondition;
 import com.restsecure.core.http.cookie.Cookie;
 import com.restsecure.core.http.header.Header;
 import com.restsecure.core.http.header.HeaderNames;
@@ -38,7 +40,7 @@ public class Validations {
      * @return Validation
      */
     public static Validation success() {
-        return (ctx, resp) -> new ValidationResult(ValidationStatus.SUCCESS);
+        return resp -> new ValidationResult(ValidationStatus.SUCCESS);
     }
 
     /**
@@ -47,7 +49,7 @@ public class Validations {
      * @return Validation
      */
     public static Validation fail() {
-        return (ctx, resp) -> new ValidationResult(ValidationStatus.FAIL);
+        return resp -> new ValidationResult(ValidationStatus.FAIL);
     }
 
     /**
@@ -57,7 +59,7 @@ public class Validations {
      * @return Validation
      */
     public static Validation fail(String msg) {
-        return (ctx, resp) -> new ValidationResult(ValidationStatus.FAIL, msg);
+        return resp -> new ValidationResult(ValidationStatus.FAIL, msg);
     }
 
     /**
@@ -212,7 +214,7 @@ public class Validations {
      * @return ResponseConditionalValidation
      */
     public static ResponseConditionalValidation when(Validation condition, Validation validation) {
-        return new ResponseConditionalValidation(condition, validation, (ctx, resp) -> new ValidationResult(ValidationStatus.SUCCESS));
+        return new ResponseConditionalValidation(condition, validation, resp -> new ValidationResult(ValidationStatus.SUCCESS));
     }
 
     /**
@@ -261,7 +263,7 @@ public class Validations {
      * @return ConditionalValidation
      */
     public static ConditionalValidation when(Condition condition, Validation validation) {
-        return new ConditionalValidation(condition, validation, (ctx, resp) -> new ValidationResult(ValidationStatus.SUCCESS));
+        return new ConditionalValidation(condition, validation, resp -> new ValidationResult(ValidationStatus.SUCCESS));
     }
 
     /**
@@ -310,7 +312,7 @@ public class Validations {
      * @return ConditionalValidation
      */
     public static ConditionalValidation when(boolean condition, Validation validation) {
-        return new ConditionalValidation(() -> condition, validation, (ctx, resp) -> new ValidationResult(ValidationStatus.SUCCESS));
+        return new ConditionalValidation(() -> condition, validation, resp -> new ValidationResult(ValidationStatus.SUCCESS));
     }
 
     /**
@@ -359,7 +361,7 @@ public class Validations {
      * @return ContextConditionalValidation
      */
     public static ContextConditionalValidation when(ContextCondition condition, Validation validation) {
-        return new ContextConditionalValidation(condition, validation, (ctx, resp) -> new ValidationResult(ValidationStatus.SUCCESS));
+        return new ContextConditionalValidation(condition, validation, resp -> new ValidationResult(ValidationStatus.SUCCESS));
     }
 
     /**

@@ -2,6 +2,7 @@ package com.restsecure.core.response;
 
 import com.restsecure.core.http.cookie.Cookie;
 import com.restsecure.core.http.header.Header;
+import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.util.NameValueList;
 
 import java.util.List;
@@ -86,4 +87,15 @@ public interface Response {
      * @return response time in specify time unit
      */
     long getTimeIn(TimeUnit timeUnit);
+
+    /**
+     * Set request context
+     * @param context RequestContext
+     */
+    void setContext(RequestContext context);
+
+    /**
+     * @return RequestContext
+     */
+    RequestContext getContext();
 }
