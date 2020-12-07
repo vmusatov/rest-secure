@@ -6,13 +6,13 @@ import com.restsecure.core.mapping.deserialize.Deserializer;
 import com.restsecure.core.mapping.serialize.Serializer;
 import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.response.Response;
-import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.response.validation.ValidationResult;
+import com.restsecure.validation.BaseValidation;
 import com.restsecure.validation.config.BaseJsonPathConfig;
 
 import java.util.LinkedHashMap;
 
-public abstract class ResponseObjectValidation<T> implements Validation {
+public abstract class ResponseObjectValidation<T> extends BaseValidation {
 
     protected final Class<T> responseClass;
     private String path;
@@ -22,10 +22,10 @@ public abstract class ResponseObjectValidation<T> implements Validation {
         this.path = path;
     }
 
-    protected abstract ValidationResult validate(T responseObject);
+    protected abstract ValidationResult softValidate(T responseObject);
 
     @Override
-    public ValidationResult validate(Response response) {
+    public ValidationResult softValidate(Response response) {
         RequestContext context = response.getContext();
         String basePath = context.getConfigValue(BaseJsonPathConfig.class);
 
@@ -34,7 +34,7 @@ public abstract class ResponseObjectValidation<T> implements Validation {
         }
 
         if (this.path.isEmpty()) {
-            return validate(response.getBody().as(responseClass));
+            return softValidate(response.getBody().as(responseClass));
         }
 
         Serializer serializer = context.getConfigValue(SerializerConfig.class);
@@ -43,7 +43,7 @@ public abstract class ResponseObjectValidation<T> implements Validation {
         LinkedHashMap<String, String> value = response.getBody().get(this.path);
         String json = serializer.serialize(value);
 
-        return validate(deserializer.deserialize(json, responseClass));
+        return softValidate(deserializer.deserialize(json, responseClass));
 
     }
 }

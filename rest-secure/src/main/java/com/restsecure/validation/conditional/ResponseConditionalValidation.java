@@ -14,6 +14,6 @@ public class ResponseConditionalValidation extends AbstractConditionalValidation
 
     @Override
     boolean isConditionMet(Response response) {
-        return conditional.validate(response).isSuccess();
+        return conditional.softValidate(response).isSuccess();
     }
 }

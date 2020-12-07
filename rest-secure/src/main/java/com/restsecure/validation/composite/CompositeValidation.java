@@ -1,8 +1,10 @@
 package com.restsecure.validation.composite;
 
+import com.restsecure.Validations;
 import com.restsecure.core.response.Response;
 import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.response.validation.ValidationResult;
+import com.restsecure.validation.BaseValidation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +13,7 @@ import static com.restsecure.core.response.validation.ValidationStatus.SUCCESS;
 import static com.restsecure.validation.composite.LogicalOperators.AND;
 import static com.restsecure.validation.composite.LogicalOperators.OR;
 
-public abstract class CompositeValidation implements Validation {
+public abstract class CompositeValidation extends BaseValidation {
 
     protected List<Validation> validations;
 
@@ -21,7 +23,7 @@ public abstract class CompositeValidation implements Validation {
     }
 
     @Override
-    public abstract ValidationResult validate(Response response);
+    public abstract ValidationResult softValidate(Response response);
 
     protected ValidationResult validateAll(Response response) {
         if (hasLogicalOperators(this.validations)) {
@@ -29,7 +31,7 @@ public abstract class CompositeValidation implements Validation {
 
             if (hasLogicalOperators(parsedValidations)) {
                 Validation combinedValidation = combineAllInOne(parsedValidations);
-                return combinedValidation.validate(response);
+                return combinedValidation.softValidate(response);
             }
 
             return validateWithoutLogical(response);
@@ -45,7 +47,7 @@ public abstract class CompositeValidation implements Validation {
     private ValidationResult validateWithoutLogical(Response response) {
         for (Validation validation : this.validations) {
 
-            ValidationResult validationResult = validation.validate(response);
+            ValidationResult validationResult = validation.softValidate(response);
 
             if (validationResult.isFail()) {
                 return validationResult;
@@ -78,7 +80,7 @@ public abstract class CompositeValidation implements Validation {
         }
 
         if (combinedValidations.isEmpty()) {
-            return response -> new ValidationResult(SUCCESS);
+            return Validations.success();
         } else {
             return combinedValidations.get(0);
         }

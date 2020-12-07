@@ -9,7 +9,6 @@ import com.restsecure.core.mapping.deserialize.Deserializer;
 import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.response.validation.Validation;
-import com.restsecure.core.response.validation.ValidationResult;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.util.EntityUtils;
@@ -76,13 +75,13 @@ public class ResponseConfigurator {
     }
 
     private static void validateResponse(RequestContext context, Response response) {
-        for (Validation validation : context.getSpecification().getValidations()) {
-            ValidationResult result = validation.validate(response);
+        List<Validation> validations = context.getSpecification().getValidations();
 
-            if (result.isFail()) {
-                throw new AssertionError(result.getErrorText());
-            }
+        if (validations == null) {
+            return;
         }
+
+        validations.forEach(validation -> validation.validate(response));
     }
 
     private static void precessResponse(RequestContext context, Response response) {

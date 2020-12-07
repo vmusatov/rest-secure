@@ -5,15 +5,19 @@ import com.restsecure.core.condition.ContextCondition;
 import com.restsecure.core.http.cookie.Cookie;
 import com.restsecure.core.http.header.Header;
 import com.restsecure.core.http.header.HeaderNames;
+import com.restsecure.core.response.Response;
 import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.response.validation.ValidationResult;
 import com.restsecure.core.response.validation.ValidationStatus;
-import com.restsecure.validation.DefaultValidation;
+import com.restsecure.validation.BaseValidation;
 import com.restsecure.validation.base.*;
 import com.restsecure.validation.composite.BaseCompositeValidation;
 import com.restsecure.validation.composite.CompositeValidation;
+import com.restsecure.validation.composite.DefaultValidation;
 import com.restsecure.validation.composite.LogicalOperators;
-import com.restsecure.validation.conditional.*;
+import com.restsecure.validation.conditional.ConditionalValidation;
+import com.restsecure.validation.conditional.ContextConditionalValidation;
+import com.restsecure.validation.conditional.ResponseConditionalValidation;
 import com.restsecure.validation.object.ObjectMatcherValidation;
 import com.restsecure.validation.object.ObjectValidation;
 import org.hamcrest.Matcher;
@@ -40,7 +44,12 @@ public class Validations {
      * @return Validation
      */
     public static Validation success() {
-        return resp -> new ValidationResult(ValidationStatus.SUCCESS);
+        return new BaseValidation() {
+            @Override
+            public ValidationResult softValidate(Response response) {
+                return new ValidationResult(ValidationStatus.SUCCESS);
+            }
+        };
     }
 
     /**
@@ -49,7 +58,7 @@ public class Validations {
      * @return Validation
      */
     public static Validation fail() {
-        return resp -> new ValidationResult(ValidationStatus.FAIL);
+        return fail("");
     }
 
     /**
@@ -59,7 +68,12 @@ public class Validations {
      * @return Validation
      */
     public static Validation fail(String msg) {
-        return resp -> new ValidationResult(ValidationStatus.FAIL, msg);
+        return new BaseValidation() {
+            @Override
+            public ValidationResult softValidate(Response response) {
+                return new ValidationResult(ValidationStatus.FAIL, msg);
+            }
+        };
     }
 
     /**
@@ -214,7 +228,7 @@ public class Validations {
      * @return ResponseConditionalValidation
      */
     public static ResponseConditionalValidation when(Validation condition, Validation validation) {
-        return new ResponseConditionalValidation(condition, validation, resp -> new ValidationResult(ValidationStatus.SUCCESS));
+        return new ResponseConditionalValidation(condition, validation, success());
     }
 
     /**
@@ -263,7 +277,7 @@ public class Validations {
      * @return ConditionalValidation
      */
     public static ConditionalValidation when(Condition condition, Validation validation) {
-        return new ConditionalValidation(condition, validation, resp -> new ValidationResult(ValidationStatus.SUCCESS));
+        return new ConditionalValidation(condition, validation, success());
     }
 
     /**
@@ -312,7 +326,7 @@ public class Validations {
      * @return ConditionalValidation
      */
     public static ConditionalValidation when(boolean condition, Validation validation) {
-        return new ConditionalValidation(() -> condition, validation, resp -> new ValidationResult(ValidationStatus.SUCCESS));
+        return new ConditionalValidation(() -> condition, validation, success());
     }
 
     /**
@@ -361,7 +375,7 @@ public class Validations {
      * @return ContextConditionalValidation
      */
     public static ContextConditionalValidation when(ContextCondition condition, Validation validation) {
-        return new ContextConditionalValidation(condition, validation, resp -> new ValidationResult(ValidationStatus.SUCCESS));
+        return new ContextConditionalValidation(condition, validation, success());
     }
 
     /**

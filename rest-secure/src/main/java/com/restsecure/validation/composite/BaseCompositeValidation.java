@@ -13,7 +13,7 @@ public class BaseCompositeValidation extends CompositeValidation {
     }
 
     @Override
-    public ValidationResult validate(Response response) {
+    public ValidationResult softValidate(Response response) {
         return validateAll(response);
     }
 }

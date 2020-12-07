@@ -1,16 +1,16 @@
 package com.restsecure.validation.base;
 
 import com.restsecure.core.response.Response;
-import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.response.validation.ValidationResult;
 import com.restsecure.core.response.validation.ValidationStatus;
+import com.restsecure.validation.BaseValidation;
 import org.hamcrest.Matcher;
 
 import java.util.concurrent.TimeUnit;
 
 import static com.restsecure.core.response.validation.ValidationStatus.SUCCESS;
 
-public class ResponseTimeValidation implements Validation {
+public class ResponseTimeValidation extends BaseValidation {
 
     private final Matcher<Long> timeMatcher;
     private final TimeUnit timeUnit;
@@ -21,7 +21,7 @@ public class ResponseTimeValidation implements Validation {
     }
 
     @Override
-    public ValidationResult validate(Response response) {
+    public ValidationResult softValidate(Response response) {
         long time = response.getTimeIn(timeUnit);
 
         if (!timeMatcher.matches(time)) {

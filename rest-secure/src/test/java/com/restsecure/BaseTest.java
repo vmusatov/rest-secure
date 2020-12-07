@@ -2,29 +2,19 @@ package com.restsecure;
 
 import com.restsecure.core.http.cookie.Cookie;
 import com.restsecure.core.http.header.Header;
-import com.restsecure.core.response.HttpResponse;
-import com.restsecure.core.response.ResponseBody;
-import com.restsecure.core.response.validation.Validation;
-import com.restsecure.core.request.RequestContext;
-import com.restsecure.core.request.specification.RequestSpecificationImpl;
 import com.restsecure.core.response.Response;
+import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.response.validation.ValidationResult;
 import com.restsecure.core.response.validation.ValidationStatus;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.testng.annotations.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static com.restsecure.Configs.baseJsonPath;
 import static com.restsecure.Matchers.anyValue;
-import static com.restsecure.Validations.as;
-import static com.restsecure.Validations.body;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
@@ -74,12 +64,12 @@ public class BaseTest {
     );
 
     protected void expectValidationSuccess(Validation validation, Response response) {
-        ValidationResult result = validation.validate(response);
+        ValidationResult result = validation.softValidate(response);
         assertThat(result.getStatus(), equalTo(ValidationStatus.SUCCESS));
     }
 
     protected void expectValidationFailWithErrorText(Validation validation, Response response, String expectedText) {
-        ValidationResult result = validation.validate(response);
+        ValidationResult result = validation.softValidate(response);
 
         assertThat(result.getStatus(), equalTo(ValidationStatus.FAIL));
         assertThat(result.getErrorText(), containsString(expectedText));

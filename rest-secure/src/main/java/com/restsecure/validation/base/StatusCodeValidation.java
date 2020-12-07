@@ -1,14 +1,14 @@
 package com.restsecure.validation.base;
 
 import com.restsecure.core.response.Response;
-import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.response.validation.ValidationResult;
 import com.restsecure.core.response.validation.ValidationStatus;
+import com.restsecure.validation.BaseValidation;
 import org.hamcrest.Matcher;
 
 import static com.restsecure.core.response.validation.ValidationStatus.SUCCESS;
 
-public class StatusCodeValidation implements Validation {
+public class StatusCodeValidation extends BaseValidation {
 
     private final Matcher<Integer> statusCodeMatcher;
 
@@ -17,7 +17,7 @@ public class StatusCodeValidation implements Validation {
     }
 
     @Override
-    public ValidationResult validate(Response response) {
+    public ValidationResult softValidate(Response response) {
         int statusCode = response.getStatusCode();
 
         if (!statusCodeMatcher.matches(statusCode)) {

@@ -4,12 +4,13 @@ import com.restsecure.core.response.Response;
 import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.response.validation.ValidationException;
 import com.restsecure.core.response.validation.ValidationResult;
+import com.restsecure.validation.BaseValidation;
 
 import static com.restsecure.core.response.validation.ValidationStatus.FAIL;
 import static com.restsecure.core.response.validation.ValidationStatus.SUCCESS;
 import static com.restsecure.validation.composite.LogicalOperators.AND;
 
-class DoubleValidation implements Validation {
+class DoubleValidation extends BaseValidation {
 
     private final Validation validation1;
     private final Validation logicalOperator;
@@ -22,10 +23,10 @@ class DoubleValidation implements Validation {
     }
 
     @Override
-    public ValidationResult validate(Response response) {
+    public ValidationResult softValidate(Response response) {
 
-        ValidationResult result1 = validation1.validate(response);
-        ValidationResult result2 = validation2.validate(response);
+        ValidationResult result1 = validation1.softValidate(response);
+        ValidationResult result2 = validation2.softValidate(response);
 
         if (logicalOperator.equals(AND)) {
             if (result1.isFail()) {

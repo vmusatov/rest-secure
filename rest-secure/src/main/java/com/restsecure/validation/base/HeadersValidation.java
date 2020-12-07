@@ -2,9 +2,9 @@ package com.restsecure.validation.base;
 
 import com.restsecure.core.http.header.Header;
 import com.restsecure.core.response.Response;
-import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.response.validation.ValidationResult;
 import com.restsecure.core.util.NameValueList;
+import com.restsecure.validation.BaseValidation;
 import com.restsecure.validation.matchers.MatcherUtils;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -12,7 +12,7 @@ import org.hamcrest.Matcher;
 import static com.restsecure.core.response.validation.ValidationStatus.FAIL;
 import static com.restsecure.core.response.validation.ValidationStatus.SUCCESS;
 
-public class HeadersValidation implements Validation {
+public class HeadersValidation extends BaseValidation {
 
     private final String HEADER_VALIDATION_REASON = "Headers validation";
 
@@ -23,7 +23,7 @@ public class HeadersValidation implements Validation {
     }
 
     @Override
-    public ValidationResult validate(Response response) {
+    public ValidationResult softValidate(Response response) {
         NameValueList<Header> headers = response.getHeaders();
 
         if (!headersMatcher.matches(headers)) {

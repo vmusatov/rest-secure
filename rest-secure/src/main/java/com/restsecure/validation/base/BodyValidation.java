@@ -1,8 +1,8 @@
 package com.restsecure.validation.base;
 
 import com.restsecure.core.response.Response;
-import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.response.validation.ValidationResult;
+import com.restsecure.validation.BaseValidation;
 import com.restsecure.validation.config.BaseJsonPathConfig;
 import com.restsecure.validation.matchers.JsonMatcher;
 import com.restsecure.validation.matchers.MatcherUtils;
@@ -11,7 +11,7 @@ import org.hamcrest.Description;
 import static com.restsecure.core.response.validation.ValidationStatus.FAIL;
 import static com.restsecure.core.response.validation.ValidationStatus.SUCCESS;
 
-public class BodyValidation implements Validation {
+public class BodyValidation extends BaseValidation {
 
     private final String BODY_VALIDATION_REASON = "Body validation";
 
@@ -22,7 +22,7 @@ public class BodyValidation implements Validation {
     }
 
     @Override
-    public ValidationResult validate(Response response) {
+    public ValidationResult softValidate(Response response) {
         String body = response.getBody().asString();
         String basePath = response.getContext().getConfigValue(BaseJsonPathConfig.class);
 

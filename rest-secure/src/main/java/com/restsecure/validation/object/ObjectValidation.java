@@ -1,6 +1,5 @@
 package com.restsecure.validation.object;
 
-import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.response.validation.ValidationResult;
 import com.restsecure.core.response.validation.ValidationStatus;
 
@@ -20,7 +19,7 @@ public class ObjectValidation<T> extends ResponseObjectValidation<T> {
     }
 
     @Override
-    public ValidationResult validate(T responseObject) {
+    public ValidationResult softValidate(T responseObject) {
         if (!predicate.test(responseObject)) {
             if (reason == null) {
                 return new ValidationResult(ValidationStatus.FAIL);
