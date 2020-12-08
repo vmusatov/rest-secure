@@ -1,12 +1,11 @@
 package com.restsecure.logging.config;
 
 import com.restsecure.core.configuration.BaseConfig;
+import com.restsecure.logging.LogWriter;
 
-import java.io.PrintStream;
-
-public class LogPrintStreamConfig extends BaseConfig<PrintStream> {
+public class LogWriterConfig extends BaseConfig<LogWriter> {
     @Override
     public void initDefault() {
-        value = System.out;
+        value = System.out::println;
     }
 }

@@ -5,7 +5,8 @@ import com.restsecure.core.configuration.configs.*;
 import com.restsecure.core.mapping.deserialize.Deserializer;
 import com.restsecure.core.mapping.serialize.Serializer;
 import com.restsecure.logging.LogInfo;
-import com.restsecure.logging.config.LogPrintStreamConfig;
+import com.restsecure.logging.LogWriter;
+import com.restsecure.logging.config.LogWriterConfig;
 import com.restsecure.logging.config.RequestLogConfig;
 import com.restsecure.logging.config.ResponseLogConfig;
 import com.restsecure.session.SessionIdNameConfig;
@@ -13,7 +14,6 @@ import com.restsecure.validation.config.BaseJsonPathConfig;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.impl.client.HttpClientBuilder;
 
-import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.List;
 
@@ -128,14 +128,14 @@ public class Configs {
     }
 
     /**
-     * Create a LogPrintStreamConfig with specified value
+     * Create a LogWriterConfig with specified value
      *
-     * @param printStreams PrintStream
-     * @return LogPrintStreamConfig
+     * @param writer LogWriter
+     * @return LogWriterConfig
      */
-    public static Config<PrintStream> logPrintStream(PrintStream printStreams) {
-        LogPrintStreamConfig config = new LogPrintStreamConfig();
-        config.setValue(printStreams);
+    public static Config<LogWriter> logWriter(LogWriter writer) {
+        LogWriterConfig config = new LogWriterConfig();
+        config.setValue(writer);
         return config;
     }
 

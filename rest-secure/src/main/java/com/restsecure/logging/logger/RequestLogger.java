@@ -4,15 +4,15 @@ import com.restsecure.core.http.header.Header;
 import com.restsecure.core.http.param.Parameter;
 import com.restsecure.core.request.specification.RequestSpecification;
 import com.restsecure.logging.LogInfo;
+import com.restsecure.logging.LogWriter;
 
-import java.io.PrintStream;
 import java.util.List;
 
 import static com.restsecure.logging.logger.LogHelper.*;
 
 public class RequestLogger {
 
-    public static void log(PrintStream printStream, RequestSpecification spec, List<LogInfo> logInfoList) {
+    public static void log(LogWriter writer, RequestSpecification spec, List<LogInfo> logInfoList) {
         final StringBuilder builder = new StringBuilder();
 
         builder.append("----------------------------------------")
@@ -48,7 +48,7 @@ public class RequestLogger {
 
         builder.append("----------------------------------------");
         builder.append(lineSeparator());
-        printStream.println(builder.toString());
+        writer.writeLog(builder.toString());
     }
 
     private static void addAll(StringBuilder builder, RequestSpecification spec) {

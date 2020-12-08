@@ -5,15 +5,15 @@ import com.restsecure.core.http.header.Header;
 import com.restsecure.core.request.specification.RequestSpecification;
 import com.restsecure.core.response.Response;
 import com.restsecure.logging.LogInfo;
+import com.restsecure.logging.LogWriter;
 
-import java.io.PrintStream;
 import java.util.List;
 
 import static com.restsecure.logging.logger.LogHelper.*;
 
 public class ResponseLogger {
 
-    public static void log(PrintStream printStream, Response response, RequestSpecification spec, List<LogInfo> logInfoList) {
+    public static void log(LogWriter writer, Response response, RequestSpecification spec, List<LogInfo> logInfoList) {
         final StringBuilder builder = new StringBuilder();
 
         builder.append("----------------------------------------")
@@ -57,7 +57,7 @@ public class ResponseLogger {
 
         builder.append("----------------------------------------");
         builder.append(lineSeparator());
-        printStream.println(builder.toString());
+        writer.writeLog(builder.toString());
     }
 
     private static void addAll(StringBuilder builder, Response response) {
