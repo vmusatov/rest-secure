@@ -32,8 +32,8 @@ public class RequestSenderTest extends BaseTest {
     private Cookie expectCookie = new Cookie("cookie", "cookie_value");
 
     @BeforeClass
-    public void resetGlobalSpec() {
-        RestSecure.globalSpecification = request();
+    public void setupGlobalSpec() {
+        RestSecure.globalSpecification = request().expect(checkResponse());
     }
 
     @BeforeMethod
@@ -47,18 +47,19 @@ public class RequestSenderTest extends BaseTest {
     @AfterClass
     public void teardown() {
         MockServer.reset();
+        RestSecure.globalSpecification = request();
     }
 
     @Test()
     public void sendOneRequestTest() {
-        RequestSender.send(RestSecure.get(MockServer.GET_PATH).expect(checkResponse()));
-        RequestSender.send(RestSecure.post(MockServer.POST_PATH).expect(checkResponse()));
-        RequestSender.send(RestSecure.put(MockServer.PUT_PATH).expect(checkResponse()));
-        RequestSender.send(RestSecure.delete(MockServer.DELETE_PATH).expect(checkResponse()));
-        RequestSender.send(RestSecure.head(MockServer.HEAD_PATH).expect(checkResponse()));
-        RequestSender.send(RestSecure.trace(MockServer.TRACE_PATH).expect(checkResponse()));
-        RequestSender.send(RestSecure.options(MockServer.OPTIONS_PATH).expect(checkResponse()));
-        RequestSender.send(RestSecure.patch(MockServer.PATCH_PATH).expect(checkResponse()));
+        RequestSender.send(RestSecure.get(MockServer.GET_PATH));
+        RequestSender.send(RestSecure.post(MockServer.POST_PATH));
+        RequestSender.send(RestSecure.put(MockServer.PUT_PATH));
+        RequestSender.send(RestSecure.delete(MockServer.DELETE_PATH));
+        RequestSender.send(RestSecure.head(MockServer.HEAD_PATH));
+        RequestSender.send(RestSecure.trace(MockServer.TRACE_PATH));
+        RequestSender.send(RestSecure.options(MockServer.OPTIONS_PATH));
+        RequestSender.send(RestSecure.patch(MockServer.PATCH_PATH));
 
         assertThat(MockServer.requestCount, equalTo(8));
     }
@@ -66,14 +67,14 @@ public class RequestSenderTest extends BaseTest {
     @Test()
     public void sendMultipleRequestsTest() {
         RequestSender.send(
-                RestSecure.get(MockServer.GET_PATH).expect(checkResponse()),
-                RestSecure.post(MockServer.POST_PATH).expect(checkResponse()),
-                RestSecure.put(MockServer.PUT_PATH).expect(checkResponse()),
-                RestSecure.delete(MockServer.DELETE_PATH).expect(checkResponse()),
-                RestSecure.head(MockServer.HEAD_PATH).expect(checkResponse()),
-                RestSecure.trace(MockServer.TRACE_PATH).expect(checkResponse()),
-                RestSecure.options(MockServer.OPTIONS_PATH).expect(checkResponse()),
-                RestSecure.patch(MockServer.PATCH_PATH).expect(checkResponse())
+                RestSecure.get(MockServer.GET_PATH),
+                RestSecure.post(MockServer.POST_PATH),
+                RestSecure.put(MockServer.PUT_PATH),
+                RestSecure.delete(MockServer.DELETE_PATH),
+                RestSecure.head(MockServer.HEAD_PATH),
+                RestSecure.trace(MockServer.TRACE_PATH),
+                RestSecure.options(MockServer.OPTIONS_PATH),
+                RestSecure.patch(MockServer.PATCH_PATH)
         );
 
         assertThat(MockServer.requestCount, equalTo(8));
@@ -82,14 +83,14 @@ public class RequestSenderTest extends BaseTest {
     @Test()
     public void sendRequestsListTest() {
         List<RequestSpecification> requests = Arrays.asList(
-                RestSecure.get(MockServer.GET_PATH).expect(checkResponse()),
-                RestSecure.post(MockServer.POST_PATH).expect(checkResponse()),
-                RestSecure.put(MockServer.PUT_PATH).expect(checkResponse()),
-                RestSecure.delete(MockServer.DELETE_PATH).expect(checkResponse()),
-                RestSecure.head(MockServer.HEAD_PATH).expect(checkResponse()),
-                RestSecure.trace(MockServer.TRACE_PATH).expect(checkResponse()),
-                RestSecure.options(MockServer.OPTIONS_PATH).expect(checkResponse()),
-                RestSecure.patch(MockServer.PATCH_PATH).expect(checkResponse())
+                RestSecure.get(MockServer.GET_PATH),
+                RestSecure.post(MockServer.POST_PATH),
+                RestSecure.put(MockServer.PUT_PATH),
+                RestSecure.delete(MockServer.DELETE_PATH),
+                RestSecure.head(MockServer.HEAD_PATH),
+                RestSecure.trace(MockServer.TRACE_PATH),
+                RestSecure.options(MockServer.OPTIONS_PATH),
+                RestSecure.patch(MockServer.PATCH_PATH)
         );
 
         RequestSender.send(requests);
