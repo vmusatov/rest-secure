@@ -446,7 +446,7 @@ public class RequestSpecificationTest {
         }
 
         @Override
-        public void processResponse(RequestContext context, Response response) {
+        public void processResponse(Response response) {
 
         }
     }

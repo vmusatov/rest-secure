@@ -26,8 +26,8 @@ public class ResponseConfigurator {
     public static Response configureResponse(CloseableHttpResponse httpResponse, RequestContext context) {
         Response response = parseHttpResponse(httpResponse, context);
 
-        validateResponse(context, response);
-        precessResponse(context, response);
+        validateResponse(response);
+        precessResponse(response);
 
         return response;
     }
@@ -74,7 +74,8 @@ public class ResponseConfigurator {
         }
     }
 
-    private static void validateResponse(RequestContext context, Response response) {
+    private static void validateResponse(Response response) {
+        RequestContext context = response.getContext();
         List<Validation> validations = context.getSpecification().getValidations();
 
         if (validations == null) {
@@ -84,13 +85,15 @@ public class ResponseConfigurator {
         validations.forEach(validation -> validation.validate(response));
     }
 
-    private static void precessResponse(RequestContext context, Response response) {
+    private static void precessResponse(Response response) {
+        RequestContext context = response.getContext();
         List<Processor> processors = new ArrayList<>();
+
         processors.addAll(RestSecure.getContext().getProcessors());
         processors.addAll(context.getSpecification().getProcessors());
 
         processors.stream()
                 .sorted(Comparator.comparingInt(Processor::getResponseProcessOrder))
-                .forEach(processor -> processor.processResponse(context, response));
+                .forEach(processor -> processor.processResponse(response));
     }
 }

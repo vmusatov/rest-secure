@@ -16,7 +16,8 @@ import java.util.List;
 public class LogProcessor implements Processor {
 
     @Override
-    public void processResponse(RequestContext context, Response response) {
+    public void processResponse(Response response) {
+        RequestContext context = response.getContext();
         LogWriter writer = context.getConfigValue(LogWriterConfig.class);
         List<LogInfo> logInfo = context.getConfigValue(ResponseLogConfig.class);
 

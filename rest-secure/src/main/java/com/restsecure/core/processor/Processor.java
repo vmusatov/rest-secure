@@ -19,10 +19,9 @@ public interface Processor {
     /**
      * Override this method if you need process response
      *
-     * @param context  request context
      * @param response response
      */
-    default void processResponse(RequestContext context, Response response) {
+    default void processResponse(Response response) {
     }
 
     /**

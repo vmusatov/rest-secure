@@ -52,13 +52,13 @@ public class Session implements Processor {
     }
 
     @Override
-    public void processResponse(RequestContext context, Response response) {
+    public void processResponse(Response response) {
         NameValueList<Cookie> responseCookies = response.getCookies();
         if (responseCookies == null) {
             return;
         }
 
-        String sessionIdName = context.getConfigValue(SessionIdNameConfig.class);
+        String sessionIdName = response.getContext().getConfigValue(SessionIdNameConfig.class);
 
         Cookie sessionCookie = responseCookies.getFirst(sessionIdName);
         if (sessionCookie != null) {

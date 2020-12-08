@@ -20,11 +20,15 @@ public class SessionTest {
         response.setCookies(Collections.singletonList(new Cookie(SessionIdNameConfig.DEFAULT_SESSION_ID_NAME, "session_value")));
 
         RequestContext context = new RequestContext();
+        response.setContext(context);
 
-        session.processResponse(context, response);
+        session.processResponse(response);
         session.processRequest(context);
 
         Header expectedHeader = new Header("Cookie", SessionIdNameConfig.DEFAULT_SESSION_ID_NAME + "=session_value");
-        assertThat("request not contain session cookie", context.getSpecification().getHeaders().getFirst(expectedHeader.getName()).equals(expectedHeader.getValue()));
+        assertThat(
+                "request not contain session cookie",
+                context.getSpecification().getHeaders().getFirst(expectedHeader.getName()).equals(expectedHeader.getValue())
+        );
     }
 }
