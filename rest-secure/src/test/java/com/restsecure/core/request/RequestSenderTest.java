@@ -18,7 +18,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.restsecure.Matchers.containsPair;
-import static com.restsecure.RestSecure.request;
 import static com.restsecure.Validations.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -33,21 +32,21 @@ public class RequestSenderTest extends BaseTest {
 
     @BeforeClass
     public void setupGlobalSpec() {
-        RestSecure.globalSpecification = request().expect(checkResponse());
+        RestSecure.getGlobalSpecification().expect(checkResponse());
     }
 
     @BeforeMethod
     public void setup() {
         MockServer.reset();
-        MockServer.addResponseCookie("cookie", "cookie_value");
-        MockServer.addResponseHeader("header", "header_value");
-        MockServer.setResponseBody("some body");
+        MockServer.addResponseCookie(expectCookie.getName(), expectCookie.getValue());
+        MockServer.addResponseHeader(expectHeader.getName(), expectHeader.getValue());
+        MockServer.setResponseBody(expectBody);
     }
 
     @AfterClass
     public void teardown() {
         MockServer.reset();
-        RestSecure.globalSpecification = request();
+        RestSecure.resetGlobalSpec();
     }
 
     @Test()

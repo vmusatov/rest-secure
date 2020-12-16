@@ -12,7 +12,7 @@ public class UrlProcessorTest {
 
     @Test
     public void setBaseUrlTest() {
-        RestSecure.baseUrl = "http://localhost";
+        RestSecure.setBaseUrl("http://localhost");
         RequestSpecification spec = RestSecure.get("/user");
         RequestContext context = new RequestContext(spec);
         UrlProcessor processor = new UrlProcessor();
@@ -23,7 +23,7 @@ public class UrlProcessorTest {
 
     @Test
     public void notSetBaseUrlTest() {
-        RestSecure.baseUrl = "http://localhost";
+        RestSecure.setBaseUrl("http://localhost");
         RequestSpecification spec = RestSecure.get("http://otherhost/user");
         RequestContext context = new RequestContext(spec);
         UrlProcessor processor = new UrlProcessor();

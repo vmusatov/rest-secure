@@ -29,7 +29,7 @@ public class UrlProcessor implements Processor {
     private void setBaseUrl(RequestContext context) {
         String domainName = HttpHelper.getDomainName(context.getSpecification().getUrl());
         if (domainName == null || domainName.isEmpty()) {
-            String url = RestSecure.baseUrl + context.getSpecification().getUrl();
+            String url = RestSecure.getBaseUrl() + context.getSpecification().getUrl();
             context.getSpecification().url(url);
         }
     }

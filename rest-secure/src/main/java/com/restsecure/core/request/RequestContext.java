@@ -28,7 +28,7 @@ public class RequestContext {
 
     private void init(RequestSpecification specification) {
         this.specification = new RequestSpecificationImpl();
-        this.specification.mergeWith(RestSecure.globalSpecification);
+        this.specification.mergeWith(RestSecure.getGlobalSpecification());
 
         if (specification != null) {
             this.specification.mergeWith(specification);

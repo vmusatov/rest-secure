@@ -3,6 +3,7 @@ package com.restsecure;
 import com.restsecure.authentication.BasicAuthentication;
 import com.restsecure.authentication.BearerAuthentication;
 import com.restsecure.core.Context;
+import com.restsecure.core.configuration.configs.*;
 import com.restsecure.core.http.RequestMethod;
 import com.restsecure.core.http.header.Header;
 import com.restsecure.core.http.header.HeaderNames;
@@ -11,26 +12,55 @@ import com.restsecure.core.request.RequestSender;
 import com.restsecure.core.request.specification.RequestSpecification;
 import com.restsecure.core.request.specification.RequestSpecificationImpl;
 import com.restsecure.core.response.Response;
+import com.restsecure.logging.config.LogWriterConfig;
+import com.restsecure.logging.config.RequestLogConfig;
+import com.restsecure.logging.config.ResponseLogConfig;
+import com.restsecure.session.SessionIdNameConfig;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
+import static com.restsecure.core.configuration.ConfigFactory.createDefaultConfig;
+
 public class RestSecure {
 
-    public static final String DEFAULT_URL = "http://localhost";
+    private static final String DEFAULT_URL = "http://localhost";
 
     /**
      * A base url will be added to each requests if its url does not have a domain name
      */
-    public static String baseUrl = DEFAULT_URL;
+    @Getter
+    @Setter
+    private static String baseUrl = DEFAULT_URL;
 
     /**
      * A global specification will be added to each request. 
      */
-    public static RequestSpecification globalSpecification = new RequestSpecificationImpl();
+    @Getter
+    private static RequestSpecification globalSpecification = getDefaultSpecification();
 
     @Getter
     private static final Context context = new Context();
+
+    public static void resetGlobalSpec() {
+        globalSpecification = getDefaultSpecification();
+    }
+
+    private static RequestSpecification getDefaultSpecification() {
+        return request().config(
+                createDefaultConfig(HttpClientContextConfig.class),
+                createDefaultConfig(HttpClientBuilderConfig.class),
+                createDefaultConfig(SerializerConfig.class),
+                createDefaultConfig(DeserializerConfig.class),
+                createDefaultConfig(SessionIdNameConfig.class),
+                createDefaultConfig(LogWriterConfig.class),
+                createDefaultConfig(RequestLogConfig.class),
+                createDefaultConfig(ResponseLogConfig.class),
+                createDefaultConfig(OverrideHeadersConfig.class),
+                createDefaultConfig(OverrideParamsConfig.class)
+        );
+    }
 
     /**
      * Creates an empty request specification
