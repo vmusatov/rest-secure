@@ -42,6 +42,22 @@ public class RequestSender {
     /**
      * Allows you to send multiple requests at once
      *
+     * @param processors      Processor list
+     * @param spec            RequestSpecification
+     * @param additionalSpecs RequestSpecifications list
+     * @return last request response
+     */
+    public static Response send(List<Processor> processors, RequestSpecification spec, RequestSpecification... additionalSpecs) {
+        List<RequestSpecification> requests = new ArrayList<>();
+        requests.add(spec);
+        requests.addAll(Arrays.asList(additionalSpecs));
+
+        return send(processors, requests);
+    }
+
+    /**
+     * Allows you to send multiple requests at once
+     *
      * @param processor Processor
      * @param specs     RequestSpecification list
      * @return last request response
@@ -49,6 +65,20 @@ public class RequestSender {
     public static Response send(Processor processor, List<RequestSpecification> specs) {
         for (RequestSpecification spec : specs) {
             spec.process(processor);
+        }
+        return send(specs);
+    }
+
+    /**
+     * Allows you to send multiple requests at once
+     *
+     * @param processors Processors list
+     * @param specs      RequestSpecification list
+     * @return last request response
+     */
+    public static Response send(List<Processor> processors, List<RequestSpecification> specs) {
+        for (RequestSpecification spec : specs) {
+            spec.process(processors);
         }
         return send(specs);
     }

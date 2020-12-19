@@ -228,6 +228,26 @@ public class RestSecure {
      * Allows you to send multiple requests at once<br>
      * For example:
      * <pre>
+     *     List<Processor> processors = Arrays.asList(bearerAuth("token"), new Session());
+     *     RequestSpecification one = get("url);
+     *     RequestSpecification two = get("other_url);
+     *
+     *     send(processors, one, two);
+     * </pre>
+     *
+     * @param processors      Processors list
+     * @param spec            RequestSpecification
+     * @param additionalSpecs RequestSpecifications list
+     * @return last request response
+     */
+    public static Response send(List<Processor> processors, RequestSpecification spec, RequestSpecification... additionalSpecs) {
+        return RequestSender.send(processors, spec, additionalSpecs);
+    }
+
+    /**
+     * Allows you to send multiple requests at once<br>
+     * For example:
+     * <pre>
      *     Session session = new Session();
      *     List<RequestSpecification> requests = Arrays.asList(
      *          get("url),
@@ -243,6 +263,27 @@ public class RestSecure {
      */
     public static Response send(Processor processor, List<RequestSpecification> specs) {
         return RequestSender.send(processor, specs);
+    }
+
+    /**
+     * Allows you to send multiple requests at once<br>
+     * For example:
+     * <pre>
+     *     List<Processor> processors = Arrays.asList(bearerAuth("token"), new Session());
+     *     List<RequestSpecification> requests = Arrays.asList(
+     *          get("url),
+     *          get("other_url)
+     *     );
+     *
+     *     send(processors, requests);
+     * </pre>
+     *
+     * @param processors Processors list
+     * @param specs      RequestSpecifications list
+     * @return last request response
+     */
+    public static Response send(List<Processor> processors, List<RequestSpecification> specs) {
+        return RequestSender.send(processors, specs);
     }
 
     /**
