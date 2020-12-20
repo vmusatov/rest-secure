@@ -5,6 +5,7 @@ import com.restsecure.MockServer;
 import com.restsecure.RestSecure;
 import com.restsecure.core.condition.ContextCondition;
 import com.restsecure.core.http.RequestMethod;
+import com.restsecure.core.http.StatusCode;
 import com.restsecure.core.http.cookie.Cookie;
 import com.restsecure.core.http.header.Header;
 import com.restsecure.core.request.specification.RequestSpecification;
@@ -24,7 +25,7 @@ import static org.hamcrest.Matchers.equalTo;
 
 public class RequestSenderTest extends BaseTest {
 
-    private int expectStatusCode = 200;
+    private StatusCode expectStatusCode = StatusCode.OK;
     private String expectStatusLine = "HTTP/1.1 200 OK";
     private String expectBody = "some body";
     private Header expectHeader = new Header("header", "header_value");

@@ -2,6 +2,8 @@ package com.restsecure;
 
 import com.restsecure.core.condition.Condition;
 import com.restsecure.core.condition.ContextCondition;
+import com.restsecure.core.http.StatusCode;
+import com.restsecure.core.http.StatusGroup;
 import com.restsecure.core.http.cookie.Cookie;
 import com.restsecure.core.http.header.Header;
 import com.restsecure.core.http.header.HeaderNames;
@@ -31,7 +33,7 @@ import java.util.function.Predicate;
 
 import static com.restsecure.Matchers.containsPair;
 import static com.restsecure.Matchers.valueByPathIs;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.*;
 
 public class Validations {
 
@@ -503,6 +505,45 @@ public class Validations {
      */
     public static StatusCodeValidation statusCode(int expectedStatusCode) {
         return new StatusCodeValidation(equalTo(expectedStatusCode));
+    }
+
+    /**
+     * Allows you to specify the expected response status code<br>
+     * For example:
+     * <pre>
+     *     get("url")
+     *          .param("name", "value")
+     *          .expect(statusCode(OK))
+     *          .send();
+     * </pre>
+     *
+     * @param expectedStatusCode expected response status code
+     * @return StatusCodeValidation
+     */
+    public static StatusCodeValidation statusCode(StatusCode expectedStatusCode) {
+        return new StatusCodeValidation(equalTo(expectedStatusCode.getCode()));
+    }
+
+    /**
+     * Allows you to specify the expected response status code<br>
+     * For example:
+     * <pre>
+     *     get("url")
+     *          .param("name", "value")
+     *          .expect(statusCode(CLIENT_ERROR))
+     *          .send();
+     * </pre>
+     *
+     * @param expectedStatusGroup expected response status group
+     * @return StatusCodeValidation
+     */
+    public static StatusCodeValidation statusCode(StatusGroup expectedStatusGroup) {
+        return new StatusCodeValidation(
+                allOf(
+                        greaterThan(expectedStatusGroup.getFrom() - 1),
+                        lessThan(expectedStatusGroup.getTo() + 1)
+                )
+        );
     }
 
     /**
