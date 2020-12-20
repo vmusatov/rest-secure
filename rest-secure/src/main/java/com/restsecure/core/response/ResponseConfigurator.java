@@ -26,8 +26,8 @@ public class ResponseConfigurator {
     public static Response configureResponse(CloseableHttpResponse httpResponse, RequestContext context) {
         Response response = parseHttpResponse(httpResponse, context);
 
-        validateResponse(response);
         precessResponse(response);
+        validateResponse(response);
 
         return response;
     }
