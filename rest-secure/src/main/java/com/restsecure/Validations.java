@@ -855,6 +855,23 @@ public class Validations {
     }
 
     /**
+     * Allows you to specify expected response body<br>
+     * For example:
+     * <pre>
+     *     get("/users")
+     *          .param("id", "1")
+     *          .expect(body(some body"))
+     *          .send();
+     * </pre>
+     *
+     * @param expectedBody expected response body
+     * @return BodyValidation
+     */
+    public static BodyValidation body(String expectedBody) {
+        return new BodyValidation(valueByPathIs("", equalTo(expectedBody)));
+    }
+
+    /**
      * Allows you to specify predicates for checking the response<br>
      * For example:
      * <pre>

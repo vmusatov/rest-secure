@@ -40,7 +40,7 @@ public class ProxyTest {
                 .proxy("localhost", 7777)
                 .expect(
                         statusCode(OK),
-                        body(equalTo("proxied body"))
+                        body("proxied body")
                 )
                 .send();
 
@@ -53,7 +53,7 @@ public class ProxyTest {
                 .proxy("localhost", 7777, "username", "pass")
                 .expect(
                         statusCode(OK),
-                        body(equalTo("proxied body"))
+                        body("proxied body")
                 )
                 .send();
 

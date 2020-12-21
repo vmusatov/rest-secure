@@ -313,7 +313,7 @@ public class RequestSenderTest extends BaseTest {
                 headers(containsPair(expectHeader)),
                 cookies(containsPair(expectCookie)),
                 when(needCheckBody, then(
-                        body(equalTo(expectBody))
+                        body(expectBody)
                 ))
         );
     }
