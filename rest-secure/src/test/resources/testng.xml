@@ -14,9 +14,17 @@
             <package name="com.restsecure.authentication"/>
             <package name="com.restsecure.session"/>
             <package name="com.restsecure.data"/>
+
             <package name="com.restsecure.validation.base"/>
             <package name="com.restsecure.validation.matchers"/>
             <package name="com.restsecure.validation.object"/>
+        </packages>
+    </test>
+
+<!--    The ProxyServer is not stable with other tests-->
+    <test name="proxy">
+        <packages>
+            <package name="com.restsecure.core.http.proxy"/>
         </packages>
     </test>
 </suite>
