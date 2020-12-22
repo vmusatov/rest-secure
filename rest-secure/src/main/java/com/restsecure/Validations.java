@@ -838,6 +838,24 @@ public class Validations {
     }
 
     /**
+     * Allows you to specify expected response value by json path<br>
+     * For example:
+     * <pre>
+     *     get("/users")
+     *          .param("id", "1")
+     *          .expect(body("user.login", "username"))
+     *          .send();
+     * </pre>
+     *
+     * @param path          json path
+     * @param expectedValue expected response value
+     * @return ResponseValidation
+     */
+    public static BodyValidation body(String path, String expectedValue) {
+        return new BodyValidation(valueByPathIs(path, equalTo(expectedValue)));
+    }
+
+    /**
      * Allows you to specify matchers to checking the response<br>
      * For example:
      * <pre>
@@ -860,7 +878,7 @@ public class Validations {
      * <pre>
      *     get("/users")
      *          .param("id", "1")
-     *          .expect(body(some body"))
+     *          .expect(body("some body"))
      *          .send();
      * </pre>
      *
