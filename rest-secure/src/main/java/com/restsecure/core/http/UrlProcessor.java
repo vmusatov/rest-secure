@@ -21,16 +21,17 @@ public class UrlProcessor implements Processor {
 
     @Override
     public void processRequest(RequestContext context) {
-        applyRouteParams(context);
         setBaseUrl(context);
+        applyRouteParams(context);
         buildUrl(context);
     }
 
     private void setBaseUrl(RequestContext context) {
-        String domainName = HttpHelper.getDomainName(context.getSpecification().getUrl());
-        if (domainName == null || domainName.isEmpty()) {
-            String url = RestSecure.getBaseUrl() + context.getSpecification().getUrl();
-            context.getSpecification().url(url);
+        String baseUrl = RestSecure.getBaseUrl();
+        String url = context.getSpecification().getUrl();
+
+        if (baseUrl != null && !baseUrl.isEmpty() && !url.startsWith("http")) {
+            context.getSpecification().url(baseUrl + url);
         }
     }
 
