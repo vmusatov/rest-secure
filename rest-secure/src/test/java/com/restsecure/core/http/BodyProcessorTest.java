@@ -1,11 +1,13 @@
 package com.restsecure.core.http;
 
 import com.restsecure.BaseTest;
+import com.restsecure.TestObjectMapper;
 import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.request.specification.RequestSpecification;
 import com.restsecure.core.request.specification.RequestSpecificationImpl;
 import org.testng.annotations.Test;
 
+import static com.restsecure.Configs.objectMapper;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -27,7 +29,10 @@ public class BodyProcessorTest {
         phone.setCode("+7");
         phone.setNumber("7777777777");
 
-        RequestSpecification spec = new RequestSpecificationImpl().body(phone);
+        RequestSpecification spec = new RequestSpecificationImpl()
+                .body(phone)
+                .config(objectMapper(new TestObjectMapper()));
+
         RequestContext context = new RequestContext(spec);
         BodyProcessor processor = new BodyProcessor();
 

@@ -1,11 +1,10 @@
 package com.restsecure.core.response;
 
 import com.restsecure.RestSecure;
-import com.restsecure.core.configuration.configs.DeserializerConfig;
+import com.restsecure.core.configuration.configs.ObjectMapperConfig;
 import com.restsecure.core.exception.RestSecureException;
 import com.restsecure.core.http.HttpHelper;
 import com.restsecure.core.http.header.Header;
-import com.restsecure.core.mapping.deserialize.Deserializer;
 import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.response.validation.Validation;
@@ -44,8 +43,13 @@ public class ResponseConfigurator {
             response.setStatusLine(httpResponse.getStatusLine().toString());
             response.setStatusCode(httpResponse.getStatusLine().getStatusCode());
 
-            Deserializer deserializer = context.getConfigValue(DeserializerConfig.class);
-            response.setBody(new ResponseBody(getBodyContent(httpResponse), deserializer));
+            String bodyContent = getBodyContent(httpResponse);
+
+            context.getConfigValue(ObjectMapperConfig.class)
+                    .ifPresentOrElse(
+                            objectMapper -> response.setBody(new ResponseBody(bodyContent, objectMapper)),
+                            () -> response.setBody(new ResponseBody(bodyContent))
+                    );
 
             response.setContext(context);
 

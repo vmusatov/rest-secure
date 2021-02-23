@@ -1,7 +1,7 @@
 package com.restsecure.validation.object;
 
 import com.restsecure.BaseTest;
-import com.restsecure.core.mapping.deserialize.DefaultJacksonDeserializer;
+import com.restsecure.TestObjectMapper;
 import com.restsecure.core.response.HttpResponse;
 import com.restsecure.core.response.Response;
 import com.restsecure.core.response.ResponseBody;
@@ -12,17 +12,15 @@ import org.testng.annotations.Test;
 import static com.restsecure.Validations.as;
 
 public class ObjectValidationTest extends BaseTest {
-    private User user;
 
     @BeforeMethod
     public void init() {
-        user = new DefaultJacksonDeserializer().deserialize(userJson, User.class);
     }
 
     @Test
     public void predicateSuccessTest() {
         Response response = new HttpResponse();
-        response.setBody(new ResponseBody(userJson));
+        response.setBody(new ResponseBody(userJson, new TestObjectMapper()));
 
         Validation validation = as(User.class, user -> user.getId() == 1);
         expectValidationSuccess(validation, response);
@@ -31,7 +29,7 @@ public class ObjectValidationTest extends BaseTest {
     @Test
     public void predicateFailTest() {
         Response response = new HttpResponse();
-        response.setBody(new ResponseBody(userJson));
+        response.setBody(new ResponseBody(userJson, new TestObjectMapper()));
 
         Validation validation = as(User.class, user -> user.getId() == 2);
         expectValidationFailWithErrorText(validation, response, "");
@@ -40,7 +38,7 @@ public class ObjectValidationTest extends BaseTest {
     @Test
     public void predicateWithReasonSuccessTest() {
         Response response = new HttpResponse();
-        response.setBody(new ResponseBody(userJson));
+        response.setBody(new ResponseBody(userJson, new TestObjectMapper()));
 
         Validation validation = as(User.class, user -> user.getId() == 1, "Id validation");
         expectValidationSuccess(validation, response);
@@ -49,7 +47,7 @@ public class ObjectValidationTest extends BaseTest {
     @Test
     public void predicateWithReasonFailTest() {
         Response response = new HttpResponse();
-        response.setBody(new ResponseBody(userJson));
+        response.setBody(new ResponseBody(userJson, new TestObjectMapper()));
 
         Validation validation = as(User.class, user -> user.getId() == 2, "Id validation");
 

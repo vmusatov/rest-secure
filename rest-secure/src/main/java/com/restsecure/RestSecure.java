@@ -51,8 +51,7 @@ public class RestSecure {
         return request().config(
                 createDefaultConfig(HttpClientContextConfig.class),
                 createDefaultConfig(HttpClientBuilderConfig.class),
-                createDefaultConfig(SerializerConfig.class),
-                createDefaultConfig(DeserializerConfig.class),
+                createDefaultConfig(ObjectMapperConfig.class),
                 createDefaultConfig(SessionIdNameConfig.class),
                 createDefaultConfig(LogWriterConfig.class),
                 createDefaultConfig(RequestLogConfig.class),

@@ -1,9 +1,8 @@
 package com.restsecure.validation.object;
 
-import com.restsecure.core.configuration.configs.DeserializerConfig;
-import com.restsecure.core.configuration.configs.SerializerConfig;
-import com.restsecure.core.mapping.deserialize.Deserializer;
-import com.restsecure.core.mapping.serialize.Serializer;
+import com.restsecure.core.configuration.configs.ObjectMapperConfig;
+import com.restsecure.core.exception.RestSecureException;
+import com.restsecure.core.mapping.ObjectMapper;
 import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.response.Response;
 import com.restsecure.core.response.validation.ValidationResult;
@@ -11,6 +10,7 @@ import com.restsecure.validation.BaseValidation;
 import com.restsecure.validation.config.BaseJsonPathConfig;
 
 import java.util.LinkedHashMap;
+import java.util.Optional;
 
 public abstract class ResponseObjectValidation<T> extends BaseValidation {
 
@@ -37,13 +37,16 @@ public abstract class ResponseObjectValidation<T> extends BaseValidation {
             return softValidate(response.getBody().as(responseClass));
         }
 
-        Serializer serializer = context.getConfigValue(SerializerConfig.class);
-        Deserializer deserializer = context.getConfigValue(DeserializerConfig.class);
+        Optional<ObjectMapper> mapper = context.getConfigValue(ObjectMapperConfig.class);
+
+        if (mapper.isEmpty()) {
+            throw new RestSecureException("ObjectMapper is null. You must configure ObjectMapper");
+        }
 
         LinkedHashMap<String, String> value = response.getBody().get(this.path);
-        String json = serializer.serialize(value);
+        String json = mapper.get().serialize(value);
 
-        return softValidate(deserializer.deserialize(json, responseClass));
+        return softValidate(mapper.get().deserialize(json, responseClass));
 
     }
 }

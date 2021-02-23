@@ -1,9 +1,8 @@
 package com.restsecure.core.http.header;
 
+import com.restsecure.core.configuration.configs.ObjectMapperConfig;
 import com.restsecure.core.configuration.configs.OverrideHeadersConfig;
-import com.restsecure.core.configuration.configs.SerializerConfig;
-import com.restsecure.core.mapping.serialize.SerializeHelper;
-import com.restsecure.core.mapping.serialize.Serializer;
+import com.restsecure.core.util.SerializeHelper;
 import com.restsecure.core.processor.ProcessAll;
 import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.RequestContext;
@@ -19,10 +18,11 @@ public class HeadersProcessor implements Processor {
     @Override
     public void processRequest(RequestContext context) {
         List<String> headersToOverride = context.getConfigValue(OverrideHeadersConfig.class);
-        Serializer serializer = context.getConfigValue(SerializerConfig.class);
         MultiKeyMap<String, Object> headers = context.getSpecification().getHeaders();
 
-        SerializeHelper.serializeValuesIfNeed(headers, serializer);
+        context.getConfigValue(ObjectMapperConfig.class)
+                .ifPresent(mapper -> SerializeHelper.serializeValuesIfNeed(headers, mapper));
+
         overrideValues(headers, headersToOverride);
     }
 

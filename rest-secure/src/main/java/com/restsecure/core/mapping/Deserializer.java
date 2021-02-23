@@ -1,4 +1,4 @@
-package com.restsecure.core.mapping.deserialize;
+package com.restsecure.core.mapping;
 
 import java.lang.reflect.Type;
 

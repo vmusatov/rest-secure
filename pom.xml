@@ -12,6 +12,8 @@
 
     <modules>
         <module>rest-secure</module>
+        <module>object-mapping-jackson</module>
+        <module>object-mapping-gson</module>
     </modules>
 
     <properties>

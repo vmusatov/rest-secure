@@ -1,9 +1,8 @@
 package com.restsecure.core.http.param;
 
+import com.restsecure.core.configuration.configs.ObjectMapperConfig;
 import com.restsecure.core.configuration.configs.OverrideParamsConfig;
-import com.restsecure.core.configuration.configs.SerializerConfig;
-import com.restsecure.core.mapping.serialize.SerializeHelper;
-import com.restsecure.core.mapping.serialize.Serializer;
+import com.restsecure.core.util.SerializeHelper;
 import com.restsecure.core.processor.ProcessAll;
 import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.RequestContext;
@@ -19,10 +18,11 @@ public class ParamProcessor implements Processor {
     @Override
     public void processRequest(RequestContext context) {
         List<String> paramsToOverride = context.getConfigValue(OverrideParamsConfig.class);
-        Serializer serializer = context.getConfigValue(SerializerConfig.class);
         MultiKeyMap<String, Object> params = context.getSpecification().getParameters();
 
-        SerializeHelper.serializeValuesIfNeed(params, serializer);
+        context.getConfigValue(ObjectMapperConfig.class)
+                .ifPresent(mapper -> SerializeHelper.serializeValuesIfNeed(params, mapper));
+
         overrideValues(params, paramsToOverride);
     }
 

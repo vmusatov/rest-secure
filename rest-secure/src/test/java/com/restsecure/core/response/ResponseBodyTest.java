@@ -1,6 +1,7 @@
 package com.restsecure.core.response;
 
 import com.restsecure.BaseTest;
+import com.restsecure.TestObjectMapper;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -16,7 +17,7 @@ public class ResponseBodyTest extends BaseTest {
 
     @Test
     public void asTest() {
-        ResponseBody body = new ResponseBody(userJson);
+        ResponseBody body = new ResponseBody(userJson, new TestObjectMapper());
         User user = body.as(User.class);
 
         assertThat(user.getId(), equalTo(1));

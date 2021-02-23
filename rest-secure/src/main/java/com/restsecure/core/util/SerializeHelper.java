@@ -1,6 +1,6 @@
-package com.restsecure.core.mapping.serialize;
+package com.restsecure.core.util;
 
-import com.restsecure.core.util.MultiKeyMap;
+import com.restsecure.core.mapping.Serializer;
 
 public class SerializeHelper {
 

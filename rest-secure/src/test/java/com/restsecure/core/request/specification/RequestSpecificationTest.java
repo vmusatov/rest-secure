@@ -1,7 +1,7 @@
 package com.restsecure.core.request.specification;
 
 import com.restsecure.core.configuration.Config;
-import com.restsecure.core.configuration.configs.DeserializerConfig;
+import com.restsecure.core.configuration.configs.ObjectMapperConfig;
 import com.restsecure.core.http.RequestMethod;
 import com.restsecure.core.http.header.Header;
 import com.restsecure.core.http.param.Parameter;
@@ -301,9 +301,9 @@ public class RequestSpecificationTest {
     public void addConfigsListTest() {
         RequestSpecification spec = new RequestSpecificationImpl();
         SessionIdNameConfig sessionConfig = new SessionIdNameConfig();
-        DeserializerConfig deserializeConfig = new DeserializerConfig();
+        ObjectMapperConfig objectMapperConfig = new ObjectMapperConfig();
 
-        List<Config<?>> configs = Arrays.asList(sessionConfig, deserializeConfig);
+        List<Config<?>> configs = Arrays.asList(sessionConfig, objectMapperConfig);
         spec.config(configs);
 
         assertThat(spec.getConfigs().size(), equalTo(2));

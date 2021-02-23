@@ -2,8 +2,7 @@ package com.restsecure.core.response;
 
 import com.jayway.jsonpath.JsonPath;
 import com.restsecure.core.exception.RestSecureException;
-import com.restsecure.core.mapping.deserialize.DefaultJacksonDeserializer;
-import com.restsecure.core.mapping.deserialize.Deserializer;
+import com.restsecure.core.mapping.Deserializer;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -15,7 +14,7 @@ public class ResponseBody {
 
     public ResponseBody(String content) {
         this.content = content;
-        this.deserializer = new DefaultJacksonDeserializer();
+        this.deserializer = null;
     }
 
     public ResponseBody(String content, Deserializer deserializer) {
@@ -38,15 +37,23 @@ public class ResponseBody {
     }
 
     public <T> T as(Class<T> to) {
+        checkDeserializerNotNull();
         return this.deserializer.deserialize(asString(), to);
     }
 
     public <T> T as(Type to) {
+        checkDeserializerNotNull();
         return this.deserializer.deserialize(asString(), to);
     }
 
     public <T> T get(String path) {
         return JsonPath.read(asString(), path);
+    }
+
+    private void checkDeserializerNotNull() {
+        if (deserializer == null) {
+            throw new RestSecureException("ObjectMapper is null. You must configure ObjectMapper");
+        }
     }
 
     private void checkContentNotNull() {

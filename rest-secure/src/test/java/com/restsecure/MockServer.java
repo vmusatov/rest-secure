@@ -1,8 +1,7 @@
 package com.restsecure;
 
 import com.restsecure.core.http.header.Header;
-import com.restsecure.core.mapping.serialize.DefaultJacksonSerializer;
-import com.restsecure.core.mapping.serialize.SerializeHelper;
+import com.restsecure.core.util.SerializeHelper;
 import org.eclipse.jetty.util.UrlEncoded;
 import spark.Route;
 import spark.Spark;
@@ -34,7 +33,7 @@ public class MockServer {
     private static List<Cookie> responseCookies = new ArrayList<>();
     private static List<Header> responseHeaders = new ArrayList<>();
 
-    private static final DefaultJacksonSerializer serializer = new DefaultJacksonSerializer();
+    private static final TestObjectMapper mapper = new TestObjectMapper();
 
     static {
         Spark.port(PORT);
@@ -70,7 +69,7 @@ public class MockServer {
 
     public static void setResponseBody(Object response) {
         if (SerializeHelper.isNeedSerialize(response)) {
-            responseBody = serializer.serialize(response);
+            responseBody = mapper.serialize(response);
         } else {
             responseBody = String.valueOf(response);
         }
