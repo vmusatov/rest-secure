@@ -56,8 +56,10 @@ public class RestSecure {
                 createDefaultConfig(LogWriterConfig.class),
                 createDefaultConfig(RequestLogConfig.class),
                 createDefaultConfig(ResponseLogConfig.class),
-                createDefaultConfig(OverrideHeadersConfig.class),
-                createDefaultConfig(OverrideParamsConfig.class)
+                createDefaultConfig(OverwriteParamsConfig.class),
+                createDefaultConfig(OverwriteAllParamsConfig.class),
+                createDefaultConfig(OverwriteHeadersConfig.class),
+                createDefaultConfig(OverwriteAllHeadersConfig.class)
         );
     }
 

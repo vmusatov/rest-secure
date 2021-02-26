@@ -5,7 +5,7 @@ import com.restsecure.core.configuration.BaseConfig;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OverrideHeadersConfig extends BaseConfig<List<String>> {
+public class OverwriteParamsConfig extends BaseConfig<List<String>> {
     @Override
     public void initDefault() {
         value = new ArrayList<>();

@@ -2,12 +2,9 @@ package com.restsecure.core.configuration.configs;
 
 import com.restsecure.core.configuration.BaseConfig;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class OverrideParamsConfig extends BaseConfig<List<String>> {
+public class OverwriteAllHeadersConfig extends BaseConfig<Boolean> {
     @Override
     public void initDefault() {
-        value = new ArrayList<>();
+        value = false;
     }
 }

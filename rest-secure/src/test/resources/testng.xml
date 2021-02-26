@@ -3,6 +3,7 @@
 <suite name="Unit tests" parallel="classes">
     <test name="test">
         <packages>
+            <package name="com.restsecure.core.config"/>
             <package name="com.restsecure.core.request"/>
             <package name="com.restsecure.core.mapping.deserialize"/>
             <package name="com.restsecure.core.http"/>

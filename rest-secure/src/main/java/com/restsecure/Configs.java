@@ -67,50 +67,74 @@ public class Configs {
     }
 
     /**
-     * Create a OverrideHeadersConfig with specified value
+     * Create a OverwriteAllHeadersConfig with specified value
      *
-     * @param headersToOverride Headers to override
-     * @return OverrideHeadersConfig
+     * @param isOverwrite is overwrite all headers
+     * @return OverwriteAllHeadersConfig
      */
-    public static OverrideHeadersConfig overrideHeaders(List<String> headersToOverride) {
-        OverrideHeadersConfig config = new OverrideHeadersConfig();
-        config.setValue(headersToOverride);
+    public static OverwriteAllHeadersConfig overwriteAllHeaders(boolean isOverwrite) {
+        OverwriteAllHeadersConfig config = new OverwriteAllHeadersConfig();
+        config.setValue(isOverwrite);
         return config;
     }
 
     /**
-     * Create a OverrideHeadersConfig with specified value
+     * Create a OverwriteHeadersConfig with specified value
      *
-     * @param headersToOverride Headers to override
-     * @return OverrideHeadersConfig
+     * @param headersToOverwrite headers to overwrite
+     * @return OverwriteHeadersConfig
      */
-    public static OverrideHeadersConfig overrideHeaders(String... headersToOverride) {
-        OverrideHeadersConfig config = new OverrideHeadersConfig();
-        config.setValue(Arrays.asList(headersToOverride));
+    public static OverwriteHeadersConfig overwriteHeaders(List<String> headersToOverwrite) {
+        OverwriteHeadersConfig config = new OverwriteHeadersConfig();
+        config.setValue(headersToOverwrite);
         return config;
     }
 
     /**
-     * Create a OverrideParamsConfig with specified value
+     * Create a OverwriteHeadersConfig with specified value
      *
-     * @param paramsToOverride Params to override
-     * @return OverrideParamsConfig
+     * @param headersToOverwrite headers to overwrite
+     * @return OverwriteHeadersConfig
      */
-    public static OverrideParamsConfig overrideParams(List<String> paramsToOverride) {
-        OverrideParamsConfig config = new OverrideParamsConfig();
-        config.setValue(paramsToOverride);
+    public static OverwriteHeadersConfig overwriteHeaders(String... headersToOverwrite) {
+        OverwriteHeadersConfig config = new OverwriteHeadersConfig();
+        config.setValue(Arrays.asList(headersToOverwrite));
         return config;
     }
 
     /**
-     * Create a OverrideParamsConfig with specified value
+     * Create a OverwriteAllParamsConfig with specified value
      *
-     * @param paramsToOverride Params to override
-     * @return OverrideParamsConfig
+     * @param isOverwrite is overwrite all params
+     * @return OverwriteAllParamsConfig
      */
-    public static OverrideParamsConfig overrideParams(String... paramsToOverride) {
-        OverrideParamsConfig config = new OverrideParamsConfig();
-        config.setValue(Arrays.asList(paramsToOverride));
+    public static OverwriteAllParamsConfig overwriteAllParams(boolean isOverwrite) {
+        OverwriteAllParamsConfig config = new OverwriteAllParamsConfig();
+        config.setValue(isOverwrite);
+        return config;
+    }
+
+    /**
+     * Create a OverwriteParamsConfig with specified value
+     *
+     * @param paramsToOverwrite params to overwrite
+     * @return OverwriteParamsConfig
+     */
+    public static OverwriteParamsConfig overwriteParams(List<String> paramsToOverwrite) {
+        OverwriteParamsConfig config = new OverwriteParamsConfig();
+        config.setValue(paramsToOverwrite);
+        return config;
+    }
+
+    /**
+     * Create a OverwriteParamsConfig with specified value
+     *
+     * @param paramsToOverwrite params to overwrite
+     * @return OverwriteParamsConfig
+     */
+    public static OverwriteParamsConfig overwriteParams(String... paramsToOverwrite) {
+        OverwriteParamsConfig config = new OverwriteParamsConfig();
+        config.setValue(Arrays.asList(paramsToOverwrite));
         return config;
     }
 
