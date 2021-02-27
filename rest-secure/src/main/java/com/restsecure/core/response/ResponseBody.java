@@ -46,6 +46,14 @@ public class ResponseBody {
         return this.deserializer.deserialize(asString(), to);
     }
 
+    public <T> T as(Class<T> to, Deserializer deserializer) {
+        return deserializer.deserialize(asString(), to);
+    }
+
+    public <T> T as(Type to, Deserializer deserializer) {
+        return deserializer.deserialize(asString(), to);
+    }
+
     public <T> T get(String path) {
         return JsonPath.read(asString(), path);
     }
