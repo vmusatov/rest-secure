@@ -1,12 +1,11 @@
-package com.restsecure.core.http.param;
+package com.restsecure.core.http;
 
-import com.restsecure.core.http.NameAndValue;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class Parameter implements NameAndValue {
+public class Header implements NameAndValue {
     private String name;
     private String value;
 }

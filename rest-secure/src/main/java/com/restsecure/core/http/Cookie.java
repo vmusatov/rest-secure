@@ -1,6 +1,5 @@
-package com.restsecure.core.http.cookie;
+package com.restsecure.core.http;
 
-import com.restsecure.core.http.NameAndValue;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

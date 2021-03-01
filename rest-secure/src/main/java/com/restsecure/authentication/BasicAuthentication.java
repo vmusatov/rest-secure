@@ -1,6 +1,6 @@
 package com.restsecure.authentication;
 
-import com.restsecure.core.http.header.HeaderNames;
+import com.restsecure.core.http.HeaderNames;
 import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.RequestContext;
 

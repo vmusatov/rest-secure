@@ -1,9 +1,8 @@
-package com.restsecure.core.http;
+package com.restsecure.core.processor;
 
 import com.restsecure.RestSecure;
 import com.restsecure.core.exception.RestSecureException;
-import com.restsecure.core.processor.ProcessAll;
-import com.restsecure.core.processor.Processor;
+import com.restsecure.core.http.RequestMethod;
 import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.request.specification.RequestSpecification;
 import com.restsecure.core.util.MultiKeyMap;

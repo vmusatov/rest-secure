@@ -1,6 +1,6 @@
 package com.restsecure.validation.base;
 
-import com.restsecure.core.http.header.Header;
+import com.restsecure.core.http.Header;
 import com.restsecure.core.response.Response;
 import com.restsecure.core.response.validation.ValidationResult;
 import com.restsecure.core.util.NameValueList;

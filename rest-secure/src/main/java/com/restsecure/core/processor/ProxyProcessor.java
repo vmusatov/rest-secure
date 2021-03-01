@@ -1,9 +1,8 @@
-package com.restsecure.core.http.proxy;
+package com.restsecure.core.processor;
 
 import com.restsecure.core.configuration.configs.HttpClientBuilderConfig;
 import com.restsecure.core.configuration.configs.HttpClientContextConfig;
-import com.restsecure.core.processor.ProcessAll;
-import com.restsecure.core.processor.Processor;
+import com.restsecure.core.http.Proxy;
 import com.restsecure.core.request.RequestContext;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;

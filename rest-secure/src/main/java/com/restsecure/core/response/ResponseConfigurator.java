@@ -4,7 +4,7 @@ import com.restsecure.RestSecure;
 import com.restsecure.core.configuration.configs.ObjectMapperConfig;
 import com.restsecure.core.exception.RestSecureException;
 import com.restsecure.core.http.HttpHelper;
-import com.restsecure.core.http.header.Header;
+import com.restsecure.core.http.Header;
 import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.response.validation.Validation;

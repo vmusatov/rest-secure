@@ -1,4 +1,4 @@
-package com.restsecure.core.http.cookie;
+package com.restsecure.core.http;
 
 import org.apache.http.client.utils.DateUtils;
 import org.testng.annotations.Test;

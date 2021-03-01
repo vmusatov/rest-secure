@@ -1,4 +1,4 @@
-package com.restsecure.core.http;
+package com.restsecure.core.processor;
 
 import com.restsecure.BaseTest;
 import com.restsecure.TestObjectMapper;

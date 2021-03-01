@@ -1,10 +1,8 @@
-package com.restsecure.core.http.header;
+package com.restsecure.core.processor;
 
 import com.restsecure.core.configuration.configs.ObjectMapperConfig;
 import com.restsecure.core.configuration.configs.OverwriteAllHeadersConfig;
 import com.restsecure.core.configuration.configs.OverwriteHeadersConfig;
-import com.restsecure.core.processor.ProcessAll;
-import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.util.MultiKeyMap;
 import com.restsecure.core.util.SerializeHelper;

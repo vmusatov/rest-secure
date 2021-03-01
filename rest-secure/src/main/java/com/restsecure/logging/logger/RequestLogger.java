@@ -1,7 +1,7 @@
 package com.restsecure.logging.logger;
 
-import com.restsecure.core.http.header.Header;
-import com.restsecure.core.http.param.Parameter;
+import com.restsecure.core.http.Header;
+import com.restsecure.core.http.Parameter;
 import com.restsecure.core.request.specification.RequestSpecification;
 import com.restsecure.logging.LogInfo;
 import com.restsecure.logging.LogWriter;

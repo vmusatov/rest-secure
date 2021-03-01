@@ -1,4 +1,4 @@
-package com.restsecure.core.http.header;
+package com.restsecure.core.http;
 
 public class HeaderNames {
     public static final String ACCEPT = "Accept";

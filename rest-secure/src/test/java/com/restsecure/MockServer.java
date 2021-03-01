@@ -1,6 +1,6 @@
 package com.restsecure;
 
-import com.restsecure.core.http.header.Header;
+import com.restsecure.core.http.Header;
 import com.restsecure.core.util.SerializeHelper;
 import org.eclipse.jetty.util.UrlEncoded;
 import spark.Route;

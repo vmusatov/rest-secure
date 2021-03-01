@@ -1,7 +1,7 @@
 package com.restsecure.session;
 
-import com.restsecure.core.http.cookie.Cookie;
-import com.restsecure.core.http.header.Header;
+import com.restsecure.core.http.Cookie;
+import com.restsecure.core.http.Header;
 import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.response.HttpResponse;
 import com.restsecure.core.response.Response;
