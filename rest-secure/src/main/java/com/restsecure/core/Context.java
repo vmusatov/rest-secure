@@ -14,18 +14,22 @@ public class Context {
 
     public static final String PACKAGE = "com.restsecure";
 
-    private final Reflections scanner;
     @Getter
     private final List<Processor> processors;
 
     public Context() {
-        this.scanner = new Reflections(PACKAGE);
         this.processors = new ArrayList<>();
 
-        scanProcessors();
+        Reflections scanner = new Reflections(PACKAGE);
+        scanProcessors(scanner);
     }
 
-    private void scanProcessors() {
+    public void scan(String packageToScan) {
+        Reflections scanner = new Reflections(packageToScan);
+        scanProcessors(scanner);
+    }
+
+    private void scanProcessors(Reflections scanner) {
         Set<Class<? extends Processor>> processors = scanner.getSubTypesOf(Processor.class);
 
         for (Class<? extends Processor> processor : processors) {
