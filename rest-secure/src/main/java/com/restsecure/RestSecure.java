@@ -169,6 +169,20 @@ public class RestSecure {
     }
 
     /**
+     * Allows you to send request<br>
+     * For example:
+     * <pre>
+     *     send(get("url));
+     * </pre>
+     *
+     * @param spec RequestSpecification
+     * @return response
+     */
+    public static Response send(RequestSpecification spec) {
+        return RequestSender.send(spec);
+    }
+
+    /**
      * Allows you to send multiple requests at once<br>
      * For example:
      * <pre>
@@ -180,9 +194,9 @@ public class RestSecure {
      *
      * @param spec            RequestSpecification
      * @param additionalSpecs RequestSpecifications list
-     * @return last request response
+     * @return responses list
      */
-    public static Response send(RequestSpecification spec, RequestSpecification... additionalSpecs) {
+    public static List<Response> send(RequestSpecification spec, RequestSpecification... additionalSpecs) {
         return RequestSender.send(spec, additionalSpecs);
     }
 
@@ -199,9 +213,9 @@ public class RestSecure {
      * </pre>
      *
      * @param specs RequestSpecifications list
-     * @return last request response
+     * @return responses list
      */
-    public static Response send(List<RequestSpecification> specs) {
+    public static List<Response> send(List<RequestSpecification> specs) {
         return RequestSender.send(specs);
     }
 
@@ -219,9 +233,9 @@ public class RestSecure {
      * @param processor       processor
      * @param spec            RequestSpecification
      * @param additionalSpecs RequestSpecifications list
-     * @return last request response
+     * @return responses list
      */
-    public static Response send(Processor processor, RequestSpecification spec, RequestSpecification... additionalSpecs) {
+    public static List<Response> send(Processor processor, RequestSpecification spec, RequestSpecification... additionalSpecs) {
         return RequestSender.send(processor, spec, additionalSpecs);
     }
 
@@ -239,9 +253,9 @@ public class RestSecure {
      * @param processors      Processors list
      * @param spec            RequestSpecification
      * @param additionalSpecs RequestSpecifications list
-     * @return last request response
+     * @return responses list
      */
-    public static Response send(List<Processor> processors, RequestSpecification spec, RequestSpecification... additionalSpecs) {
+    public static List<Response> send(List<Processor> processors, RequestSpecification spec, RequestSpecification... additionalSpecs) {
         return RequestSender.send(processors, spec, additionalSpecs);
     }
 
@@ -260,9 +274,9 @@ public class RestSecure {
      *
      * @param processor processor
      * @param specs     RequestSpecifications list
-     * @return last request response
+     * @return responses list
      */
-    public static Response send(Processor processor, List<RequestSpecification> specs) {
+    public static List<Response> send(Processor processor, List<RequestSpecification> specs) {
         return RequestSender.send(processor, specs);
     }
 
@@ -281,9 +295,9 @@ public class RestSecure {
      *
      * @param processors Processors list
      * @param specs      RequestSpecifications list
-     * @return last request response
+     * @return responses list
      */
-    public static Response send(List<Processor> processors, List<RequestSpecification> specs) {
+    public static List<Response> send(List<Processor> processors, List<RequestSpecification> specs) {
         return RequestSender.send(processors, specs);
     }
 
