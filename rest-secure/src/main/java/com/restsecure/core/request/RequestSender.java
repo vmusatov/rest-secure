@@ -2,7 +2,7 @@ package com.restsecure.core.request;
 
 import com.restsecure.core.configuration.configs.HttpClientBuilderConfig;
 import com.restsecure.core.configuration.configs.HttpClientContextConfig;
-import com.restsecure.core.exception.SendRequestException;
+import com.restsecure.core.exception.RestSecureException;
 import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.specification.RequestSpecification;
 import com.restsecure.core.response.Response;
@@ -128,11 +128,14 @@ public class RequestSender {
 
         try (CloseableHttpClient httpClient = httpClientBuilder.build(); httpClient) {
             context.setRequestTime(System.currentTimeMillis());
-            CloseableHttpResponse httpResponse = httpClient.execute(request, httpClientContext);
+            CloseableHttpResponse apacheResponse = httpClient.execute(request, httpClientContext);
 
-            return ResponseConfigurator.configureResponse(httpResponse, context);
+            Response response = ResponseConfigurator.configureResponse(apacheResponse, context);
+            apacheResponse.close();
+
+            return response;
         } catch (IOException e) {
-            throw new SendRequestException(e.getMessage());
+            throw new RestSecureException(e);
         }
     }
 }
