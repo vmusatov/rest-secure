@@ -4,7 +4,7 @@ import com.restsecure.core.http.Proxy;
 
 public class SpecificationMerger {
 
-    public static void merge(RequestSpecification from, RequestSpecification to) {
+    public static void merge(RequestSpec from, RequestSpec to) {
         to.url(from.getUrl());
         to.method(from.getMethod());
         to.port(from.getPort());
@@ -26,7 +26,7 @@ public class SpecificationMerger {
         to.data(from.getData());
     }
 
-    private static void mergeProxy(RequestSpecification from, RequestSpecification to) {
+    private static void mergeProxy(RequestSpec from, RequestSpec to) {
         Proxy proxy = from.getProxy();
         if (proxy == null) {
             to.proxy(null);

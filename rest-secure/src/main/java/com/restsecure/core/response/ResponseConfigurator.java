@@ -80,7 +80,7 @@ public class ResponseConfigurator {
 
     private static void validateResponse(Response response) {
         RequestContext context = response.getContext();
-        List<Validation> validations = context.getSpecification().getValidations();
+        List<Validation> validations = context.getRequestSpec().getValidations();
 
         if (validations == null) {
             return;
@@ -94,7 +94,7 @@ public class ResponseConfigurator {
         List<Processor> processors = new ArrayList<>();
 
         processors.addAll(RestSecure.getContext().getProcessors());
-        processors.addAll(context.getSpecification().getProcessors());
+        processors.addAll(context.getRequestSpec().getProcessors());
 
         processors.stream()
                 .sorted(Comparator.comparingInt(Processor::getResponseProcessOrder))

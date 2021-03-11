@@ -9,7 +9,7 @@ import com.restsecure.core.http.StatusCode;
 import com.restsecure.core.http.Cookie;
 import com.restsecure.core.http.Header;
 import com.restsecure.core.processor.Processor;
-import com.restsecure.core.request.specification.RequestSpecification;
+import com.restsecure.core.request.specification.RequestSpec;
 import com.restsecure.core.response.Response;
 import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.response.validation.ValidationResult;
@@ -38,7 +38,7 @@ public class RequestSenderTest extends BaseTest {
 
     @BeforeClass
     public void setupGlobalSpec() {
-        RestSecure.getGlobalSpecification().expect(checkResponse());
+        RestSecure.getGlobalRequestSpec().expect(checkResponse());
     }
 
     @BeforeMethod
@@ -87,7 +87,7 @@ public class RequestSenderTest extends BaseTest {
 
     @Test()
     public void sendRequestsListTest() {
-        List<RequestSpecification> requests = Arrays.asList(
+        List<RequestSpec> requests = Arrays.asList(
                 RestSecure.get(MockServer.GET_PATH),
                 RestSecure.post(MockServer.POST_PATH),
                 RestSecure.put(MockServer.PUT_PATH),
@@ -216,7 +216,7 @@ public class RequestSenderTest extends BaseTest {
 
     @Test()
     public void sendRequestsListWithOneProcessorTest() {
-        List<RequestSpecification> requests = Arrays.asList(
+        List<RequestSpec> requests = Arrays.asList(
                 RestSecure.get(MockServer.GET_PATH).expect(isUseTestProcessor(1), teardownTestProcessors),
                 RestSecure.post(MockServer.POST_PATH).expect(isUseTestProcessor(1), teardownTestProcessors),
                 RestSecure.put(MockServer.PUT_PATH).expect(isUseTestProcessor(1), teardownTestProcessors),
@@ -234,7 +234,7 @@ public class RequestSenderTest extends BaseTest {
 
     @Test()
     public void sendRequestsListWithProcessorsListTest() {
-        List<RequestSpecification> requests = Arrays.asList(
+        List<RequestSpec> requests = Arrays.asList(
                 RestSecure.get(MockServer.GET_PATH).expect(isUseTestProcessor(3), teardownTestProcessors),
                 RestSecure.post(MockServer.POST_PATH).expect(isUseTestProcessor(3), teardownTestProcessors),
                 RestSecure.put(MockServer.PUT_PATH).expect(isUseTestProcessor(3), teardownTestProcessors),
@@ -257,7 +257,7 @@ public class RequestSenderTest extends BaseTest {
         @Override
         public ValidationResult softValidate(Response response) {
             RequestContext context = response.getContext();
-            List<Processor> processors = context.getSpecification().getProcessors();
+            List<Processor> processors = context.getRequestSpec().getProcessors();
 
             for (Processor processor : processors) {
                 if (processor instanceof TestProcessor) {
@@ -276,7 +276,7 @@ public class RequestSenderTest extends BaseTest {
             @Override
             public ValidationResult softValidate(Response response) {
                 RequestContext context = response.getContext();
-                List<Processor> processors = context.getSpecification().getProcessors();
+                List<Processor> processors = context.getRequestSpec().getProcessors();
 
                 int count = 0;
 
@@ -305,7 +305,7 @@ public class RequestSenderTest extends BaseTest {
     }
 
     private Validation checkResponse() {
-        ContextCondition needCheckBody = ctx -> ctx.getSpecification().getMethod() != RequestMethod.HEAD;
+        ContextCondition needCheckBody = ctx -> ctx.getRequestSpec().getMethod() != RequestMethod.HEAD;
 
         return combine(
                 statusCode(expectStatusCode),

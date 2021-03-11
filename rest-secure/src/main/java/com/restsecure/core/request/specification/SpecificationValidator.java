@@ -3,9 +3,9 @@ package com.restsecure.core.request.specification;
 import com.restsecure.core.exception.RequestConfigurationException;
 
 public class SpecificationValidator {
-    public static void validate(RequestSpecification spec) {
+    public static void validate(RequestSpec spec) {
         if (spec == null) {
-            throw new RequestConfigurationException("Request specification is null");
+            throw new RequestConfigurationException("Request spec is null");
         }
         if (spec.getMethod() == null) {
             throw new RequestConfigurationException("Request method is null");

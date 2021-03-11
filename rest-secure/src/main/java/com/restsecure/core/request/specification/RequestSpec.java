@@ -18,18 +18,18 @@ import java.util.Map;
 /**
  * Allows you to configure request
  */
-public interface RequestSpecification {
+public interface RequestSpec {
 
     /**
      * Allows you to specify request url<br><br>
      * <pre>
-     *     RequestSpecification spec = spec().url("url");
+     *     RequestSpec spec = spec().url("url");
      * </pre>
      *
      * @param url request url
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    RequestSpecification url(String url);
+    RequestSpec url(String url);
 
     /**
      * @return request url
@@ -39,13 +39,13 @@ public interface RequestSpecification {
     /**
      * Allows you to specify request port<br><br>
      * <pre>
-     *     RequestSpecification spec = spec().port(8080);
+     *     RequestSpec spec = spec().port(8080);
      * </pre>
      *
      * @param port request port
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    RequestSpecification port(int port);
+    RequestSpec port(int port);
 
     /**
      * @return request port
@@ -55,13 +55,13 @@ public interface RequestSpecification {
     /**
      * Allows you to specify request method<br><br>
      * <pre>
-     *     RequestSpecification spec = spec().method(GET);
+     *     RequestSpec spec = spec().method(GET);
      * </pre>
      *
      * @param method request method
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    RequestSpecification method(RequestMethod method);
+    RequestSpec method(RequestMethod method);
 
     /**
      * @return request method
@@ -72,9 +72,9 @@ public interface RequestSpecification {
      * Allow you to set request body
      *
      * @param body request body
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    RequestSpecification body(Object body);
+    RequestSpec body(Object body);
 
     /**
      * @return reqeust body
@@ -84,27 +84,27 @@ public interface RequestSpecification {
     /**
      * Allows you to specify request header<br><br>
      * <pre>
-     *     RequestSpecification spec = get("url").header("name", "value");
+     *     RequestSpec spec = get("url").header("name", "value");
      * </pre>
      *
      * @param name             header name
      * @param value            header value
      * @param additionalValues additional header values
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    RequestSpecification header(String name, Object value, Object... additionalValues);
+    RequestSpec header(String name, Object value, Object... additionalValues);
 
     /**
      * Allows you to specify request header<br><br>
      * <pre>
      *     Header header = new Header("name", "value")
-     *     RequestSpecification spec = get("url").header(header);
+     *     RequestSpec spec = get("url").header(header);
      * </pre>
      *
      * @param header request header
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    RequestSpecification header(Header header, Header... additionalHeaders);
+    RequestSpec header(Header header, Header... additionalHeaders);
 
     /**
      * Allows you to specify request headers<br><br>
@@ -114,21 +114,21 @@ public interface RequestSpecification {
      *          new Header("name2", "value2")
      *     );
      *
-     *     RequestSpecification spec = get("url").headers(headers);
+     *     RequestSpec spec = get("url").headers(headers);
      * </pre>
      *
      * @param headers list of request headers
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    RequestSpecification headers(List<Header> headers);
+    RequestSpec headers(List<Header> headers);
 
     /**
      * Allows you to specify request headers
      *
      * @param headers request headers
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    RequestSpecification headers(Map<String, ?> headers);
+    RequestSpec headers(Map<String, ?> headers);
 
     /**
      * @return request headers
@@ -140,15 +140,15 @@ public interface RequestSpecification {
      * For requests that contain the body, for example POST or PUT, parameters are set as form parameters,<br>
      * for other requests set as query parameters<br><br>
      * <pre>
-     *     RequestSpecification spec = get("url").param("name", "value");
+     *     RequestSpec spec = get("url").param("name", "value");
      * </pre>
      *
      * @param name             parameter name
      * @param value            parameter value
      * @param additionalValues additional param values
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    RequestSpecification param(String name, Object value, Object... additionalValues);
+    RequestSpec param(String name, Object value, Object... additionalValues);
 
     /**
      * Allows you to specify request parameters<br>
@@ -156,13 +156,13 @@ public interface RequestSpecification {
      * for other requests set as query parameters<br><br>
      * <pre>
      *     Parameter param = new Parameter("name", "value");
-     *     RequestSpecification spec = get("url").param(param);
+     *     RequestSpec spec = get("url").param(param);
      * </pre>
      *
      * @param parameter request parameter
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    RequestSpecification param(Parameter parameter);
+    RequestSpec param(Parameter parameter);
 
     /**
      * Allows you to specify request parameters<br>
@@ -174,21 +174,21 @@ public interface RequestSpecification {
      *          new Parameter("name2", "value2")
      *     );
      *
-     *     RequestSpecification spec = get("url").params(params);
+     *     RequestSpec spec = get("url").params(params);
      * </pre>
      *
      * @param parameters request parameters
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    RequestSpecification params(List<Parameter> parameters);
+    RequestSpec params(List<Parameter> parameters);
 
     /**
      * Allows you to specify request parameters
      *
      * @param parameters request parameters
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    RequestSpecification params(Map<String, ?> parameters);
+    RequestSpec params(Map<String, ?> parameters);
 
     /**
      * @return request parameters
@@ -198,33 +198,33 @@ public interface RequestSpecification {
     /**
      * Allows you to specify query parameters
      *
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    RequestSpecification queryParam(String name, Object... value);
+    RequestSpec queryParam(String name, Object... value);
 
     /**
      * Allows you to specify query parameters
      *
      * @return
      */
-    RequestSpecification queryParam(Parameter param);
+    RequestSpec queryParam(Parameter param);
 
     /**
      * Allows you to specify query parameters
      *
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    RequestSpecification queryParams(List<Parameter> params);
+    RequestSpec queryParams(List<Parameter> params);
 
     /**
      * Allows you to specify query parameters
      *
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    RequestSpecification queryParams(Map<String, ?> params);
+    RequestSpec queryParams(Map<String, ?> params);
 
     /**
-     * @return RequestSpecification
+     * @return RequestSpec
      */
     MultiKeyMap<String, Object> getQueryParams();
 
@@ -237,9 +237,9 @@ public interface RequestSpecification {
      *
      * @param name  param name
      * @param value param value
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    RequestSpecification routeParam(String name, Object value);
+    RequestSpec routeParam(String name, Object value);
 
     /**
      * @return route params
@@ -249,15 +249,15 @@ public interface RequestSpecification {
     /**
      * Allow you to specify request cookies
      * <pre>
-     *     RequestSpecification spec = get("url").cookie("name", "value");
+     *     RequestSpec spec = get("url").cookie("name", "value");
      * </pre>
      *
      * @param name             cookie name
      * @param value            cookie value
      * @param additionalValues additional values
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    RequestSpecification cookie(String name, Object value, Object... additionalValues);
+    RequestSpec cookie(String name, Object value, Object... additionalValues);
 
     /**
      * Allow you to specify detailed request cookie
@@ -269,13 +269,13 @@ public interface RequestSpecification {
      *          .secure(true)
      *          .build();
      *
-     *     RequestSpecification spec = get("url").cookie(cookie);
+     *     RequestSpec spec = get("url").cookie(cookie);
      * </pre>
      *
      * @param cookie Cookie
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    RequestSpecification cookie(Cookie cookie);
+    RequestSpec cookie(Cookie cookie);
 
     /**
      * Allow you to specify detailed request cookies
@@ -285,21 +285,21 @@ public interface RequestSpecification {
      *          new Cookie("name2", "value2")
      *     );
      *
-     *     RequestSpecification spec = get("url").cookies(cookies);
+     *     RequestSpec spec = get("url").cookies(cookies);
      * </pre>
      *
      * @param cookies Cookie list
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    RequestSpecification cookies(List<Cookie> cookies);
+    RequestSpec cookies(List<Cookie> cookies);
 
     /**
      * Allow you to specify request cookies
      *
      * @param cookies request cookies
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    RequestSpecification cookies(Map<String, ?> cookies);
+    RequestSpec cookies(Map<String, ?> cookies);
 
     /**
      * @return cookies with Object value
@@ -311,17 +311,17 @@ public interface RequestSpecification {
      *
      * @param host host url
      * @param port proxy port
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    RequestSpecification proxy(String host, int port);
+    RequestSpec proxy(String host, int port);
 
     /**
      * Set a proxy without auth for request
      *
      * @param proxy Proxy
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    RequestSpecification proxy(Proxy proxy);
+    RequestSpec proxy(Proxy proxy);
 
     /**
      * Set a proxy with auth for request
@@ -330,9 +330,9 @@ public interface RequestSpecification {
      * @param port     proxy port
      * @param username username
      * @param password password
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    RequestSpecification proxy(String host, int port, String username, String password);
+    RequestSpec proxy(String host, int port, String username, String password);
 
     /**
      * @return Proxy
@@ -346,9 +346,9 @@ public interface RequestSpecification {
      *
      * @param processor            processor
      * @param additionalProcessors additional processors
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    RequestSpecification process(Processor processor, Processor... additionalProcessors);
+    RequestSpec process(Processor processor, Processor... additionalProcessors);
 
     /**
      * Allow you to specify Processor to process request and response
@@ -356,9 +356,9 @@ public interface RequestSpecification {
      * which allows it to receive session ID from a response
      *
      * @param processors processors
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    RequestSpecification process(List<Processor> processors);
+    RequestSpec process(List<Processor> processors);
 
     /**
      * @return Processors list
@@ -369,17 +369,17 @@ public interface RequestSpecification {
      * Allow you to specify request data classes
      *
      * @param data data class
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    RequestSpecification data(Object data, Object... additionalData);
+    RequestSpec data(Object data, Object... additionalData);
 
     /**
      * Allow you to specify request data classes
      *
      * @param data data classes list
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    RequestSpecification data(List<Object> data);
+    RequestSpec data(List<Object> data);
 
     /**
      * @return data class
@@ -398,9 +398,9 @@ public interface RequestSpecification {
      *
      * @param config            config
      * @param additionalConfigs additional configs
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    RequestSpecification config(Config<?> config, Config<?>... additionalConfigs);
+    RequestSpec config(Config<?> config, Config<?>... additionalConfigs);
 
     /**
      * Allow tou to add configuration<br>
@@ -413,9 +413,9 @@ public interface RequestSpecification {
      * </pre>
      *
      * @param configs configs list
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    RequestSpecification config(List<Config<?>> configs);
+    RequestSpec config(List<Config<?>> configs);
 
     /**
      * @return Configs list
@@ -425,10 +425,10 @@ public interface RequestSpecification {
     /**
      * Allows you to merge another specification into the current
      *
-     * @param specification RequestSpecification
-     * @return RequestSpecification
+     * @param spec RequestSpec
+     * @return RequestSpec
      */
-    RequestSpecification mergeWith(RequestSpecification specification);
+    RequestSpec mergeWith(RequestSpec spec);
 
     /**
      * Allows you to add a response validation<br>
@@ -445,16 +445,16 @@ public interface RequestSpecification {
      * Validation of the response is added to the request, which verifies that status code is 200 and
      * the user.login field is equal to Sam
      *
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    RequestSpecification expect(Validation validation, Validation... additionalValidation);
+    RequestSpec expect(Validation validation, Validation... additionalValidation);
 
     /**
      * Allows you to add a response validation<br>
      *
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    RequestSpecification expect(List<Validation> validations);
+    RequestSpec expect(List<Validation> validations);
 
     /**
      * @return List<ResponseValidation>
@@ -464,12 +464,12 @@ public interface RequestSpecification {
     /**
      * Syntactic sugar
      *
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    RequestSpecification and();
+    RequestSpec and();
 
     /**
-     * Allows you to send request with specified specification
+     * Allows you to send request with specified request spec
      *
      * @return Response
      */

@@ -16,7 +16,7 @@ public class DefaultValidation extends CompositeValidation {
 
     @Override
     public ValidationResult softValidate(Response response) {
-        List<Validation> validations = response.getContext().getSpecification().getValidations();
+        List<Validation> validations = response.getContext().getRequestSpec().getValidations();
 
         if (hasNoDefaultValidation(validations)) {
             return new ValidationResult(SUCCESS);

@@ -14,8 +14,8 @@ public class CookieProcessor implements Processor {
     }
 
     private void serializeCookies(RequestContext context) {
-        MultiKeyMap<String, Object> cookiesWithValueToSerialize = context.getSpecification().getCookiesWithValueToSerialize();
-        MultiKeyMap<String, Object> headers = context.getSpecification().getHeaders();
+        MultiKeyMap<String, Object> cookiesWithValueToSerialize = context.getRequestSpec().getCookiesWithValueToSerialize();
+        MultiKeyMap<String, Object> headers = context.getRequestSpec().getHeaders();
 
         context.getConfigValue(ObjectMapperConfig.class)
                 .ifPresent(mapper -> SerializeHelper.serializeValuesIfNeed(cookiesWithValueToSerialize, mapper));

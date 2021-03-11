@@ -17,7 +17,7 @@ public class HeadersProcessor implements Processor {
 
     @Override
     public void processRequest(RequestContext context) {
-        MultiKeyMap<String, Object> headers = context.getSpecification().getHeaders();
+        MultiKeyMap<String, Object> headers = context.getRequestSpec().getHeaders();
 
         context.getConfigValue(ObjectMapperConfig.class)
                 .ifPresent(mapper -> SerializeHelper.serializeValuesIfNeed(headers, mapper));

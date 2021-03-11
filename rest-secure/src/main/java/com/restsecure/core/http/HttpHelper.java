@@ -2,7 +2,7 @@ package com.restsecure.core.http;
 
 import com.restsecure.core.exception.RequestConfigurationException;
 import com.restsecure.core.exception.RestSecureException;
-import com.restsecure.core.request.specification.RequestSpecification;
+import com.restsecure.core.request.specification.RequestSpec;
 import com.restsecure.core.util.MultiKeyMap;
 import com.restsecure.core.util.NameValueList;
 import org.apache.http.HttpEntity;
@@ -52,9 +52,9 @@ public class HttpHelper {
         }
     }
 
-    public static void setEntityToRequest(RequestSpecification specification, HttpEntityEnclosingRequestBase request) {
-        List<NameValuePair> params = HttpHelper.getFilteredParameters(specification.getParameters());
-        Object body = specification.getBody();
+    public static void setEntityToRequest(RequestSpec spec, HttpEntityEnclosingRequestBase request) {
+        List<NameValuePair> params = HttpHelper.getFilteredParameters(spec.getParameters());
+        Object body = spec.getBody();
 
         if (!params.isEmpty() && body != null) {
             throw new RequestConfigurationException("You can specify either request body or form parameters");

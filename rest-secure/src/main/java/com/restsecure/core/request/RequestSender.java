@@ -4,7 +4,7 @@ import com.restsecure.core.configuration.configs.HttpClientBuilderConfig;
 import com.restsecure.core.configuration.configs.HttpClientContextConfig;
 import com.restsecure.core.exception.RestSecureException;
 import com.restsecure.core.processor.Processor;
-import com.restsecure.core.request.specification.RequestSpecification;
+import com.restsecure.core.request.specification.RequestSpec;
 import com.restsecure.core.response.Response;
 import com.restsecure.core.response.ResponseConfigurator;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -27,12 +27,12 @@ public class RequestSender {
      * Allows you to send multiple requests at once
      *
      * @param processor       Processor
-     * @param spec            RequestSpecification
-     * @param additionalSpecs RequestSpecifications list
+     * @param spec            RequestSpec
+     * @param additionalSpecs RequestSpecs list
      * @return responses list
      */
-    public static List<Response> send(Processor processor, RequestSpecification spec, RequestSpecification... additionalSpecs) {
-        List<RequestSpecification> requests = new ArrayList<>();
+    public static List<Response> send(Processor processor, RequestSpec spec, RequestSpec... additionalSpecs) {
+        List<RequestSpec> requests = new ArrayList<>();
         requests.add(spec);
         requests.addAll(Arrays.asList(additionalSpecs));
 
@@ -43,12 +43,12 @@ public class RequestSender {
      * Allows you to send multiple requests at once
      *
      * @param processors      Processor list
-     * @param spec            RequestSpecification
-     * @param additionalSpecs RequestSpecifications list
+     * @param spec            RequestSpec
+     * @param additionalSpecs RequestSpecs list
      * @return responses list
      */
-    public static List<Response> send(List<Processor> processors, RequestSpecification spec, RequestSpecification... additionalSpecs) {
-        List<RequestSpecification> requests = new ArrayList<>();
+    public static List<Response> send(List<Processor> processors, RequestSpec spec, RequestSpec... additionalSpecs) {
+        List<RequestSpec> requests = new ArrayList<>();
         requests.add(spec);
         requests.addAll(Arrays.asList(additionalSpecs));
 
@@ -59,11 +59,11 @@ public class RequestSender {
      * Allows you to send multiple requests at once
      *
      * @param processor Processor
-     * @param specs     RequestSpecification list
+     * @param specs     RequestSpecs list
      * @return responses list
      */
-    public static List<Response> send(Processor processor, List<RequestSpecification> specs) {
-        for (RequestSpecification spec : specs) {
+    public static List<Response> send(Processor processor, List<RequestSpec> specs) {
+        for (RequestSpec spec : specs) {
             spec.process(processor);
         }
         return send(specs);
@@ -73,11 +73,11 @@ public class RequestSender {
      * Allows you to send multiple requests at once
      *
      * @param processors Processors list
-     * @param specs      RequestSpecification list
+     * @param specs      RequestSpecs list
      * @return responses list
      */
-    public static List<Response> send(List<Processor> processors, List<RequestSpecification> specs) {
-        for (RequestSpecification spec : specs) {
+    public static List<Response> send(List<Processor> processors, List<RequestSpec> specs) {
+        for (RequestSpec spec : specs) {
             spec.process(processors);
         }
         return send(specs);
@@ -86,12 +86,12 @@ public class RequestSender {
     /**
      * Allows you to send multiple requests at once
      *
-     * @param spec            RequestSpecification
-     * @param additionalSpecs RequestSpecification list
+     * @param spec            RequestSpec
+     * @param additionalSpecs RequestSpecs list
      * @return responses list
      */
-    public static List<Response> send(RequestSpecification spec, RequestSpecification... additionalSpecs) {
-        List<RequestSpecification> requests = new ArrayList<>();
+    public static List<Response> send(RequestSpec spec, RequestSpec... additionalSpecs) {
+        List<RequestSpec> requests = new ArrayList<>();
         requests.add(spec);
         requests.addAll(Arrays.asList(additionalSpecs));
 
@@ -101,24 +101,24 @@ public class RequestSender {
     /**
      * Allows you to send multiple requests at once
      *
-     * @param specs RequestSpecifications list
+     * @param specs RequestSpecs list
      * @return responses list
      */
-    public static List<Response> send(List<RequestSpecification> specs) {
+    public static List<Response> send(List<RequestSpec> specs) {
         List<Response> responses = new ArrayList<>();
-        for (RequestSpecification spec : specs) {
+        for (RequestSpec spec : specs) {
             responses.add(send(spec));
         }
         return responses;
     }
 
     /**
-     * Allows you to send request by specified RequestSpecification
+     * Allows you to send request by specified RequestSpec
      *
-     * @param spec RequestSpecification
+     * @param spec RequestSpec
      * @return Response
      */
-    public static Response send(RequestSpecification spec) {
+    public static Response send(RequestSpec spec) {
 
         RequestContext context = new RequestContext(spec);
         HttpUriRequest request = RequestFactory.createRequest(context);

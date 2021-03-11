@@ -5,7 +5,7 @@ import com.restsecure.RestSecure;
 import com.restsecure.core.configuration.configs.OverwriteHeadersConfig;
 import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.request.RequestFactory;
-import com.restsecure.core.request.specification.RequestSpecification;
+import com.restsecure.core.request.specification.RequestSpec;
 import com.restsecure.core.util.MultiKeyMap;
 import org.testng.annotations.Test;
 
@@ -46,7 +46,7 @@ public class OverwriteHeadersConfigTest {
 
     @Test
     public void applyConfigTest() {
-        RequestSpecification spec = RestSecure.get(MockServer.GET_PATH)
+        RequestSpec spec = RestSecure.get(MockServer.GET_PATH)
                 .config(overwriteHeaders("one"))
                 .header("one", "one value1")
                 .header("two", "two value1")
@@ -57,7 +57,7 @@ public class OverwriteHeadersConfigTest {
         RequestContext context = new RequestContext(spec);
         RequestFactory.createRequest(context);
 
-        MultiKeyMap<String, Object> headers = context.getSpecification().getHeaders();
+        MultiKeyMap<String, Object> headers = context.getRequestSpec().getHeaders();
 
         assertThat(headers.size(), equalTo(4));
         assertThat(headers.getFirst("one"), equalTo("one value2"));

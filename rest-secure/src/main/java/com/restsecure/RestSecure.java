@@ -9,8 +9,8 @@ import com.restsecure.core.http.Header;
 import com.restsecure.core.http.HeaderNames;
 import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.RequestSender;
-import com.restsecure.core.request.specification.RequestSpecification;
-import com.restsecure.core.request.specification.RequestSpecificationImpl;
+import com.restsecure.core.request.specification.RequestSpec;
+import com.restsecure.core.request.specification.RequestSpecImpl;
 import com.restsecure.core.response.Response;
 import com.restsecure.logging.config.LogWriterConfig;
 import com.restsecure.logging.config.RequestLogConfig;
@@ -38,16 +38,16 @@ public class RestSecure {
      * A global specification will be added to each request. 
      */
     @Getter
-    private static RequestSpecification globalSpecification = getDefaultSpecification();
+    private static RequestSpec globalRequestSpec = getDefaultRequestSpec();
 
     @Getter
     private static final Context context = new Context();
 
     public static void resetGlobalSpec() {
-        globalSpecification = getDefaultSpecification();
+        globalRequestSpec = getDefaultRequestSpec();
     }
 
-    private static RequestSpecification getDefaultSpecification() {
+    private static RequestSpec getDefaultRequestSpec() {
         return request().config(
                 createDefaultConfig(HttpClientContextConfig.class),
                 createDefaultConfig(HttpClientBuilderConfig.class),
@@ -66,19 +66,19 @@ public class RestSecure {
     /**
      * Creates an empty request specification
      *
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    public static RequestSpecification request() {
-        return new RequestSpecificationImpl();
+    public static RequestSpec request() {
+        return new RequestSpecImpl();
     }
 
     /**
      * Creates a request specification with the get method and the specified URL
      *
      * @param url request url
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    public static RequestSpecification get(String url) {
+    public static RequestSpec get(String url) {
         return request()
                 .url(url)
                 .method(RequestMethod.GET);
@@ -88,9 +88,9 @@ public class RestSecure {
      * Creates a request specification with the post method and the specified URL
      *
      * @param url request url
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    public static RequestSpecification post(String url) {
+    public static RequestSpec post(String url) {
         return request()
                 .url(url)
                 .method(RequestMethod.POST);
@@ -100,9 +100,9 @@ public class RestSecure {
      * Creates a request specification with the put method and the specified URL
      *
      * @param url request url
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    public static RequestSpecification put(String url) {
+    public static RequestSpec put(String url) {
         return request()
                 .url(url)
                 .method(RequestMethod.PUT);
@@ -112,9 +112,9 @@ public class RestSecure {
      * Creates a request specification with the delete method and the specified URL
      *
      * @param url request url
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    public static RequestSpecification delete(String url) {
+    public static RequestSpec delete(String url) {
         return request()
                 .url(url)
                 .method(RequestMethod.DELETE);
@@ -124,9 +124,9 @@ public class RestSecure {
      * Creates a request specification with the head method and the specified URL
      *
      * @param url request url
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    public static RequestSpecification head(String url) {
+    public static RequestSpec head(String url) {
         return request()
                 .url(url)
                 .method(RequestMethod.HEAD);
@@ -136,9 +136,9 @@ public class RestSecure {
      * Creates a request specification with the trace method and the specified URL
      *
      * @param url request url
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    public static RequestSpecification trace(String url) {
+    public static RequestSpec trace(String url) {
         return request()
                 .url(url)
                 .method(RequestMethod.TRACE);
@@ -148,9 +148,9 @@ public class RestSecure {
      * Creates a request specification with the options method and the specified URL
      *
      * @param url request url
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    public static RequestSpecification options(String url) {
+    public static RequestSpec options(String url) {
         return request()
                 .url(url)
                 .method(RequestMethod.OPTIONS);
@@ -160,9 +160,9 @@ public class RestSecure {
      * Creates a request specification with the patch method and the specified URL
      *
      * @param url request url
-     * @return RequestSpecification
+     * @return RequestSpec
      */
-    public static RequestSpecification patch(String url) {
+    public static RequestSpec patch(String url) {
         return request()
                 .url(url)
                 .method(RequestMethod.PATCH);
@@ -175,10 +175,10 @@ public class RestSecure {
      *     send(get("url));
      * </pre>
      *
-     * @param spec RequestSpecification
+     * @param spec RequestSpec
      * @return response
      */
-    public static Response send(RequestSpecification spec) {
+    public static Response send(RequestSpec spec) {
         return RequestSender.send(spec);
     }
 
@@ -192,11 +192,11 @@ public class RestSecure {
      *     );
      * </pre>
      *
-     * @param spec            RequestSpecification
-     * @param additionalSpecs RequestSpecifications list
+     * @param spec            RequestSpec
+     * @param additionalSpecs RequestSpec list
      * @return responses list
      */
-    public static List<Response> send(RequestSpecification spec, RequestSpecification... additionalSpecs) {
+    public static List<Response> send(RequestSpec spec, RequestSpec... additionalSpecs) {
         return RequestSender.send(spec, additionalSpecs);
     }
 
@@ -204,7 +204,7 @@ public class RestSecure {
      * Allows you to send multiple requests at once<br>
      * For example:
      * <pre>
-     *     List<RequestSpecification> requests = Arrays.asList(
+     *     List<RequestSpec> requests = Arrays.asList(
      *          get("url),
      *          get("other_url)
      *     );
@@ -212,10 +212,10 @@ public class RestSecure {
      *     send(requests);
      * </pre>
      *
-     * @param specs RequestSpecifications list
+     * @param specs RequestSpecs list
      * @return responses list
      */
-    public static List<Response> send(List<RequestSpecification> specs) {
+    public static List<Response> send(List<RequestSpec> specs) {
         return RequestSender.send(specs);
     }
 
@@ -224,18 +224,18 @@ public class RestSecure {
      * For example:
      * <pre>
      *     Session session = new Session();
-     *     RequestSpecification one = get("url);
-     *     RequestSpecification two = get("other_url);
+     *     RequestSpec one = get("url);
+     *     RequestSpec two = get("other_url);
      *
      *     send(session, one, two);
      * </pre>
      *
      * @param processor       processor
-     * @param spec            RequestSpecification
-     * @param additionalSpecs RequestSpecifications list
+     * @param spec            RequestSpec
+     * @param additionalSpecs RequestSpecs list
      * @return responses list
      */
-    public static List<Response> send(Processor processor, RequestSpecification spec, RequestSpecification... additionalSpecs) {
+    public static List<Response> send(Processor processor, RequestSpec spec, RequestSpec... additionalSpecs) {
         return RequestSender.send(processor, spec, additionalSpecs);
     }
 
@@ -244,18 +244,18 @@ public class RestSecure {
      * For example:
      * <pre>
      *     List<Processor> processors = Arrays.asList(bearerAuth("token"), new Session());
-     *     RequestSpecification one = get("url);
-     *     RequestSpecification two = get("other_url);
+     *     RequestSpec one = get("url);
+     *     RequestSpec two = get("other_url);
      *
      *     send(processors, one, two);
      * </pre>
      *
      * @param processors      Processors list
-     * @param spec            RequestSpecification
-     * @param additionalSpecs RequestSpecifications list
+     * @param spec            RequestSpec
+     * @param additionalSpecs RequestSpec list
      * @return responses list
      */
-    public static List<Response> send(List<Processor> processors, RequestSpecification spec, RequestSpecification... additionalSpecs) {
+    public static List<Response> send(List<Processor> processors, RequestSpec spec, RequestSpec... additionalSpecs) {
         return RequestSender.send(processors, spec, additionalSpecs);
     }
 
@@ -264,7 +264,7 @@ public class RestSecure {
      * For example:
      * <pre>
      *     Session session = new Session();
-     *     List<RequestSpecification> requests = Arrays.asList(
+     *     List<RequestSpec> requests = Arrays.asList(
      *          get("url),
      *          get("other_url)
      *     );
@@ -273,10 +273,10 @@ public class RestSecure {
      * </pre>
      *
      * @param processor processor
-     * @param specs     RequestSpecifications list
+     * @param specs     RequestSpec list
      * @return responses list
      */
-    public static List<Response> send(Processor processor, List<RequestSpecification> specs) {
+    public static List<Response> send(Processor processor, List<RequestSpec> specs) {
         return RequestSender.send(processor, specs);
     }
 
@@ -285,7 +285,7 @@ public class RestSecure {
      * For example:
      * <pre>
      *     List<Processor> processors = Arrays.asList(bearerAuth("token"), new Session());
-     *     List<RequestSpecification> requests = Arrays.asList(
+     *     List<RequestSpec> requests = Arrays.asList(
      *          get("url),
      *          get("other_url)
      *     );
@@ -294,10 +294,10 @@ public class RestSecure {
      * </pre>
      *
      * @param processors Processors list
-     * @param specs      RequestSpecifications list
+     * @param specs      RequestSpec list
      * @return responses list
      */
-    public static List<Response> send(List<Processor> processors, List<RequestSpecification> specs) {
+    public static List<Response> send(List<Processor> processors, List<RequestSpec> specs) {
         return RequestSender.send(processors, specs);
     }
 
@@ -305,7 +305,7 @@ public class RestSecure {
      * Creates a basic request authentication<br>
      * For example:
      * <pre>
-     *    RequestSpecification request = get("url").process(basicAuth("username", "userpass"));
+     *    RequestSpec request = get("url").process(basicAuth("username", "userpass"));
      * </pre>
      *
      * @param name     username
@@ -320,7 +320,7 @@ public class RestSecure {
      * Creates a bearer token request authentication<br>
      * For example:
      * <pre>
-     *    RequestSpecification request = get("url").process(bearerAuth("YOUR_TOKEN"));
+     *    RequestSpec request = get("url").process(bearerAuth("YOUR_TOKEN"));
      * </pre>
      *
      * @param token access token

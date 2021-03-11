@@ -18,6 +18,6 @@ public class BearerAuthenticationTest {
         RequestContext context = new RequestContext();
         auth.processRequest(context);
 
-        assertThat(context.getSpecification().getHeaders().getFirst(HeaderNames.AUTHORIZATION), equalTo("Bearer " + token));
+        assertThat(context.getRequestSpec().getHeaders().getFirst(HeaderNames.AUTHORIZATION), equalTo("Bearer " + token));
     }
 }

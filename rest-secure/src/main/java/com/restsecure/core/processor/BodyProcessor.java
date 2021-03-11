@@ -9,12 +9,12 @@ public class BodyProcessor implements Processor {
 
     @Override
     public void processRequest(RequestContext context) {
-        Object body = context.getSpecification().getBody();
+        Object body = context.getRequestSpec().getBody();
         context.getConfigValue(ObjectMapperConfig.class)
                 .ifPresent(mapper -> {
                     if (SerializeHelper.isNeedSerialize(body)) {
                         String serializedBody = mapper.serialize(body);
-                        context.getSpecification().body(serializedBody);
+                        context.getRequestSpec().body(serializedBody);
                     }
                 });
     }

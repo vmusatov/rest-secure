@@ -20,6 +20,6 @@ public class BasicAuthentication implements Processor {
         String nameAndPass = userName + ":" + password;
         String encoded = Base64.getEncoder().encodeToString(nameAndPass.getBytes());
 
-        context.getSpecification().header(HeaderNames.AUTHORIZATION, "Basic " + encoded);
+        context.getRequestSpec().header(HeaderNames.AUTHORIZATION, "Basic " + encoded);
     }
 }

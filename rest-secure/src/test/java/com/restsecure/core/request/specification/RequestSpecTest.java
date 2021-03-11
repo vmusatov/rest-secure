@@ -20,11 +20,11 @@ import java.util.Map;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-public class RequestSpecificationTest {
+public class RequestSpecTest {
 
     @Test
     public void setUrlTest() {
-        RequestSpecification spec = new RequestSpecificationImpl();
+        RequestSpec spec = new RequestSpecImpl();
         assertThat(spec.getUrl(), emptyString());
 
         spec.url("/path");
@@ -33,7 +33,7 @@ public class RequestSpecificationTest {
 
     @Test
     public void setPortTest() {
-        RequestSpecification spec = new RequestSpecificationImpl();
+        RequestSpec spec = new RequestSpecImpl();
         assertThat(spec.getPort(), equalTo(0));
 
         spec.port(8080);
@@ -42,7 +42,7 @@ public class RequestSpecificationTest {
 
     @Test
     public void setMethodTest() {
-        RequestSpecification spec = new RequestSpecificationImpl();
+        RequestSpec spec = new RequestSpecImpl();
         assertThat(spec.getMethod(), equalTo(null));
 
         spec.method(RequestMethod.GET);
@@ -51,7 +51,7 @@ public class RequestSpecificationTest {
 
     @Test
     public void setBodyTest() {
-        RequestSpecification spec = new RequestSpecificationImpl();
+        RequestSpec spec = new RequestSpecImpl();
         assertThat(spec.getBody(), is(nullValue()));
 
         String body = "Some body";
@@ -62,7 +62,7 @@ public class RequestSpecificationTest {
 
     @Test
     public void addHeaderTest() {
-        RequestSpecification spec = new RequestSpecificationImpl();
+        RequestSpec spec = new RequestSpecImpl();
         assertThat(spec.getHeaders().size(), equalTo(0));
 
         Header header = new Header("name", "value");
@@ -74,7 +74,7 @@ public class RequestSpecificationTest {
 
     @Test
     public void addHeaderWithNameAndValueTest() {
-        RequestSpecification spec = new RequestSpecificationImpl();
+        RequestSpec spec = new RequestSpecImpl();
         assertThat(spec.getHeaders().size(), equalTo(0));
 
         Header header = new Header("name", "value");
@@ -86,7 +86,7 @@ public class RequestSpecificationTest {
 
     @Test
     public void addHeadersTest() {
-        RequestSpecification spec = new RequestSpecificationImpl();
+        RequestSpec spec = new RequestSpecImpl();
         assertThat(spec.getHeaders().size(), equalTo(0));
 
         Header header1 = new Header("name", "value");
@@ -103,7 +103,7 @@ public class RequestSpecificationTest {
 
     @Test
     public void addParamTest() {
-        RequestSpecification spec = new RequestSpecificationImpl();
+        RequestSpec spec = new RequestSpecImpl();
         assertThat(spec.getParameters().size(), equalTo(0));
 
         Parameter param = new Parameter("name", "value");
@@ -115,7 +115,7 @@ public class RequestSpecificationTest {
 
     @Test
     public void addParamWithNameAndValueTest() {
-        RequestSpecification spec = new RequestSpecificationImpl();
+        RequestSpec spec = new RequestSpecImpl();
         assertThat(spec.getParameters().size(), equalTo(0));
 
         Parameter param = new Parameter("name", "value");
@@ -127,7 +127,7 @@ public class RequestSpecificationTest {
 
     @Test
     public void addParamsTest() {
-        RequestSpecification spec = new RequestSpecificationImpl();
+        RequestSpec spec = new RequestSpecImpl();
         assertThat(spec.getParameters().size(), equalTo(0));
 
         Parameter param1 = new Parameter("name", "value");
@@ -144,7 +144,7 @@ public class RequestSpecificationTest {
 
     @Test
     public void addQueryParamTest() {
-        RequestSpecification spec = new RequestSpecificationImpl();
+        RequestSpec spec = new RequestSpecImpl();
         assertThat(spec.getQueryParams().size(), equalTo(0));
 
         Parameter param = new Parameter("name", "value");
@@ -156,7 +156,7 @@ public class RequestSpecificationTest {
 
     @Test
     public void addQueryParamAsNameAndValueTest() {
-        RequestSpecification spec = new RequestSpecificationImpl();
+        RequestSpec spec = new RequestSpecImpl();
         assertThat(spec.getQueryParams().size(), equalTo(0));
 
         Parameter param = new Parameter("name", "value");
@@ -168,7 +168,7 @@ public class RequestSpecificationTest {
 
     @Test
     public void addQueryParamsAsMapTest() {
-        RequestSpecification spec = new RequestSpecificationImpl();
+        RequestSpec spec = new RequestSpecImpl();
         assertThat(spec.getQueryParams().size(), equalTo(0));
 
         Map<String, String> queryParams = new HashMap<>();
@@ -184,7 +184,7 @@ public class RequestSpecificationTest {
 
     @Test
     public void addQueryParamsTest() {
-        RequestSpecification spec = new RequestSpecificationImpl();
+        RequestSpec spec = new RequestSpecImpl();
         assertThat(spec.getQueryParams().size(), equalTo(0));
 
         Parameter param1 = new Parameter("name", "value");
@@ -201,7 +201,7 @@ public class RequestSpecificationTest {
 
     @Test
     public void addRouteParamTest() {
-        RequestSpecification spec = new RequestSpecificationImpl();
+        RequestSpec spec = new RequestSpecImpl();
         assertThat(spec.getRouteParams().size(), equalTo(0));
 
         spec.routeParam("name1", "value1");
@@ -216,7 +216,7 @@ public class RequestSpecificationTest {
 
     @Test
     public void addProcessorTest() {
-        RequestSpecification specification = new RequestSpecificationImpl();
+        RequestSpec specification = new RequestSpecImpl();
         assertThat(specification.getProcessors().size(), equalTo(0));
 
         Processor processor1 = new TestProcessor();
@@ -231,7 +231,7 @@ public class RequestSpecificationTest {
 
     @Test
     public void addProxyTest() {
-        RequestSpecification spec = new RequestSpecificationImpl();
+        RequestSpec spec = new RequestSpecImpl();
         assertThat(spec.getProxy(), is(nullValue()));
 
         spec.proxy("host", 8090);
@@ -245,7 +245,7 @@ public class RequestSpecificationTest {
 
     @Test
     public void addProxyWithAuthTest() {
-        RequestSpecification spec = new RequestSpecificationImpl();
+        RequestSpec spec = new RequestSpecImpl();
         assertThat(spec.getProxy(), is(nullValue()));
 
         spec.proxy("host", 8090, "username", "pass");
@@ -259,7 +259,7 @@ public class RequestSpecificationTest {
 
     @Test
     public void addProxyObjectTest() {
-        RequestSpecification spec = new RequestSpecificationImpl();
+        RequestSpec spec = new RequestSpecImpl();
         assertThat(spec.getProxy(), is(nullValue()));
 
         Proxy proxy = new Proxy("host", 8080);
@@ -270,7 +270,7 @@ public class RequestSpecificationTest {
 
     @Test
     public void addProcessorsListTest() {
-        RequestSpecification specification = new RequestSpecificationImpl();
+        RequestSpec specification = new RequestSpecImpl();
         assertThat(specification.getProcessors().size(), equalTo(0));
 
         Processor processor1 = new TestProcessor();
@@ -290,7 +290,7 @@ public class RequestSpecificationTest {
 
     @Test
     public void addConfigTest() {
-        RequestSpecification spec = new RequestSpecificationImpl();
+        RequestSpec spec = new RequestSpecImpl();
         SessionIdNameConfig sessionConfig = new SessionIdNameConfig();
         spec.config(sessionConfig);
 
@@ -299,7 +299,7 @@ public class RequestSpecificationTest {
 
     @Test
     public void addConfigsListTest() {
-        RequestSpecification spec = new RequestSpecificationImpl();
+        RequestSpec spec = new RequestSpecImpl();
         SessionIdNameConfig sessionConfig = new SessionIdNameConfig();
         ObjectMapperConfig objectMapperConfig = new ObjectMapperConfig();
 
@@ -311,8 +311,8 @@ public class RequestSpecificationTest {
 
     @Test
     public void mergeWithNotEmptyUrlTest() {
-        RequestSpecification spec1 = new RequestSpecificationImpl().url("example1.com");
-        RequestSpecification spec2 = new RequestSpecificationImpl().url("example2.com");
+        RequestSpec spec1 = new RequestSpecImpl().url("example1.com");
+        RequestSpec spec2 = new RequestSpecImpl().url("example2.com");
 
         spec2.mergeWith(spec1);
         assertThat(spec2.getUrl(), equalTo("example1.com"));
@@ -320,8 +320,8 @@ public class RequestSpecificationTest {
 
     @Test
     public void mergeWithEmptyUrlTest() {
-        RequestSpecification spec1 = new RequestSpecificationImpl().url("");
-        RequestSpecification spec2 = new RequestSpecificationImpl().url("example2.com");
+        RequestSpec spec1 = new RequestSpecImpl().url("");
+        RequestSpec spec2 = new RequestSpecImpl().url("example2.com");
 
         spec2.mergeWith(spec1);
         assertThat(spec2.getUrl(), equalTo(""));
@@ -329,8 +329,8 @@ public class RequestSpecificationTest {
 
     @Test
     public void mergePortTest() {
-        RequestSpecification spec1 = new RequestSpecificationImpl().port(8080);
-        RequestSpecification spec2 = new RequestSpecificationImpl().port(8081);
+        RequestSpec spec1 = new RequestSpecImpl().port(8080);
+        RequestSpec spec2 = new RequestSpecImpl().port(8081);
 
         spec2.mergeWith(spec1);
         assertThat(spec2.getPort(), equalTo(8080));
@@ -338,8 +338,8 @@ public class RequestSpecificationTest {
 
     @Test
     public void mergeMethodTest() {
-        RequestSpecification spec1 = new RequestSpecificationImpl().method(RequestMethod.GET);
-        RequestSpecification spec2 = new RequestSpecificationImpl().method(RequestMethod.POST);
+        RequestSpec spec1 = new RequestSpecImpl().method(RequestMethod.GET);
+        RequestSpec spec2 = new RequestSpecImpl().method(RequestMethod.POST);
 
         spec2.mergeWith(spec1);
         assertThat(spec2.getMethod(), equalTo(RequestMethod.GET));
@@ -349,8 +349,8 @@ public class RequestSpecificationTest {
     public void mergeBodyTest() {
         String body1 = "Some body 1";
         String body2 = "Some body 2";
-        RequestSpecification spec1 = new RequestSpecificationImpl().body(body1);
-        RequestSpecification spec2 = new RequestSpecificationImpl().body(body2);
+        RequestSpec spec1 = new RequestSpecImpl().body(body1);
+        RequestSpec spec2 = new RequestSpecImpl().body(body2);
 
         spec2.mergeWith(spec1);
         assertThat(spec2.getBody(), equalTo(body1));
@@ -360,8 +360,8 @@ public class RequestSpecificationTest {
     public void mergeParamsTest() {
         Parameter param1 = new Parameter("name1", "value1");
         Parameter param2 = new Parameter("name2", "value2");
-        RequestSpecification spec1 = new RequestSpecificationImpl().param(param1);
-        RequestSpecification spec2 = new RequestSpecificationImpl().param(param2);
+        RequestSpec spec1 = new RequestSpecImpl().param(param1);
+        RequestSpec spec2 = new RequestSpecImpl().param(param2);
 
         spec2.mergeWith(spec1);
 
@@ -372,9 +372,9 @@ public class RequestSpecificationTest {
 
     @Test
     public void mergeRouteParamsTest() {
-        RequestSpecification spec1 = new RequestSpecificationImpl()
+        RequestSpec spec1 = new RequestSpecImpl()
                 .routeParam("name1", "value1");
-        RequestSpecification spec2 = new RequestSpecificationImpl()
+        RequestSpec spec2 = new RequestSpecImpl()
                 .routeParam("name2", "value2");
 
         spec2.mergeWith(spec1);
@@ -388,8 +388,8 @@ public class RequestSpecificationTest {
     public void mergeHeadersTest() {
         Header header1 = new Header("name1", "value1");
         Header header2 = new Header("name2", "value2");
-        RequestSpecification spec1 = new RequestSpecificationImpl().header(header1);
-        RequestSpecification spec2 = new RequestSpecificationImpl().header(header2);
+        RequestSpec spec1 = new RequestSpecImpl().header(header1);
+        RequestSpec spec2 = new RequestSpecImpl().header(header2);
 
         spec2.mergeWith(spec1);
 
@@ -403,8 +403,8 @@ public class RequestSpecificationTest {
         Processor processor1 = new TestProcessor();
         Processor processor2 = new TestProcessor();
 
-        RequestSpecification spec1 = new RequestSpecificationImpl().process(processor1, processor2);
-        RequestSpecification spec2 = new RequestSpecificationImpl().process(processor1);
+        RequestSpec spec1 = new RequestSpecImpl().process(processor1, processor2);
+        RequestSpec spec2 = new RequestSpecImpl().process(processor1);
 
         spec2.mergeWith(spec1);
 
@@ -415,10 +415,10 @@ public class RequestSpecificationTest {
 
     @Test
     public void mergeProxyTest() {
-        RequestSpecification spec1 = new RequestSpecificationImpl();
+        RequestSpec spec1 = new RequestSpecImpl();
         spec1.proxy("host1", 8090);
 
-        RequestSpecification spec2 = new RequestSpecificationImpl();
+        RequestSpec spec2 = new RequestSpecImpl();
         spec2.proxy("host2", 8092);
 
         spec2.mergeWith(spec1);

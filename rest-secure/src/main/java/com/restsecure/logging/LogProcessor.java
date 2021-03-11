@@ -22,7 +22,7 @@ public class LogProcessor implements Processor {
         List<LogInfo> logInfo = context.getConfigValue(ResponseLogConfig.class);
 
         if (!logInfo.isEmpty()) {
-            ResponseLogger.log(writer, response, context.getSpecification(), logInfo);
+            ResponseLogger.log(writer, response, context.getRequestSpec(), logInfo);
         }
     }
 
@@ -32,7 +32,7 @@ public class LogProcessor implements Processor {
         List<LogInfo> logInfo = context.getConfigValue(RequestLogConfig.class);
 
         if (!logInfo.isEmpty()) {
-            RequestLogger.log(writer, context.getSpecification(), logInfo);
+            RequestLogger.log(writer, context.getRequestSpec(), logInfo);
         }
     }
 

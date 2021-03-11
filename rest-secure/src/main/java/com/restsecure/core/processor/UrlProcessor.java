@@ -4,7 +4,7 @@ import com.restsecure.RestSecure;
 import com.restsecure.core.exception.RestSecureException;
 import com.restsecure.core.http.RequestMethod;
 import com.restsecure.core.request.RequestContext;
-import com.restsecure.core.request.specification.RequestSpecification;
+import com.restsecure.core.request.specification.RequestSpec;
 import com.restsecure.core.util.MultiKeyMap;
 import org.apache.http.client.utils.URIBuilder;
 
@@ -27,16 +27,16 @@ public class UrlProcessor implements Processor {
 
     private void setBaseUrl(RequestContext context) {
         String baseUrl = RestSecure.getBaseUrl();
-        String url = context.getSpecification().getUrl();
+        String url = context.getRequestSpec().getUrl();
 
         if (baseUrl != null && !baseUrl.isEmpty() && !url.startsWith("http")) {
-            context.getSpecification().url(baseUrl + url);
+            context.getRequestSpec().url(baseUrl + url);
         }
     }
 
     private void applyRouteParams(RequestContext context) {
-        String url = context.getSpecification().getUrl();
-        MultiKeyMap<String, Object> routeParams = context.getSpecification().getRouteParams();
+        String url = context.getRequestSpec().getUrl();
+        MultiKeyMap<String, Object> routeParams = context.getRequestSpec().getRouteParams();
 
         for (MultiKeyMap.Entity<String, Object> param : routeParams) {
             if (!url.contains("{" + param.getKey() + "}")) {
@@ -46,30 +46,30 @@ public class UrlProcessor implements Processor {
             url = url.replaceAll("\\{" + param.getKey() + "\\}", value);
         }
 
-        context.getSpecification().url(url);
+        context.getRequestSpec().url(url);
     }
 
     public static void buildUrl(RequestContext context) {
         try {
-            RequestSpecification specification = context.getSpecification();
-            URIBuilder uriBuilder = new URIBuilder(specification.getUrl());
-            RequestMethod method = specification.getMethod();
+            RequestSpec spec = context.getRequestSpec();
+            URIBuilder uriBuilder = new URIBuilder(spec.getUrl());
+            RequestMethod method = spec.getMethod();
 
             if (method == null) {
                 throw new RestSecureException("Http method is null");
             }
 
-            uriBuilder.addParameters(getFilteredParameters(specification.getQueryParams()));
+            uriBuilder.addParameters(getFilteredParameters(spec.getQueryParams()));
 
             if (!isHaveBody(method)) {
-                uriBuilder.addParameters(getFilteredParameters(specification.getParameters()));
+                uriBuilder.addParameters(getFilteredParameters(spec.getParameters()));
             }
 
-            if (specification.getPort() != 0) {
-                uriBuilder.setPort(specification.getPort());
+            if (spec.getPort() != 0) {
+                uriBuilder.setPort(spec.getPort());
             }
 
-            specification.url(uriBuilder.build().toString());
+            spec.url(uriBuilder.build().toString());
         } catch (URISyntaxException e) {
             throw new RestSecureException(e);
         }

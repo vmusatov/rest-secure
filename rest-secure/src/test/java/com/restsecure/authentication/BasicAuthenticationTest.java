@@ -22,6 +22,6 @@ public class BasicAuthenticationTest {
         RequestContext context = new RequestContext();
         auth.processRequest(context);
 
-        assertThat(context.getSpecification().getHeaders().getFirst(HeaderNames.AUTHORIZATION), equalTo("Basic " + encoded));
+        assertThat(context.getRequestSpec().getHeaders().getFirst(HeaderNames.AUTHORIZATION), equalTo("Basic " + encoded));
     }
 }

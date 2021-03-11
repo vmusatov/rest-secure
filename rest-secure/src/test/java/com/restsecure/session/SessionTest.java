@@ -28,7 +28,7 @@ public class SessionTest {
         Header expectedHeader = new Header("Cookie", SessionIdNameConfig.DEFAULT_SESSION_ID_NAME + "=session_value");
         assertThat(
                 "request not contain session cookie",
-                context.getSpecification().getHeaders().getFirst(expectedHeader.getName()).equals(expectedHeader.getValue())
+                context.getRequestSpec().getHeaders().getFirst(expectedHeader.getName()).equals(expectedHeader.getValue())
         );
     }
 }

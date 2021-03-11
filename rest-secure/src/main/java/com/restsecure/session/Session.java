@@ -27,8 +27,8 @@ import lombok.Getter;
  * For example:
  * <pre>
  *     Session session = new Session();
- *     RequestSpecification one = get("url);
- *     RequestSpecification two = get("other_url);
+ *     RequestSpec one = get("url);
+ *     RequestSpec two = get("other_url);
  *
  *     RequestSender.send(
  *          session,
@@ -47,7 +47,7 @@ public class Session implements Processor {
         String sessionIdName = context.getConfigValue(SessionIdNameConfig.class);
 
         if (sessionIdValue != null && !sessionIdValue.isEmpty()) {
-            context.getSpecification().header("Cookie", sessionIdName + "=" + sessionIdValue);
+            context.getRequestSpec().header("Cookie", sessionIdName + "=" + sessionIdValue);
         }
     }
 

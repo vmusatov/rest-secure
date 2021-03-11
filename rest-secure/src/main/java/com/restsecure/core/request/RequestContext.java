@@ -3,8 +3,8 @@ package com.restsecure.core.request;
 import com.restsecure.RestSecure;
 import com.restsecure.core.configuration.Config;
 import com.restsecure.core.configuration.ConfigFactory;
-import com.restsecure.core.request.specification.RequestSpecification;
-import com.restsecure.core.request.specification.RequestSpecificationImpl;
+import com.restsecure.core.request.specification.RequestSpec;
+import com.restsecure.core.request.specification.RequestSpecImpl;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +12,7 @@ import java.util.List;
 
 public class RequestContext {
     @Getter
-    private RequestSpecification specification;
+    private RequestSpec requestSpec;
     private List<Config<?>> configs;
     @Getter
     @Setter
@@ -22,19 +22,19 @@ public class RequestContext {
         init(null);
     }
 
-    public RequestContext(RequestSpecification specification) {
-        init(specification);
+    public RequestContext(RequestSpec spec) {
+        init(spec);
     }
 
-    private void init(RequestSpecification specification) {
-        this.specification = new RequestSpecificationImpl();
-        this.specification.mergeWith(RestSecure.getGlobalSpecification());
+    private void init(RequestSpec spec) {
+        this.requestSpec = new RequestSpecImpl();
+        this.requestSpec.mergeWith(RestSecure.getGlobalRequestSpec());
 
-        if (specification != null) {
-            this.specification.mergeWith(specification);
+        if (spec != null) {
+            this.requestSpec.mergeWith(spec);
         }
 
-        this.configs = this.specification.getConfigs();
+        this.configs = this.requestSpec.getConfigs();
     }
 
     public <T, E extends Config<T>> T getConfigValue(Class<E> configClass) {

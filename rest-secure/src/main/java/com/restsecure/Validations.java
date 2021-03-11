@@ -80,11 +80,11 @@ public class Validations {
 
     /**
      * The default validation.
-     * The RequestSpecification can contain only one default validation, if more than one is specified, only the last one is executed.
+     * The RequestSpec can contain only one default validation, if more than one is specified, only the last one is executed.
      * If non-default validation is added, default validations will not be executed
      *
      * <pre>
-     *     RequestSpecification getUser = get("/users")
+     *     RequestSpec getUser = get("/users")
      *          .param("id", id)
      *          .expect(
      *              byDefault(
@@ -114,11 +114,11 @@ public class Validations {
 
     /**
      * The default validation.
-     * The RequestSpecification can contain only one default validation, if more than one is specified, only the last one is executed.
+     * The RequestSpec can contain only one default validation, if more than one is specified, only the last one is executed.
      * If non-default validation is added, default validations will not be executed
      *
      * <pre>
-     *     RequestSpecification getUser = get("/users")
+     *     RequestSpec getUser = get("/users")
      *          .param("id", id)
      *          .expect(
      *              byDefault(
@@ -155,7 +155,7 @@ public class Validations {
      * Combines several validations into one. Supports logical operators AND, OR
      * Convenient if you need to make a difficult condition for conditional validation.
      * <pre>
-     *     RequestSpecification getUser = get("/users")
+     *     RequestSpec getUser = get("/users")
      *          .param("id", id)
      *          .expect(
      *              when(
@@ -182,7 +182,7 @@ public class Validations {
      * Combines several validations into one. Supports logical operators AND, OR
      * Convenient if you need to make a difficult condition for conditional validation.
      * <pre>
-     *     RequestSpecification getUser = get("/users")
+     *     RequestSpec getUser = get("/users")
      *          .param("id", id)
      *          .expect(
      *              when(
@@ -215,7 +215,7 @@ public class Validations {
      * In this case, the condition is the validation of the answer - if the validation in the condition was successful,
      * then the specified validation will be called, otherwise the validation will be considered successful.
      * <pre>
-     *     RequestSpecification getUser = get("/users")
+     *     RequestSpec getUser = get("/users")
      *          .param("id", id)
      *          .expect(
      *              when(statusCode(400), then(
@@ -238,7 +238,7 @@ public class Validations {
      * In this case, the condition is the validation of the answer - if the validation in the condition was successful,
      * then the first specified validation will be called, otherwise the second specified validation will be called.
      * <pre>
-     *     RequestSpecification getUser = get("/users")
+     *     RequestSpec getUser = get("/users")
      *          .param("id", id)
      *          .expect(
      *              when(statusCode(400), then(
@@ -264,7 +264,7 @@ public class Validations {
      * In this case, the condition is the functional interface Condition with the method <pre>boolean isTrue();</pre>
      * if the method returns true, the specified validation will be called, otherwise the validation will be considered successful
      * <pre>
-     *     RequestSpecification getUser = get("/users")
+     *     RequestSpec getUser = get("/users")
      *          .param("id", id)
      *          .expect(
      *              when(() -> id < 0, then(
@@ -287,7 +287,7 @@ public class Validations {
      * In this case, the condition is the functional interface Condition with the method <pre>boolean isTrue();</pre>
      * if the method returns true, the specified validation will be called, otherwise the second specified validation will be called.
      * <pre>
-     *     RequestSpecification getUser = get("/users")
+     *     RequestSpec getUser = get("/users")
      *          .param("id", id)
      *          .expect(
      *              when(() -> id < 0, then(
@@ -313,7 +313,7 @@ public class Validations {
      * In this case, the condition is boolean value
      * if condition is true, the specified validation will be called, otherwise the validation will be considered successful
      * <pre>
-     *     RequestSpecification getUser = get("/users")
+     *     RequestSpec getUser = get("/users")
      *          .param("id", id)
      *          .expect(
      *              when(id < 0, then(
@@ -336,7 +336,7 @@ public class Validations {
      * In this case, the condition is boolean value
      * if condition is true, the specified validation will be called, otherwise the second specified validation will be called.
      * <pre>
-     *     RequestSpecification getUser = get("/users")
+     *     RequestSpec getUser = get("/users")
      *          .param("id", id)
      *          .expect(
      *              when(id < 0, then(
@@ -362,10 +362,10 @@ public class Validations {
      * In this case, the condition is the functional interface Condition with the method <pre>boolean isTrue(RequestContext context);</pre>
      * if condition is true, the specified validation will be called.
      * <pre>
-     *     RequestSpecification getUser = get("/users")
+     *     RequestSpec getUser = get("/users")
      *          .param("id", id)
      *          .expect(
-     *              when(ctx -> ctx.getSpecification.getUrl().isEmpty(), then(
+     *              when(ctx -> ctx.getRequestSpec().getUrl().isEmpty(), then(
      *                  fail("Request url cant be empty")
      *              ))
      *          );
@@ -385,10 +385,10 @@ public class Validations {
      * In this case, the condition is the functional interface Condition with the method <pre>boolean isTrue(RequestContext context);</pre>
      * if condition is true, the specified validation will be called, otherwise the second specified validation will be called.
      * <pre>
-     *     RequestSpecification getUser = get("/users")
+     *     RequestSpec getUser = get("/users")
      *          .param("id", id)
      *          .expect(
-     *              when(ctx -> ctx.getSpecification.getUrl().isEmpty(), then(
+     *              when(ctx -> ctx.getRequestSpec().getUrl().isEmpty(), then(
      *                  fail("Request url cant be empty")
      *              ), orElse(
      *                  body("result.id", equalTo(id))

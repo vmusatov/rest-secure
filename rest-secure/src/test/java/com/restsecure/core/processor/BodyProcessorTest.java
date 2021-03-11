@@ -3,8 +3,8 @@ package com.restsecure.core.processor;
 import com.restsecure.BaseTest;
 import com.restsecure.TestObjectMapper;
 import com.restsecure.core.request.RequestContext;
-import com.restsecure.core.request.specification.RequestSpecification;
-import com.restsecure.core.request.specification.RequestSpecificationImpl;
+import com.restsecure.core.request.specification.RequestSpec;
+import com.restsecure.core.request.specification.RequestSpecImpl;
 import org.testng.annotations.Test;
 
 import static com.restsecure.Configs.objectMapper;
@@ -15,12 +15,12 @@ public class BodyProcessorTest {
 
     @Test
     public void processContextWithNoSerializationTest() {
-        RequestSpecification spec = new RequestSpecificationImpl().body(1);
+        RequestSpec spec = new RequestSpecImpl().body(1);
         RequestContext context = new RequestContext(spec);
         BodyProcessor processor = new BodyProcessor();
 
         processor.processRequest(context);
-        assertThat(context.getSpecification().getBody(), equalTo(1));
+        assertThat(context.getRequestSpec().getBody(), equalTo(1));
     }
 
     @Test
@@ -29,7 +29,7 @@ public class BodyProcessorTest {
         phone.setCode("+7");
         phone.setNumber("7777777777");
 
-        RequestSpecification spec = new RequestSpecificationImpl()
+        RequestSpec spec = new RequestSpecImpl()
                 .body(phone)
                 .config(objectMapper(new TestObjectMapper()));
 
@@ -37,6 +37,6 @@ public class BodyProcessorTest {
         BodyProcessor processor = new BodyProcessor();
 
         processor.processRequest(context);
-        assertThat(context.getSpecification().getBody(), equalTo("{\"code\":\"+7\",\"number\":\"7777777777\"}"));
+        assertThat(context.getRequestSpec().getBody(), equalTo("{\"code\":\"+7\",\"number\":\"7777777777\"}"));
     }
 }

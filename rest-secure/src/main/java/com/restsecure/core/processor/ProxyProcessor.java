@@ -21,7 +21,7 @@ public class ProxyProcessor implements Processor {
 
     @Override
     public void processRequest(RequestContext context) {
-        Proxy proxy = context.getSpecification().getProxy();
+        Proxy proxy = context.getRequestSpec().getProxy();
 
         if (proxy == null) {
             return;

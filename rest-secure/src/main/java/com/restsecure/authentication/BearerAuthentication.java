@@ -14,6 +14,6 @@ public class BearerAuthentication implements Processor {
 
     @Override
     public void processRequest(RequestContext context) {
-        context.getSpecification().header(HeaderNames.AUTHORIZATION, "Bearer " + this.token);
+        context.getRequestSpec().header(HeaderNames.AUTHORIZATION, "Bearer " + this.token);
     }
 }
