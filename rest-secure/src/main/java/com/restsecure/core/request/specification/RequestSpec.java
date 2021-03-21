@@ -366,27 +366,6 @@ public interface RequestSpec {
     List<Processor> getProcessors();
 
     /**
-     * Allow you to specify request data classes
-     *
-     * @param data data class
-     * @return RequestSpec
-     */
-    RequestSpec data(Object data, Object... additionalData);
-
-    /**
-     * Allow you to specify request data classes
-     *
-     * @param data data classes list
-     * @return RequestSpec
-     */
-    RequestSpec data(List<Object> data);
-
-    /**
-     * @return data class
-     */
-    List<Object> getData();
-
-    /**
      * Allow tou to add configuration<br>
      * For example:
      * <pre>

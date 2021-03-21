@@ -35,7 +35,6 @@ public class RequestSpecImpl implements RequestSpec {
     private final List<Processor> processors;
     private final List<Validation> validations;
     private final List<Config<?>> configs;
-    private final List<Object> data;
 
     public RequestSpecImpl() {
         this.url = "";
@@ -52,7 +51,6 @@ public class RequestSpecImpl implements RequestSpec {
         this.validations = new ArrayList<>();
 
         this.configs = new ArrayList<>();
-        this.data = new ArrayList<>();
     }
 
     @Override
@@ -279,21 +277,6 @@ public class RequestSpecImpl implements RequestSpec {
     @Override
     public RequestSpec process(List<Processor> processors) {
         this.processors.addAll(processors);
-        return this;
-    }
-
-    @Override
-    public RequestSpec data(Object data, Object... additionalData) {
-        this.data.add(data);
-        if (additionalData != null && additionalData.length > 0) {
-            this.data.addAll(Arrays.asList(additionalData));
-        }
-        return this;
-    }
-
-    @Override
-    public RequestSpec data(List<Object> data) {
-        this.data.addAll(data);
         return this;
     }
 

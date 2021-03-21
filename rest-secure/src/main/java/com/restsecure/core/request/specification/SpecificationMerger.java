@@ -23,7 +23,6 @@ public class SpecificationMerger {
         to.process(from.getProcessors());
         to.expect(from.getValidations());
         to.config(from.getConfigs());
-        to.data(from.getData());
     }
 
     private static void mergeProxy(RequestSpec from, RequestSpec to) {
