@@ -30,6 +30,8 @@ public class RequestContext {
         this.requestSpec = new RequestSpecImpl();
         this.requestSpec.mergeWith(RestSecure.getGlobalRequestSpec());
 
+        this.requestSpec.process(RestSecure.getContext().getProcessors());
+
         if (spec != null) {
             this.requestSpec.mergeWith(spec);
         }

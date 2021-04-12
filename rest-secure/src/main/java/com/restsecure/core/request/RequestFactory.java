@@ -1,6 +1,5 @@
 package com.restsecure.core.request;
 
-import com.restsecure.RestSecure;
 import com.restsecure.core.exception.RequestConfigurationException;
 import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.specification.RequestSpec;
@@ -8,7 +7,6 @@ import com.restsecure.core.request.specification.SpecificationValidator;
 import org.apache.http.client.methods.*;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -44,9 +42,7 @@ public class RequestFactory {
     }
 
     private static void processRequest(RequestContext context) {
-        List<Processor> processors = new ArrayList<>();
-        processors.addAll(RestSecure.getContext().getProcessors());
-        processors.addAll(context.getRequestSpec().getProcessors());
+        List<Processor> processors = context.getRequestSpec().getProcessors();
 
         processors.stream()
                 .sorted(Comparator.comparingInt(Processor::getRequestProcessOrder))
