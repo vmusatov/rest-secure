@@ -9,31 +9,41 @@ import java.io.InputStream;
 import java.lang.reflect.Type;
 
 public class ResponseBody {
-    private final String content;
+    private final byte[] content;
     private final Deserializer deserializer;
 
-    public ResponseBody(String content) {
+    public ResponseBody(byte[] content) {
         this.content = content;
         this.deserializer = null;
     }
 
-    public ResponseBody(String content, Deserializer deserializer) {
+    public ResponseBody(byte[] content, Deserializer deserializer) {
         this.content = content;
         this.deserializer = deserializer;
     }
 
+    public ResponseBody(String content) {
+        this.content = content.getBytes();
+        this.deserializer = null;
+    }
+
+    public ResponseBody(String content, Deserializer deserializer) {
+        this.content = content.getBytes();
+        this.deserializer = deserializer;
+    }
+
     public String asString() {
-        return content;
+        return new String(content);
     }
 
     public byte[] asByteArray() {
         checkContentNotNull();
-        return content.getBytes();
+        return content;
     }
 
     public InputStream asInputStream() {
         checkContentNotNull();
-        return new ByteArrayInputStream(content.getBytes());
+        return new ByteArrayInputStream(content);
     }
 
     public <T> T as(Class<T> to) {

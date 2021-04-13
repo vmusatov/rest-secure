@@ -3,17 +3,15 @@ package com.restsecure.core.response;
 import com.restsecure.RestSecure;
 import com.restsecure.core.configuration.configs.ObjectMapperConfig;
 import com.restsecure.core.exception.RestSecureException;
-import com.restsecure.core.http.HttpHelper;
 import com.restsecure.core.http.Header;
+import com.restsecure.core.http.HttpHelper;
 import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.response.validation.Validation;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -43,7 +41,7 @@ public class ResponseConfigurator {
             response.setStatusLine(httpResponse.getStatusLine().toString());
             response.setStatusCode(httpResponse.getStatusLine().getStatusCode());
 
-            String bodyContent = getBodyContent(httpResponse);
+            byte[] bodyContent = getBodyContent(httpResponse);
 
             context.getConfigValue(ObjectMapperConfig.class)
                     .ifPresentOrElse(
@@ -66,13 +64,13 @@ public class ResponseConfigurator {
                 .collect(Collectors.toList());
     }
 
-    private static String getBodyContent(org.apache.http.HttpResponse response) {
+    private static byte[] getBodyContent(org.apache.http.HttpResponse response) {
         try {
             HttpEntity entity = response.getEntity();
-            if (entity == null) {
-                return "";
+            if (entity == null || entity.getContent() == null) {
+                return null;
             }
-            return EntityUtils.toString(entity, StandardCharsets.UTF_8);
+            return entity.getContent().readAllBytes();
         } catch (IOException e) {
             throw new RestSecureException(e.getMessage());
         }
