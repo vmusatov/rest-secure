@@ -1,8 +1,8 @@
 package com.restsecure.validation.composite;
 
+import com.restsecure.core.exception.RestSecureException;
 import com.restsecure.core.response.Response;
 import com.restsecure.core.response.validation.Validation;
-import com.restsecure.core.response.validation.ValidationException;
 import com.restsecure.core.response.validation.ValidationResult;
 import com.restsecure.validation.BaseValidation;
 
@@ -10,13 +10,13 @@ import static com.restsecure.core.response.validation.ValidationStatus.FAIL;
 import static com.restsecure.core.response.validation.ValidationStatus.SUCCESS;
 import static com.restsecure.validation.composite.LogicalOperators.AND;
 
-class DoubleValidation extends BaseValidation {
+class LogicalValidation extends BaseValidation {
 
     private final Validation validation1;
     private final Validation logicalOperator;
     private final Validation validation2;
 
-    public DoubleValidation(Validation validation1, Validation logicalOperator, Validation validation2) {
+    public LogicalValidation(Validation validation1, Validation logicalOperator, Validation validation2) {
         this.validation1 = validation1;
         this.logicalOperator = logicalOperator;
         this.validation2 = validation2;
@@ -49,6 +49,6 @@ class DoubleValidation extends BaseValidation {
             }
         }
 
-        throw new ValidationException("Unknown logical operator");
+        throw new RestSecureException("Unknown logical operator");
     }
 }

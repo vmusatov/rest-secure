@@ -8,7 +8,7 @@ import java.util.List;
 
 import static com.restsecure.core.response.validation.ValidationStatus.SUCCESS;
 
-public class DefaultValidation extends CompositeValidation {
+public class DefaultValidation extends AbstractCompositeValidation {
 
     public DefaultValidation(List<Validation> validations) {
         super(validations);
@@ -22,10 +22,10 @@ public class DefaultValidation extends CompositeValidation {
             return new ValidationResult(SUCCESS);
         } else {
             if (validations.size() == 1) {
-                return validateAll(response);
+                return calculateValidationResult(response);
             } else {
                 if (validations.get(validations.size() - 1).equals(this)) {
-                    return validateAll(response);
+                    return calculateValidationResult(response);
                 } else {
                     return new ValidationResult(SUCCESS);
                 }

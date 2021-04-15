@@ -2,18 +2,13 @@ package com.restsecure;
 
 import com.restsecure.core.condition.Condition;
 import com.restsecure.core.condition.ContextCondition;
-import com.restsecure.core.http.StatusCode;
-import com.restsecure.core.http.StatusGroup;
-import com.restsecure.core.http.Cookie;
-import com.restsecure.core.http.Header;
-import com.restsecure.core.http.HeaderNames;
+import com.restsecure.core.http.*;
 import com.restsecure.core.response.Response;
 import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.response.validation.ValidationResult;
 import com.restsecure.core.response.validation.ValidationStatus;
 import com.restsecure.validation.BaseValidation;
 import com.restsecure.validation.base.*;
-import com.restsecure.validation.composite.BaseCompositeValidation;
 import com.restsecure.validation.composite.CompositeValidation;
 import com.restsecure.validation.composite.DefaultValidation;
 import com.restsecure.validation.composite.LogicalOperators;
@@ -175,7 +170,7 @@ public class Validations {
      * @return CompositeValidation
      */
     public static CompositeValidation combine(List<Validation> validations) {
-        return new BaseCompositeValidation(validations);
+        return new CompositeValidation(validations);
     }
 
     /**
@@ -207,7 +202,7 @@ public class Validations {
         validations.add(validation);
         validations.addAll(Arrays.asList(additionalValidations));
 
-        return new BaseCompositeValidation(validations);
+        return new CompositeValidation(validations);
     }
 
     /**
