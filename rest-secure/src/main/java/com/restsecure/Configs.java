@@ -1,6 +1,8 @@
 package com.restsecure;
 
+import com.restsecure.core.client.Client;
 import com.restsecure.core.configuration.configs.*;
+import com.restsecure.core.http.Host;
 import com.restsecure.core.mapping.ObjectMapper;
 import com.restsecure.logging.LogInfo;
 import com.restsecure.logging.LogWriter;
@@ -9,14 +11,109 @@ import com.restsecure.logging.config.RequestLogConfig;
 import com.restsecure.logging.config.ResponseLogConfig;
 import com.restsecure.session.SessionIdNameConfig;
 import com.restsecure.validation.config.BaseJsonPathConfig;
-import org.apache.http.client.protocol.HttpClientContext;
-import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 public class Configs {
+
+    /**
+     * Create a HttpClientConfig with specified value
+     *
+     * @param client http client
+     * @return HttpClientConfig
+     */
+    public static HttpClientConfig httpClient(Client client) {
+        HttpClientConfig config = new HttpClientConfig();
+        config.setValue(client);
+        return config;
+    }
+
+    /**
+     * Create a ProxyConfig with specified value
+     *
+     * @param host http host
+     * @return ProxyConfig
+     */
+    public static ProxyConfig proxy(Host host) {
+        ProxyConfig config = new ProxyConfig();
+        config.setValue(Optional.of(host));
+        return config;
+    }
+
+    /**
+     * Create a ProxyConfig with specified value
+     *
+     * @param host host name
+     * @param port host port
+     * @return ProxyConfig
+     */
+    public static ProxyConfig proxy(String host, int port) {
+        ProxyConfig config = new ProxyConfig();
+        config.setValue(Optional.of(new Host(host, port)));
+        return config;
+    }
+
+    /**
+     * Create a SocketTimeoutConfig with specified value
+     *
+     * @param timeout socket timeout
+     * @return SocketTimeoutConfig
+     */
+    public static SocketTimeoutConfig socketTimeout(int timeout) {
+        SocketTimeoutConfig config = new SocketTimeoutConfig();
+        config.setValue(timeout);
+        return config;
+    }
+
+    /**
+     * Create a ConnectionTimeoutConfig with specified value
+     *
+     * @param timeout connection timeout
+     * @return ConnectionTimeoutConfig
+     */
+    public static ConnectionTimeoutConfig connectionTimeout(int timeout) {
+        ConnectionTimeoutConfig config = new ConnectionTimeoutConfig();
+        config.setValue(timeout);
+        return config;
+    }
+
+    /**
+     * Create a EnableRedirectsConfig with specified value
+     *
+     * @param enable is enable redirects
+     * @return EnableRedirectsConfig
+     */
+    public static EnableRedirectsConfig enableRedirects(boolean enable) {
+        EnableRedirectsConfig config = new EnableRedirectsConfig();
+        config.setValue(enable);
+        return config;
+    }
+
+    /**
+     * Create a MaxRedirectsConfig with specified value
+     *
+     * @param max max redirects count
+     * @return MaxRedirectsConfig
+     */
+    public static MaxRedirectsConfig maxRedirects(int max) {
+        MaxRedirectsConfig config = new MaxRedirectsConfig();
+        config.setValue(max);
+        return config;
+    }
+
+    /**
+     * Create a CookieSpecConfig with specified value
+     *
+     * @param cookieSpec cookie spec
+     * @return CookieSpecConfig
+     */
+    public static CookieSpecConfig cookieSpec(String cookieSpec) {
+        CookieSpecConfig config = new CookieSpecConfig();
+        config.setValue(cookieSpec);
+        return config;
+    }
 
     /**
      * Create a SessionIdNameConfig with specified value
@@ -39,30 +136,6 @@ public class Configs {
     public static ObjectMapperConfig objectMapper(ObjectMapper objectMapper) {
         ObjectMapperConfig config = new ObjectMapperConfig();
         config.setValue(Optional.of(objectMapper));
-        return config;
-    }
-
-    /**
-     * Create a HttpClientBuilderConfig with specified value
-     *
-     * @param builder HttpClientBuilder
-     * @return HttpClientBuilderConfig
-     */
-    public static HttpClientBuilderConfig httpClientBuilder(HttpClientBuilder builder) {
-        HttpClientBuilderConfig config = new HttpClientBuilderConfig();
-        config.setValue(builder);
-        return config;
-    }
-
-    /**
-     * Create a HttpClientContextConfig with specified value
-     *
-     * @param context HttpClientContext
-     * @return HttpClientContextConfig
-     */
-    public static HttpClientContextConfig httpClientContext(HttpClientContext context) {
-        HttpClientContextConfig config = new HttpClientContextConfig();
-        config.setValue(context);
         return config;
     }
 

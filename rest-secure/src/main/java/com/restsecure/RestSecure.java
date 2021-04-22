@@ -4,9 +4,9 @@ import com.restsecure.authentication.BasicAuthentication;
 import com.restsecure.authentication.BearerAuthentication;
 import com.restsecure.core.Context;
 import com.restsecure.core.configuration.configs.*;
-import com.restsecure.core.http.RequestMethod;
 import com.restsecure.core.http.Header;
 import com.restsecure.core.http.HeaderNames;
+import com.restsecure.core.http.RequestMethod;
 import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.RequestSender;
 import com.restsecure.core.request.specification.RequestSpec;
@@ -35,6 +35,11 @@ public class RestSecure {
     private static String baseUrl = DEFAULT_URL;
 
     /**
+     * Default HttpClientConfig for all requests
+     */
+    private static HttpClientConfig clientConfig = createDefaultConfig(HttpClientConfig.class);
+
+    /**
      * A global specification will be added to each request. 
      */
     @Getter
@@ -49,8 +54,13 @@ public class RestSecure {
 
     private static RequestSpec getDefaultRequestSpec() {
         return request().config(
-                createDefaultConfig(HttpClientContextConfig.class),
-                createDefaultConfig(HttpClientBuilderConfig.class),
+                clientConfig,
+                createDefaultConfig(ProxyConfig.class),
+                createDefaultConfig(SocketTimeoutConfig.class),
+                createDefaultConfig(ConnectionTimeoutConfig.class),
+                createDefaultConfig(EnableRedirectsConfig.class),
+                createDefaultConfig(MaxRedirectsConfig.class),
+                createDefaultConfig(CookieSpecConfig.class),
                 createDefaultConfig(ObjectMapperConfig.class),
                 createDefaultConfig(SessionIdNameConfig.class),
                 createDefaultConfig(LogWriterConfig.class),
@@ -61,6 +71,10 @@ public class RestSecure {
                 createDefaultConfig(OverwriteHeadersConfig.class),
                 createDefaultConfig(OverwriteAllHeadersConfig.class)
         );
+    }
+
+    public static void shutdown() {
+        clientConfig.getValue().close();
     }
 
     /**
@@ -166,20 +180,6 @@ public class RestSecure {
         return request()
                 .url(url)
                 .method(RequestMethod.PATCH);
-    }
-
-    /**
-     * Allows you to send request<br>
-     * For example:
-     * <pre>
-     *     send(get("url));
-     * </pre>
-     *
-     * @param spec RequestSpec
-     * @return response
-     */
-    public static Response send(RequestSpec spec) {
-        return RequestSender.send(spec);
     }
 
     /**
@@ -328,15 +328,5 @@ public class RestSecure {
      */
     public static Processor bearerAuth(String token) {
         return new BearerAuthentication(token);
-    }
-
-    /**
-     * Create Accept header with specify value
-     *
-     * @param value header value
-     * @return Header
-     */
-    public static Header accept(String value) {
-        return new Header(HeaderNames.ACCEPT, value);
     }
 }

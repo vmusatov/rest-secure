@@ -1,19 +1,20 @@
 package com.restsecure.core.request.specification;
 
+import com.restsecure.core.client.Client;
 import com.restsecure.core.configuration.Config;
-import com.restsecure.core.http.RequestMethod;
-import com.restsecure.core.http.Cookie;
-import com.restsecure.core.http.Header;
-import com.restsecure.core.http.Parameter;
-import com.restsecure.core.http.Proxy;
+import com.restsecure.core.configuration.configs.HttpClientConfig;
+import com.restsecure.core.http.*;
 import com.restsecure.core.processor.Processor;
-import com.restsecure.core.request.RequestSender;
+import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.response.Response;
 import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.util.MultiKeyMap;
 import lombok.Getter;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 @Getter
 public class RequestSpecImpl implements RequestSpec {
@@ -30,8 +31,6 @@ public class RequestSpecImpl implements RequestSpec {
     private final MultiKeyMap<String, Object> routeParams;
     private final MultiKeyMap<String, Object> cookiesWithValueToSerialize;
 
-    private Proxy proxy;
-
     private final List<Processor> processors;
     private final List<Validation> validations;
     private final List<Config<?>> configs;
@@ -44,8 +43,6 @@ public class RequestSpecImpl implements RequestSpec {
         this.queryParams = new MultiKeyMap<>();
         this.routeParams = new MultiKeyMap<>();
         this.cookiesWithValueToSerialize = new MultiKeyMap<>();
-
-        this.proxy = null;
 
         this.processors = new ArrayList<>();
         this.validations = new ArrayList<>();
@@ -249,24 +246,6 @@ public class RequestSpecImpl implements RequestSpec {
     }
 
     @Override
-    public RequestSpec proxy(String host, int port) {
-        this.proxy = new Proxy(host, port);
-        return this;
-    }
-
-    @Override
-    public RequestSpec proxy(Proxy proxy) {
-        this.proxy = proxy;
-        return this;
-    }
-
-    @Override
-    public RequestSpec proxy(String host, int port, String username, String password) {
-        this.proxy = new Proxy(host, port, username, password);
-        return this;
-    }
-
-    @Override
     public RequestSpec process(Processor processor, Processor... additionalProcessors) {
         this.processors.add(processor);
         this.processors.addAll(Arrays.asList(additionalProcessors));
@@ -338,6 +317,8 @@ public class RequestSpecImpl implements RequestSpec {
 
     @Override
     public Response send() {
-        return RequestSender.send(this);
+        RequestContext context = new RequestContext(this);
+        Client client = context.getConfigValue(HttpClientConfig.class);
+        return client.send(context);
     }
 }

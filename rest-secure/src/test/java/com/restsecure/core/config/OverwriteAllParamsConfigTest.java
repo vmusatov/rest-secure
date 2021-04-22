@@ -1,10 +1,10 @@
 package com.restsecure.core.config;
 
+import com.restsecure.BaseTest;
 import com.restsecure.MockServer;
 import com.restsecure.RestSecure;
 import com.restsecure.core.configuration.configs.OverwriteAllParamsConfig;
 import com.restsecure.core.request.RequestContext;
-import com.restsecure.core.request.RequestFactory;
 import com.restsecure.core.request.specification.RequestSpec;
 import com.restsecure.core.util.MultiKeyMap;
 import org.testng.annotations.Test;
@@ -13,7 +13,7 @@ import static com.restsecure.Configs.overwriteAllParams;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-public class OverwriteAllParamsConfigTest {
+public class OverwriteAllParamsConfigTest extends BaseTest {
 
     @Test
     public void setValueTest() {
@@ -53,7 +53,7 @@ public class OverwriteAllParamsConfigTest {
                 .param("two", "two value3");
 
         RequestContext context = new RequestContext(spec);
-        RequestFactory.createRequest(context);
+        processRequest(context);
 
         MultiKeyMap<String, Object> params = context.getRequestSpec().getParameters();
 

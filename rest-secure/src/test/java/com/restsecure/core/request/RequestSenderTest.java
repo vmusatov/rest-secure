@@ -4,10 +4,10 @@ import com.restsecure.BaseTest;
 import com.restsecure.MockServer;
 import com.restsecure.RestSecure;
 import com.restsecure.core.condition.ContextCondition;
-import com.restsecure.core.http.RequestMethod;
-import com.restsecure.core.http.StatusCode;
 import com.restsecure.core.http.Cookie;
 import com.restsecure.core.http.Header;
+import com.restsecure.core.http.RequestMethod;
+import com.restsecure.core.http.StatusCode;
 import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.specification.RequestSpec;
 import com.restsecure.core.response.Response;
@@ -55,21 +55,7 @@ public class RequestSenderTest extends BaseTest {
         RestSecure.resetGlobalSpec();
     }
 
-    @Test()
-    public void sendOneRequestTest() {
-        RequestSender.send(RestSecure.get(MockServer.GET_PATH));
-        RequestSender.send(RestSecure.post(MockServer.POST_PATH));
-        RequestSender.send(RestSecure.put(MockServer.PUT_PATH));
-        RequestSender.send(RestSecure.delete(MockServer.DELETE_PATH));
-        RequestSender.send(RestSecure.head(MockServer.HEAD_PATH));
-        RequestSender.send(RestSecure.trace(MockServer.TRACE_PATH));
-        RequestSender.send(RestSecure.options(MockServer.OPTIONS_PATH));
-        RequestSender.send(RestSecure.patch(MockServer.PATCH_PATH));
-
-        assertThat(MockServer.requestCount, equalTo(8));
-    }
-
-    @Test()
+    @Test
     public void sendMultipleRequestsTest() {
         RequestSender.send(
                 RestSecure.get(MockServer.GET_PATH),
@@ -85,7 +71,7 @@ public class RequestSenderTest extends BaseTest {
         assertThat(MockServer.requestCount, equalTo(8));
     }
 
-    @Test()
+    @Test
     public void sendRequestsListTest() {
         List<RequestSpec> requests = Arrays.asList(
                 RestSecure.get(MockServer.GET_PATH),
@@ -103,7 +89,7 @@ public class RequestSenderTest extends BaseTest {
         assertThat(MockServer.requestCount, equalTo(8));
     }
 
-    @Test()
+    @Test
     public void sendOneRequestWithOneProcessorTest() {
 
         RequestSender.send(
@@ -142,7 +128,7 @@ public class RequestSenderTest extends BaseTest {
         assertThat(MockServer.requestCount, equalTo(8));
     }
 
-    @Test()
+    @Test
     public void sendOneRequestWithProcessorsListTest() {
         RequestSender.send(
                 Arrays.asList(new TestProcessor(), new TestProcessor(), new TestProcessor()),
@@ -180,7 +166,7 @@ public class RequestSenderTest extends BaseTest {
         assertThat(MockServer.requestCount, equalTo(8));
     }
 
-    @Test()
+    @Test
     public void sendMultipleRequestsWithOneProcessorTest() {
         RequestSender.send(
                 new TestProcessor(),
@@ -197,7 +183,7 @@ public class RequestSenderTest extends BaseTest {
         assertThat(MockServer.requestCount, equalTo(8));
     }
 
-    @Test()
+    @Test
     public void sendMultipleRequestsWithProcessorsListTest() {
         RequestSender.send(
                 Arrays.asList(new TestProcessor(), new TestProcessor(), new TestProcessor()),
@@ -214,7 +200,7 @@ public class RequestSenderTest extends BaseTest {
         assertThat(MockServer.requestCount, equalTo(8));
     }
 
-    @Test()
+    @Test
     public void sendRequestsListWithOneProcessorTest() {
         List<RequestSpec> requests = Arrays.asList(
                 RestSecure.get(MockServer.GET_PATH).expect(isUseTestProcessor(1), teardownTestProcessors),
@@ -232,7 +218,7 @@ public class RequestSenderTest extends BaseTest {
         assertThat(MockServer.requestCount, equalTo(8));
     }
 
-    @Test()
+    @Test
     public void sendRequestsListWithProcessorsListTest() {
         List<RequestSpec> requests = Arrays.asList(
                 RestSecure.get(MockServer.GET_PATH).expect(isUseTestProcessor(3), teardownTestProcessors),

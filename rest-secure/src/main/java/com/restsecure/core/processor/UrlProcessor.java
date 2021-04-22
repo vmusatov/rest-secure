@@ -12,7 +12,7 @@ import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-import static com.restsecure.core.http.HttpHelper.getFilteredParameters;
+import static com.restsecure.core.http.HttpHelper.toApacheNameValuePair;
 import static com.restsecure.core.http.HttpHelper.isHaveBody;
 
 @ProcessAll
@@ -59,10 +59,10 @@ public class UrlProcessor implements Processor {
                 throw new RestSecureException("Http method is null");
             }
 
-            uriBuilder.addParameters(getFilteredParameters(spec.getQueryParams()));
+            uriBuilder.addParameters(toApacheNameValuePair(spec.getQueryParams()));
 
             if (!isHaveBody(method)) {
-                uriBuilder.addParameters(getFilteredParameters(spec.getParameters()));
+                uriBuilder.addParameters(toApacheNameValuePair(spec.getParameters()));
             }
 
             if (spec.getPort() != 0) {

@@ -1,10 +1,8 @@
 package com.restsecure.core.request.specification;
 
-import com.restsecure.core.http.Proxy;
+class SpecificationMerger {
 
-public class SpecificationMerger {
-
-    public static void merge(RequestSpec from, RequestSpec to) {
+    static void merge(RequestSpec from, RequestSpec to) {
         to.url(from.getUrl());
         to.method(from.getMethod());
         to.port(from.getPort());
@@ -18,19 +16,8 @@ public class SpecificationMerger {
         from.getHeaders().forEach(header -> to.header(header.getKey(), header.getValue()));
         from.getCookiesWithValueToSerialize().forEach(cookie -> to.cookie(cookie.getKey(), cookie.getValue()));
 
-        mergeProxy(from, to);
-
         to.process(from.getProcessors());
         to.expect(from.getValidations());
         to.config(from.getConfigs());
-    }
-
-    private static void mergeProxy(RequestSpec from, RequestSpec to) {
-        Proxy proxy = from.getProxy();
-        if (proxy == null) {
-            to.proxy(null);
-            return;
-        }
-        to.proxy(proxy.getHost(), proxy.getPort(), proxy.getUsername(), proxy.getPassword());
     }
 }

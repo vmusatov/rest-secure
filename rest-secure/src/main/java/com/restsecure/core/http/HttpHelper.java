@@ -1,23 +1,15 @@
 package com.restsecure.core.http;
 
-import com.restsecure.core.exception.RequestConfigurationException;
 import com.restsecure.core.exception.RestSecureException;
-import com.restsecure.core.request.specification.RequestSpec;
 import com.restsecure.core.util.MultiKeyMap;
 import com.restsecure.core.util.NameValueList;
-import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,15 +17,9 @@ import static com.restsecure.core.http.RequestMethod.*;
 
 public class HttpHelper {
 
-    public static List<NameValuePair> getFilteredParameters(MultiKeyMap<String, Object> parameters) {
+    public static List<NameValuePair> toApacheNameValuePair(MultiKeyMap<String, Object> parameters) {
         List<NameValuePair> pairs = new ArrayList<>();
-        parameters.forEach(param -> {
-            if (param.getValue() == null) {
-                param.setValue("");
-            }
-            pairs.add(new BasicNameValuePair(param.getKey(), param.getValue().toString()));
-        });
-
+        parameters.forEach(param -> pairs.add(new BasicNameValuePair(param.getKey(), param.getValue().toString())));
         return pairs;
     }
 
@@ -42,44 +28,6 @@ public class HttpHelper {
             return false;
         }
         return true;
-    }
-
-    public static URI toURI(String str) {
-        try {
-            return new URIBuilder(str).build();
-        } catch (URISyntaxException e) {
-            throw new RestSecureException(e);
-        }
-    }
-
-    public static void setEntityToRequest(RequestSpec spec, HttpEntityEnclosingRequestBase request) {
-        List<NameValuePair> params = HttpHelper.getFilteredParameters(spec.getParameters());
-        Object body = spec.getBody();
-
-        if (!params.isEmpty() && body != null) {
-            throw new RequestConfigurationException("You can specify either request body or form parameters");
-        }
-
-        HttpEntity entity = null;
-
-        if (body != null) {
-            entity = new StringEntity(body.toString(), StandardCharsets.UTF_8);
-        }
-
-        if (!params.isEmpty()) {
-            entity = new UrlEncodedFormEntity(params, StandardCharsets.UTF_8);
-        }
-
-        if (entity != null) {
-            request.setEntity(entity);
-        }
-    }
-
-    public static void setHeadersToRequest(MultiKeyMap<String, Object> headers, HttpUriRequest request) {
-        headers.forEach(header -> {
-            BasicHeader basicHeader = new BasicHeader(header.getKey(), header.getValue().toString());
-            request.addHeader(basicHeader);
-        });
     }
 
     public static List<Cookie> getCookiesFromHeaders(List<Header> headers) {

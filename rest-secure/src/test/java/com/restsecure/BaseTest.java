@@ -2,6 +2,8 @@ package com.restsecure;
 
 import com.restsecure.core.http.Cookie;
 import com.restsecure.core.http.Header;
+import com.restsecure.core.processor.Processor;
+import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.response.Response;
 import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.response.validation.ValidationResult;
@@ -10,8 +12,11 @@ import lombok.Data;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeSuite;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import static com.restsecure.Matchers.anyValue;
@@ -62,6 +67,24 @@ public class BaseTest {
             new Cookie("name4", "4"),
             new Cookie("name5", "5")
     );
+
+    @BeforeSuite
+    public void initMockServer() {
+        MockServer.reset();
+    }
+
+    @AfterSuite
+    public void shutdown() {
+        RestSecure.shutdown();
+    }
+
+    protected void processRequest(RequestContext context) {
+        List<Processor> processors = context.getRequestSpec().getProcessors();
+
+        processors.stream()
+                .sorted(Comparator.comparingInt(Processor::getRequestProcessOrder))
+                .forEach(processor -> processor.processRequest(context));
+    }
 
     protected void expectValidationSuccess(Validation validation, Response response) {
         ValidationResult result = validation.softValidate(response);

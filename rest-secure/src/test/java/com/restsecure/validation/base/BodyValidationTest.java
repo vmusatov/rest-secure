@@ -1,6 +1,7 @@
 package com.restsecure.validation.base;
 
 import com.restsecure.BaseTest;
+import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.response.HttpResponse;
 import com.restsecure.core.response.Response;
 import com.restsecure.core.response.ResponseBody;
@@ -15,7 +16,7 @@ public class BodyValidationTest extends BaseTest {
 
     @Test
     public void bodySuccessTest() {
-        Response response = new HttpResponse();
+        Response response = new HttpResponse(new RequestContext());
         response.setBody(new ResponseBody(userJson));
 
         Validation validation = body("phone.code", equalTo("+7"));
@@ -24,7 +25,7 @@ public class BodyValidationTest extends BaseTest {
 
     @Test
     public void bodyFailTest() {
-        Response response = new HttpResponse();
+        Response response = new HttpResponse(new RequestContext());
         response.setBody(new ResponseBody(userJson));
 
         Validation validation = body("phone.code", equalTo("wrong value"));

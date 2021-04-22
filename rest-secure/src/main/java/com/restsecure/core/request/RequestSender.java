@@ -1,25 +1,15 @@
 package com.restsecure.core.request;
 
-import com.restsecure.core.configuration.configs.HttpClientBuilderConfig;
-import com.restsecure.core.configuration.configs.HttpClientContextConfig;
-import com.restsecure.core.exception.RestSecureException;
 import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.specification.RequestSpec;
 import com.restsecure.core.response.Response;
-import com.restsecure.core.response.ResponseConfigurator;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.protocol.HttpClientContext;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * Class for sending multiple requests and requests in one session
+ * Class for sending multiple requests
  */
 public class RequestSender {
 
@@ -107,35 +97,8 @@ public class RequestSender {
     public static List<Response> send(List<RequestSpec> specs) {
         List<Response> responses = new ArrayList<>();
         for (RequestSpec spec : specs) {
-            responses.add(send(spec));
+            responses.add(spec.send());
         }
         return responses;
-    }
-
-    /**
-     * Allows you to send request by specified RequestSpec
-     *
-     * @param spec RequestSpec
-     * @return Response
-     */
-    public static Response send(RequestSpec spec) {
-
-        RequestContext context = new RequestContext(spec);
-        HttpUriRequest request = RequestFactory.createRequest(context);
-
-        HttpClientBuilder httpClientBuilder = context.getConfigValue(HttpClientBuilderConfig.class);
-        HttpClientContext httpClientContext = context.getConfigValue(HttpClientContextConfig.class);
-
-        try (CloseableHttpClient httpClient = httpClientBuilder.build(); httpClient) {
-            context.setRequestTime(System.currentTimeMillis());
-            CloseableHttpResponse apacheResponse = httpClient.execute(request, httpClientContext);
-
-            Response response = ResponseConfigurator.configureResponse(apacheResponse, context);
-            apacheResponse.close();
-
-            return response;
-        } catch (IOException e) {
-            throw new RestSecureException(e);
-        }
     }
 }

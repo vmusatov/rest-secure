@@ -1,10 +1,10 @@
 package com.restsecure.core.config;
 
+import com.restsecure.BaseTest;
 import com.restsecure.MockServer;
 import com.restsecure.RestSecure;
 import com.restsecure.core.configuration.configs.OverwriteHeadersConfig;
 import com.restsecure.core.request.RequestContext;
-import com.restsecure.core.request.RequestFactory;
 import com.restsecure.core.request.specification.RequestSpec;
 import com.restsecure.core.util.MultiKeyMap;
 import org.testng.annotations.Test;
@@ -16,7 +16,7 @@ import static com.restsecure.Configs.overwriteHeaders;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-public class OverwriteHeadersConfigTest {
+public class OverwriteHeadersConfigTest extends BaseTest {
 
     @Test
     public void setValueTest() {
@@ -55,7 +55,7 @@ public class OverwriteHeadersConfigTest {
                 .header("three", "three value");
 
         RequestContext context = new RequestContext(spec);
-        RequestFactory.createRequest(context);
+        processRequest(context);
 
         MultiKeyMap<String, Object> headers = context.getRequestSpec().getHeaders();
 

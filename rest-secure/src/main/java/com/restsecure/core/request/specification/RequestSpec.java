@@ -5,7 +5,6 @@ import com.restsecure.core.http.RequestMethod;
 import com.restsecure.core.http.Cookie;
 import com.restsecure.core.http.Header;
 import com.restsecure.core.http.Parameter;
-import com.restsecure.core.http.Proxy;
 import com.restsecure.core.processor.Processor;
 import com.restsecure.core.response.Response;
 import com.restsecure.core.response.validation.Validation;
@@ -305,39 +304,6 @@ public interface RequestSpec {
      * @return cookies with Object value
      */
     MultiKeyMap<String, Object> getCookiesWithValueToSerialize();
-
-    /**
-     * Set a proxy without auth for request
-     *
-     * @param host host url
-     * @param port proxy port
-     * @return RequestSpec
-     */
-    RequestSpec proxy(String host, int port);
-
-    /**
-     * Set a proxy without auth for request
-     *
-     * @param proxy Proxy
-     * @return RequestSpec
-     */
-    RequestSpec proxy(Proxy proxy);
-
-    /**
-     * Set a proxy with auth for request
-     *
-     * @param host     host url
-     * @param port     proxy port
-     * @param username username
-     * @param password password
-     * @return RequestSpec
-     */
-    RequestSpec proxy(String host, int port, String username, String password);
-
-    /**
-     * @return Proxy
-     */
-    Proxy getProxy();
 
     /**
      * Allow you to specify Processor to process request and response

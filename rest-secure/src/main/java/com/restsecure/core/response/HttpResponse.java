@@ -32,9 +32,17 @@ public class HttpResponse implements Response {
     private RequestContext context;
 
     public HttpResponse() {
+        init(null);
+    }
+
+    public HttpResponse(RequestContext context) {
+        init(context);
+    }
+
+    private void init(RequestContext context) {
         this.headers = new NameValueList<>();
         this.cookies = new NameValueList<>();
-        this.context = new RequestContext();
+        this.context = context;
         this.body = new ResponseBody("");
         this.statusLine = "";
     }
