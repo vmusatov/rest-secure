@@ -67,10 +67,6 @@ public class ResponseLogger {
         addCookies(builder, response);
     }
 
-    private static void addUrl(StringBuilder builder, Response response) {
-
-    }
-
     private static void addStatusCode(StringBuilder builder, Response response) {
         builder.append("Response status code: ")
                 .append(response.getStatusCode())
@@ -78,11 +74,17 @@ public class ResponseLogger {
     }
 
     public static void addBody(StringBuilder builder, Response response) {
-        builder.append("Response body: ")
-                .append(lineSeparator())
-                .append(tabs(1))
-                .append(response.getBody().asString())
-                .append(lineSeparator());
+        String body = response.getBody().asString();
+        builder.append("Response body: ");
+
+        if (body == null) {
+            builder.append(NONE).append(lineSeparator());
+        } else {
+            builder.append(lineSeparator())
+                    .append(tabs(1))
+                    .append(body)
+                    .append(lineSeparator());
+        }
     }
 
     private static void addHeaders(StringBuilder builder, Response response) {

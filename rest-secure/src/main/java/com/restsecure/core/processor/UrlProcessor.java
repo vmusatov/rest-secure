@@ -1,6 +1,6 @@
 package com.restsecure.core.processor;
 
-import com.restsecure.RestSecure;
+import com.restsecure.core.configuration.configs.BaseUrlConfig;
 import com.restsecure.core.exception.RestSecureException;
 import com.restsecure.core.http.RequestMethod;
 import com.restsecure.core.request.RequestContext;
@@ -12,8 +12,8 @@ import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-import static com.restsecure.core.http.HttpHelper.toApacheNameValuePair;
 import static com.restsecure.core.http.HttpHelper.isHaveBody;
+import static com.restsecure.core.http.HttpHelper.toApacheNameValuePair;
 
 @ProcessAll
 public class UrlProcessor implements Processor {
@@ -26,12 +26,13 @@ public class UrlProcessor implements Processor {
     }
 
     private void setBaseUrl(RequestContext context) {
-        String baseUrl = RestSecure.getBaseUrl();
-        String url = context.getRequestSpec().getUrl();
+        context.getConfigValue(BaseUrlConfig.class).ifPresent(baseUrl -> {
+            String url = context.getRequestSpec().getUrl();
 
-        if (baseUrl != null && !baseUrl.isEmpty() && !url.startsWith("http")) {
-            context.getRequestSpec().url(baseUrl + url);
-        }
+            if (!baseUrl.isEmpty() && !url.startsWith("http")) {
+                context.getRequestSpec().url(baseUrl + url);
+            }
+        });
     }
 
     private void applyRouteParams(RequestContext context) {

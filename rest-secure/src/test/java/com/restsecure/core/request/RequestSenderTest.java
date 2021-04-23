@@ -243,7 +243,7 @@ public class RequestSenderTest extends BaseTest {
         @Override
         public ValidationResult softValidate(Response response) {
             RequestContext context = response.getContext();
-            List<Processor> processors = context.getRequestSpec().getProcessors();
+            List<Processor> processors = context.getProcessors();
 
             for (Processor processor : processors) {
                 if (processor instanceof TestProcessor) {
@@ -262,7 +262,7 @@ public class RequestSenderTest extends BaseTest {
             @Override
             public ValidationResult softValidate(Response response) {
                 RequestContext context = response.getContext();
-                List<Processor> processors = context.getRequestSpec().getProcessors();
+                List<Processor> processors = context.getProcessors();
 
                 int count = 0;
 

@@ -33,11 +33,13 @@ public class ResponseBody {
     }
 
     public String asString() {
+        if (content == null) {
+            return null;
+        }
         return new String(content);
     }
 
     public byte[] asByteArray() {
-        checkContentNotNull();
         return content;
     }
 

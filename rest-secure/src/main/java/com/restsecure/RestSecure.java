@@ -4,8 +4,6 @@ import com.restsecure.authentication.BasicAuthentication;
 import com.restsecure.authentication.BearerAuthentication;
 import com.restsecure.core.Context;
 import com.restsecure.core.configuration.configs.*;
-import com.restsecure.core.http.Header;
-import com.restsecure.core.http.HeaderNames;
 import com.restsecure.core.http.RequestMethod;
 import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.RequestSender;
@@ -17,23 +15,12 @@ import com.restsecure.logging.config.RequestLogConfig;
 import com.restsecure.logging.config.ResponseLogConfig;
 import com.restsecure.session.SessionIdNameConfig;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.List;
 
 import static com.restsecure.core.configuration.ConfigFactory.createDefaultConfig;
 
 public class RestSecure {
-
-    private static final String DEFAULT_URL = "http://localhost";
-
-    /**
-     * A base url will be added to each requests if its url does not have a domain name
-     */
-    @Getter
-    @Setter
-    private static String baseUrl = DEFAULT_URL;
-
     /**
      * Default HttpClientConfig for all requests
      */
@@ -62,6 +49,7 @@ public class RestSecure {
                 createDefaultConfig(MaxRedirectsConfig.class),
                 createDefaultConfig(CookieSpecConfig.class),
                 createDefaultConfig(ObjectMapperConfig.class),
+                createDefaultConfig(BaseUrlConfig.class),
                 createDefaultConfig(SessionIdNameConfig.class),
                 createDefaultConfig(LogWriterConfig.class),
                 createDefaultConfig(RequestLogConfig.class),

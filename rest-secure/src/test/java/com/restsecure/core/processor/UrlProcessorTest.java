@@ -3,23 +3,17 @@ package com.restsecure.core.processor;
 import com.restsecure.RestSecure;
 import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.request.specification.RequestSpec;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
+import static com.restsecure.Configs.baseUrl;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 public class UrlProcessorTest {
 
-    @AfterMethod
-    public void resetBaseUrl() {
-        RestSecure.setBaseUrl("");
-    }
-
     @Test
     public void setBaseUrlTest() {
-        RestSecure.setBaseUrl("http://localhost");
-        RequestSpec spec = RestSecure.get("/user");
+        RequestSpec spec = RestSecure.get("/user").config(baseUrl("http://localhost"));
         RequestContext context = new RequestContext(spec);
         UrlProcessor processor = new UrlProcessor();
 
@@ -29,8 +23,7 @@ public class UrlProcessorTest {
 
     @Test
     public void notSetBaseUrlTest() {
-        RestSecure.setBaseUrl("http://localhost");
-        RequestSpec spec = RestSecure.get("http://otherhost/user");
+        RequestSpec spec = RestSecure.get("http://otherhost/user").config(baseUrl("http://localhost"));
         RequestContext context = new RequestContext(spec);
         UrlProcessor processor = new UrlProcessor();
 
@@ -50,9 +43,9 @@ public class UrlProcessorTest {
 
     @Test
     public void applyRouteParamInBaseUrlTest() {
-        RestSecure.setBaseUrl("http://{host}");
 
         RequestSpec spec = RestSecure.get("/user/{user_id}")
+                .config(baseUrl("http://{host}"))
                 .routeParam("host", "localhost")
                 .routeParam("user_id", 10);
 
@@ -75,9 +68,9 @@ public class UrlProcessorTest {
 
     @Test
     public void applyFewRouteParamsInBaseUrlTest() {
-        RestSecure.setBaseUrl("http://{host}:{port}");
 
         RequestSpec spec = RestSecure.get("/user/{user_id}")
+                .config(baseUrl("http://{host}:{port}"))
                 .routeParam("port", 8080)
                 .routeParam("host", "localhost")
                 .routeParam("user_id", 10);

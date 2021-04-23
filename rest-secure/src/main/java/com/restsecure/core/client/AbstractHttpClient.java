@@ -1,13 +1,11 @@
 package com.restsecure.core.client;
 
-import com.restsecure.RestSecure;
 import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.request.specification.SpecificationValidator;
 import com.restsecure.core.response.Response;
 import com.restsecure.core.response.validation.Validation;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -33,7 +31,7 @@ public abstract class AbstractHttpClient implements Client {
     }
 
     private void processRequest(RequestContext context) {
-        List<Processor> processors = context.getRequestSpec().getProcessors();
+        List<Processor> processors = context.getProcessors();
 
         processors.stream()
                 .sorted(Comparator.comparingInt(Processor::getRequestProcessOrder))
@@ -41,11 +39,7 @@ public abstract class AbstractHttpClient implements Client {
     }
 
     private static void precessResponse(Response response) {
-        RequestContext context = response.getContext();
-        List<Processor> processors = new ArrayList<>();
-
-        processors.addAll(RestSecure.getContext().getProcessors());
-        processors.addAll(context.getRequestSpec().getProcessors());
+        List<Processor> processors = response.getContext().getProcessors();
 
         processors.stream()
                 .sorted(Comparator.comparingInt(Processor::getResponseProcessOrder))

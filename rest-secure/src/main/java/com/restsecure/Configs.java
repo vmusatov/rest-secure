@@ -116,6 +116,18 @@ public class Configs {
     }
 
     /**
+     * Create a BaseUrlConfig with specified value
+     *
+     * @param baseUrl base url
+     * @return BaseUrlConfig
+     */
+    public static BaseUrlConfig baseUrl(String baseUrl) {
+        BaseUrlConfig config = new BaseUrlConfig();
+        config.setValue(Optional.of(baseUrl));
+        return config;
+    }
+
+    /**
      * Create a SessionIdNameConfig with specified value
      *
      * @param name Session id name

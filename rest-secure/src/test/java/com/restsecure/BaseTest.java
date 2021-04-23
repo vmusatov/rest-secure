@@ -79,7 +79,7 @@ public class BaseTest {
     }
 
     protected void processRequest(RequestContext context) {
-        List<Processor> processors = context.getRequestSpec().getProcessors();
+        List<Processor> processors = context.getProcessors();
 
         processors.stream()
                 .sorted(Comparator.comparingInt(Processor::getRequestProcessOrder))
