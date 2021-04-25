@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 
 import static com.restsecure.core.response.validation.ValidationStatus.SUCCESS;
 
-public class ObjectValidation<T> extends ResponseObjectValidation<T> {
+public class ObjectValidation<T> extends AbstractObjectValidation<T> {
 
     private final String reason;
     private final Predicate<T> predicate;

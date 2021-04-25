@@ -1,4 +1,4 @@
-package com.restsecure.validation.base;
+package com.restsecure.validation;
 
 import com.restsecure.core.http.Cookie;
 import com.restsecure.core.response.Response;

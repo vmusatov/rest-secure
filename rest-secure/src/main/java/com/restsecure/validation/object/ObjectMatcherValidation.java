@@ -10,7 +10,7 @@ import java.util.List;
 import static com.restsecure.core.response.validation.ValidationStatus.FAIL;
 import static com.restsecure.core.response.validation.ValidationStatus.SUCCESS;
 
-public class ObjectMatcherValidation<T> extends ResponseObjectValidation<T> {
+public class ObjectMatcherValidation<T> extends AbstractObjectValidation<T> {
 
     private final List<Matcher<T>> matchers;
 

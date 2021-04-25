@@ -12,12 +12,12 @@ import com.restsecure.validation.config.BaseJsonPathConfig;
 import java.util.LinkedHashMap;
 import java.util.Optional;
 
-public abstract class ResponseObjectValidation<T> extends BaseValidation {
+public abstract class AbstractObjectValidation<T> extends BaseValidation {
 
     protected final Class<T> responseClass;
     private String path;
 
-    public ResponseObjectValidation(String path, Class<T> responseClass) {
+    public AbstractObjectValidation(String path, Class<T> responseClass) {
         this.responseClass = responseClass;
         this.path = path;
     }

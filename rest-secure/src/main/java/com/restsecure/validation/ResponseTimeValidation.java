@@ -1,4 +1,4 @@
-package com.restsecure.validation.base;
+package com.restsecure.validation;
 
 import com.restsecure.core.response.Response;
 import com.restsecure.core.response.validation.ValidationResult;
