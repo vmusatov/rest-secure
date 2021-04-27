@@ -2,16 +2,26 @@ package com.restsecure.core.client;
 
 import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.RequestContext;
+import com.restsecure.core.request.RequestFactory;
 import com.restsecure.core.request.specification.SpecificationValidator;
 import com.restsecure.core.response.Response;
+import com.restsecure.core.response.ResponseTransformer;
 import com.restsecure.core.response.validation.Validation;
 
 import java.util.Comparator;
 import java.util.List;
 
-public abstract class AbstractHttpClient implements Client {
+public abstract class AbstractHttpClient<RequestType, ResponseType> implements Client {
 
-    protected abstract Response doRequest(RequestContext context);
+    private RequestFactory<RequestType> requestFactory;
+    private ResponseTransformer<ResponseType> responseTransformer;
+
+    public AbstractHttpClient(RequestFactory<RequestType> requestFactory, ResponseTransformer<ResponseType> responseTransformer) {
+        this.requestFactory = requestFactory;
+        this.responseTransformer = responseTransformer;
+    }
+
+    protected abstract ResponseType doRequest(RequestType request);
 
     @Override
     public abstract void close();
@@ -21,8 +31,11 @@ public abstract class AbstractHttpClient implements Client {
         processRequest(context);
         SpecificationValidator.validate(context.getRequestSpec());
 
+        RequestType request = requestFactory.createRequest(context);
         context.setRequestTime(System.currentTimeMillis());
-        Response response = doRequest(context);
+
+        ResponseType r = doRequest(request);
+        Response response = responseTransformer.transform(r, context);
 
         precessResponse(response);
         validateResponse(response);

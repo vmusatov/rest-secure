@@ -5,6 +5,7 @@ import com.restsecure.core.exception.RequestConfigurationException;
 import com.restsecure.core.exception.RestSecureException;
 import com.restsecure.core.http.HttpHelper;
 import com.restsecure.core.request.RequestContext;
+import com.restsecure.core.request.RequestFactory;
 import com.restsecure.core.request.specification.RequestSpec;
 import com.restsecure.core.util.MultiKeyMap;
 import org.apache.http.HttpEntity;
@@ -22,9 +23,10 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-public class ApacheRequestFactory {
+public class ApacheRequestFactory implements RequestFactory<HttpUriRequest> {
 
-    public static HttpUriRequest createRequest(RequestContext context) {
+    @Override
+    public HttpUriRequest createRequest(RequestContext context) {
         HttpRequestBase request = createApacheRequest(context.getRequestSpec());
 
         RequestConfig requestConfig = createRequestConfig(context);
@@ -33,7 +35,7 @@ public class ApacheRequestFactory {
         return request;
     }
 
-    private static RequestConfig createRequestConfig(RequestContext context) {
+    private RequestConfig createRequestConfig(RequestContext context) {
         RequestConfig.Builder builder = RequestConfig.custom();
 
         context.getConfigValue(ProxyConfig.class).ifPresent(proxy -> {
@@ -56,107 +58,45 @@ public class ApacheRequestFactory {
         return builder.build();
     }
 
-    private static HttpRequestBase createApacheRequest(RequestSpec spec) {
+    private HttpRequestBase createApacheRequest(RequestSpec spec) {
+        URI uri = toURI(spec.getUrl());
         HttpRequestBase request;
+
         switch (spec.getMethod()) {
             case GET:
-                request = createGet(spec);
+                request = new HttpGet(uri);
                 break;
             case DELETE:
-                request = createDelete(spec);
+                request = new HttpDelete(uri);
                 break;
             case PUT:
-                request = createPut(spec);
+                request = entityRequest(spec, new HttpPut(uri));
                 break;
             case POST:
-                request = createPost(spec);
+                request = entityRequest(spec, new HttpPost(uri));
                 break;
             case HEAD:
-                request = createHead(spec);
+                request = new HttpHead(uri);
                 break;
             case TRACE:
-                request = createTrace(spec);
+                request = new HttpTrace(uri);
                 break;
             case OPTIONS:
-                request = createOptions(spec);
+                request = new HttpOptions(uri);
                 break;
             case PATCH:
-                request = createPatch(spec);
+                request = entityRequest(spec, new HttpPatch(uri));
                 break;
             default:
                 throw new RequestConfigurationException("Unsupported request method " + spec.getMethod());
         }
-        return request;
-    }
 
-    private static HttpRequestBase createPost(RequestSpec spec) {
-        URI uri = toURI(spec.getUrl());
-        HttpPost request = new HttpPost(uri);
-        setHeadersToRequest(spec.getHeaders(), request);
-        setEntityToRequest(spec, request);
-
-        return request;
-    }
-
-    private static HttpRequestBase createGet(RequestSpec spec) {
-        URI uri = toURI(spec.getUrl());
-        HttpGet request = new HttpGet(uri);
         setHeadersToRequest(spec.getHeaders(), request);
 
         return request;
     }
 
-    private static HttpRequestBase createPut(RequestSpec spec) {
-        URI uri = toURI(spec.getUrl());
-        HttpPut request = new HttpPut(uri);
-        setHeadersToRequest(spec.getHeaders(), request);
-        setEntityToRequest(spec, request);
-
-        return request;
-    }
-
-    private static HttpRequestBase createDelete(RequestSpec spec) {
-        URI uri = toURI(spec.getUrl());
-        HttpDelete request = new HttpDelete(uri);
-        setHeadersToRequest(spec.getHeaders(), request);
-
-        return request;
-    }
-
-    private static HttpRequestBase createHead(RequestSpec spec) {
-        URI uri = toURI(spec.getUrl());
-        HttpHead request = new HttpHead(uri);
-        setHeadersToRequest(spec.getHeaders(), request);
-
-        return request;
-    }
-
-    private static HttpRequestBase createTrace(RequestSpec spec) {
-        URI uri = toURI(spec.getUrl());
-        HttpTrace request = new HttpTrace(uri);
-        setHeadersToRequest(spec.getHeaders(), request);
-
-        return request;
-    }
-
-    private static HttpRequestBase createOptions(RequestSpec spec) {
-        URI uri = toURI(spec.getUrl());
-        HttpOptions request = new HttpOptions(uri);
-        setHeadersToRequest(spec.getHeaders(), request);
-
-        return request;
-    }
-
-    private static HttpRequestBase createPatch(RequestSpec spec) {
-        URI uri = toURI(spec.getUrl());
-        HttpPatch request = new HttpPatch(uri);
-        setHeadersToRequest(spec.getHeaders(), request);
-        setEntityToRequest(spec, request);
-
-        return request;
-    }
-
-    private static URI toURI(String str) {
+    private URI toURI(String str) {
         try {
             return new URIBuilder(str).build();
         } catch (URISyntaxException e) {
@@ -164,14 +104,14 @@ public class ApacheRequestFactory {
         }
     }
 
-    private static void setHeadersToRequest(MultiKeyMap<String, Object> headers, HttpUriRequest request) {
+    private void setHeadersToRequest(MultiKeyMap<String, Object> headers, HttpUriRequest request) {
         headers.forEach(header -> {
             BasicHeader basicHeader = new BasicHeader(header.getKey(), header.getValue().toString());
             request.addHeader(basicHeader);
         });
     }
 
-    private static void setEntityToRequest(RequestSpec spec, HttpEntityEnclosingRequestBase request) {
+    private HttpEntityEnclosingRequestBase entityRequest(RequestSpec spec, HttpEntityEnclosingRequestBase request) {
         List<NameValuePair> params = HttpHelper.toApacheNameValuePair(spec.getParameters());
         Object body = spec.getBody();
 
@@ -192,5 +132,7 @@ public class ApacheRequestFactory {
         if (entity != null) {
             request.setEntity(entity);
         }
+
+        return request;
     }
 }

@@ -10,16 +10,18 @@ import com.restsecure.core.response.Response;
 import com.restsecure.core.response.ResponseBody;
 import com.restsecure.core.response.ResponseTransformer;
 import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ApacheResponseTransformer implements ResponseTransformer<org.apache.http.HttpResponse> {
+public class ApacheResponseTransformer implements ResponseTransformer<CloseableHttpResponse> {
 
     @Override
-    public Response transform(org.apache.http.HttpResponse apacheResponse, RequestContext context) {
+    public Response transform(CloseableHttpResponse apacheResponse, RequestContext context) {
         Response response = new HttpResponse(context);
         response.setTime(System.currentTimeMillis() - context.getRequestTime());
 
@@ -38,6 +40,7 @@ public class ApacheResponseTransformer implements ResponseTransformer<org.apache
                         () -> response.setBody(new ResponseBody(bodyContent))
                 );
 
+        close(apacheResponse);
         return response;
     }
 
@@ -57,6 +60,14 @@ public class ApacheResponseTransformer implements ResponseTransformer<org.apache
             return entity.getContent().readAllBytes();
         } catch (IOException e) {
             throw new RestSecureException(e.getMessage());
+        }
+    }
+
+    private void close(Closeable closeable) {
+        try {
+            closeable.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

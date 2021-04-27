@@ -2,6 +2,7 @@ package com.restsecure.core.processor;
 
 import com.restsecure.core.configuration.configs.BaseUrlConfig;
 import com.restsecure.core.exception.RestSecureException;
+import com.restsecure.core.http.HttpHelper;
 import com.restsecure.core.http.RequestMethod;
 import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.request.specification.RequestSpec;
@@ -12,7 +13,6 @@ import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-import static com.restsecure.core.http.HttpHelper.isHaveBody;
 import static com.restsecure.core.http.HttpHelper.toApacheNameValuePair;
 
 @ProcessAll
@@ -62,7 +62,7 @@ public class UrlProcessor implements Processor {
 
             uriBuilder.addParameters(toApacheNameValuePair(spec.getQueryParams()));
 
-            if (!isHaveBody(method)) {
+            if (!HttpHelper.isHaveBody(method)) {
                 uriBuilder.addParameters(toApacheNameValuePair(spec.getParameters()));
             }
 

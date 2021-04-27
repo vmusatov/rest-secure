@@ -3,12 +3,8 @@ package com.restsecure.core.client.apache;
 import com.restsecure.core.client.AbstractHttpClient;
 import com.restsecure.core.exception.RestSecureException;
 import com.restsecure.core.http.Host;
-import com.restsecure.core.request.RequestContext;
-import com.restsecure.core.response.Response;
-import com.restsecure.core.response.ResponseTransformer;
 import lombok.experimental.Accessors;
 import org.apache.http.HttpHost;
-import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -23,14 +19,13 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ApacheHttpClient extends AbstractHttpClient {
+public class ApacheHttpClient extends AbstractHttpClient<HttpUriRequest, CloseableHttpResponse> {
 
     private CloseableHttpClient client;
-    private ResponseTransformer<HttpResponse> responseTransformer;
 
     private ApacheHttpClient(CloseableHttpClient client) {
+        super(new ApacheRequestFactory(), new ApacheResponseTransformer());
         this.client = client;
-        this.responseTransformer = new ApacheResponseTransformer();
     }
 
     public static ApacheHttpClient create() {
@@ -42,15 +37,9 @@ public class ApacheHttpClient extends AbstractHttpClient {
     }
 
     @Override
-    public Response doRequest(RequestContext context) {
-        HttpUriRequest request = ApacheRequestFactory.createRequest(context);
-
+    public CloseableHttpResponse doRequest(HttpUriRequest request) {
         try {
-            CloseableHttpResponse apacheResponse = client.execute(request);
-            Response response = responseTransformer.transform(apacheResponse, context);
-            apacheResponse.close();
-
-            return response;
+            return client.execute(request);
         } catch (IOException e) {
             throw new RestSecureException(e);
         }
