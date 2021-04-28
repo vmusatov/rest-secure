@@ -12,7 +12,6 @@ import com.restsecure.core.response.ResponseTransformer;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 
-import java.io.Closeable;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -22,26 +21,29 @@ public class ApacheResponseTransformer implements ResponseTransformer<CloseableH
 
     @Override
     public Response transform(CloseableHttpResponse apacheResponse, RequestContext context) {
-        Response response = new HttpResponse(context);
-        response.setTime(System.currentTimeMillis() - context.getRequestTime());
+        try (apacheResponse) {
+            Response response = new HttpResponse(context);
+            response.setTime(System.currentTimeMillis() - context.getRequestTime());
 
-        List<Header> headers = parseHeaders(apacheResponse);
-        response.setHeaders(headers);
-        response.setCookies(HttpHelper.getCookiesFromHeaders(headers));
+            List<Header> headers = parseHeaders(apacheResponse);
+            response.setHeaders(headers);
+            response.setCookies(HttpHelper.getCookiesFromHeaders(headers));
 
-        response.setStatusLine(apacheResponse.getStatusLine().toString());
-        response.setStatusCode(apacheResponse.getStatusLine().getStatusCode());
+            response.setStatusLine(apacheResponse.getStatusLine().toString());
+            response.setStatusCode(apacheResponse.getStatusLine().getStatusCode());
 
-        byte[] bodyContent = getBodyContent(apacheResponse);
+            byte[] bodyContent = getBodyContent(apacheResponse);
 
-        context.getConfigValue(ObjectMapperConfig.class)
-                .ifPresentOrElse(
-                        objectMapper -> response.setBody(new ResponseBody(bodyContent, objectMapper)),
-                        () -> response.setBody(new ResponseBody(bodyContent))
-                );
+            context.getConfigValue(ObjectMapperConfig.class)
+                    .ifPresentOrElse(
+                            objectMapper -> response.setBody(new ResponseBody(bodyContent, objectMapper)),
+                            () -> response.setBody(new ResponseBody(bodyContent))
+                    );
 
-        close(apacheResponse);
-        return response;
+            return response;
+        } catch (IOException e) {
+            throw new RestSecureException(e);
+        }
     }
 
     private static List<Header> parseHeaders(org.apache.http.HttpResponse httpResponse) {
@@ -59,15 +61,7 @@ public class ApacheResponseTransformer implements ResponseTransformer<CloseableH
             }
             return entity.getContent().readAllBytes();
         } catch (IOException e) {
-            throw new RestSecureException(e.getMessage());
-        }
-    }
-
-    private void close(Closeable closeable) {
-        try {
-            closeable.close();
-        } catch (IOException e) {
-           throw new RestSecureException(e);
+            throw new RestSecureException(e);
         }
     }
 }
