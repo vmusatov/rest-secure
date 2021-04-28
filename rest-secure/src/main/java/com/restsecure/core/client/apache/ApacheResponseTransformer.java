@@ -67,7 +67,7 @@ public class ApacheResponseTransformer implements ResponseTransformer<CloseableH
         try {
             closeable.close();
         } catch (IOException e) {
-            e.printStackTrace();
+           throw new RestSecureException(e);
         }
     }
 }
