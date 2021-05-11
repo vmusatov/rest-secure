@@ -3,7 +3,6 @@ package com.restsecure;
 import com.restsecure.core.condition.Condition;
 import com.restsecure.core.condition.ContextCondition;
 import com.restsecure.core.http.*;
-import com.restsecure.core.response.Response;
 import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.response.validation.ValidationResult;
 import com.restsecure.core.response.validation.ValidationStatus;
@@ -40,12 +39,7 @@ public class Validations {
      * @return Validation
      */
     public static Validation success() {
-        return new BaseValidation() {
-            @Override
-            public ValidationResult softValidate(Response response) {
-                return new ValidationResult(ValidationStatus.SUCCESS);
-            }
-        };
+        return resp -> new ValidationResult(ValidationStatus.SUCCESS);
     }
 
     /**
@@ -64,12 +58,7 @@ public class Validations {
      * @return Validation
      */
     public static Validation fail(String msg) {
-        return new BaseValidation() {
-            @Override
-            public ValidationResult softValidate(Response response) {
-                return new ValidationResult(ValidationStatus.FAIL, msg);
-            }
-        };
+        return resp -> new ValidationResult(ValidationStatus.FAIL, msg);
     }
 
     /**

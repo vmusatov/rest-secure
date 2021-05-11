@@ -14,7 +14,6 @@ import com.restsecure.core.response.Response;
 import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.response.validation.ValidationResult;
 import com.restsecure.core.response.validation.ValidationStatus;
-import com.restsecure.validation.BaseValidation;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -239,53 +238,47 @@ public class RequestSenderTest extends BaseTest {
         assertThat(MockServer.requestCount, equalTo(8));
     }
 
-    private Validation teardownTestProcessors = new BaseValidation() {
-        @Override
-        public ValidationResult softValidate(Response response) {
-            RequestContext context = response.getContext();
-            List<Processor> processors = context.getProcessors();
+    private Validation teardownTestProcessors = response -> {
+        RequestContext context = response.getContext();
+        List<Processor> processors = context.getProcessors();
 
-            for (Processor processor : processors) {
-                if (processor instanceof TestProcessor) {
-                    TestProcessor testProcessor = (TestProcessor) processor;
-                    testProcessor.isProcessRequest = false;
-                    testProcessor.isProcessResponse = false;
-                }
+        for (Processor processor : processors) {
+            if (processor instanceof TestProcessor) {
+                TestProcessor testProcessor = (TestProcessor) processor;
+                testProcessor.isProcessRequest = false;
+                testProcessor.isProcessResponse = false;
             }
-
-            return new ValidationResult(ValidationStatus.SUCCESS);
         }
+
+        return new ValidationResult(ValidationStatus.SUCCESS);
     };
 
     private Validation isUseTestProcessor(int processorsCount) {
-        return new BaseValidation() {
-            @Override
-            public ValidationResult softValidate(Response response) {
-                RequestContext context = response.getContext();
-                List<Processor> processors = context.getProcessors();
+        return response -> {
+            RequestContext context = response.getContext();
+            List<Processor> processors = context.getProcessors();
 
-                int count = 0;
+            int count = 0;
 
-                for (Processor processor : processors) {
-                    if (processor instanceof TestProcessor) {
-                        count++;
-                        TestProcessor testProcessor = (TestProcessor) processor;
+            for (Processor processor : processors) {
+                if (processor instanceof TestProcessor) {
+                    count++;
+                    TestProcessor testProcessor = (TestProcessor) processor;
 
-                        if (!testProcessor.isProcessRequest) {
-                            return new ValidationResult(ValidationStatus.FAIL, "Processor not process request");
-                        }
+                    if (!testProcessor.isProcessRequest) {
+                        return new ValidationResult(ValidationStatus.FAIL, "Processor not process request");
+                    }
 
-                        if (!testProcessor.isProcessResponse) {
-                            return new ValidationResult(ValidationStatus.FAIL, "Processor not process response");
-                        }
+                    if (!testProcessor.isProcessResponse) {
+                        return new ValidationResult(ValidationStatus.FAIL, "Processor not process response");
                     }
                 }
+            }
 
-                if (count == processorsCount) {
-                    return new ValidationResult(ValidationStatus.SUCCESS);
-                } else {
-                    return new ValidationResult(ValidationStatus.FAIL, "Processor not use");
-                }
+            if (count == processorsCount) {
+                return new ValidationResult(ValidationStatus.SUCCESS);
+            } else {
+                return new ValidationResult(ValidationStatus.FAIL, "Processor not use");
             }
         };
     }

@@ -1,8 +1,8 @@
 package com.restsecure.validation;
 
 import com.restsecure.core.response.Response;
+import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.response.validation.ValidationResult;
-import com.restsecure.validation.BaseValidation;
 import com.restsecure.validation.config.BaseJsonPathConfig;
 import com.restsecure.validation.matchers.JsonMatcher;
 import com.restsecure.validation.matchers.MatcherUtils;
@@ -11,7 +11,7 @@ import org.hamcrest.Description;
 import static com.restsecure.core.response.validation.ValidationStatus.FAIL;
 import static com.restsecure.core.response.validation.ValidationStatus.SUCCESS;
 
-public class BodyValidation extends BaseValidation {
+public class BodyValidation implements Validation {
 
     private final String BODY_VALIDATION_REASON = "Body validation";
 

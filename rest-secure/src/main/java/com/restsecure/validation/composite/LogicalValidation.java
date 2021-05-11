@@ -4,13 +4,12 @@ import com.restsecure.core.exception.RestSecureException;
 import com.restsecure.core.response.Response;
 import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.response.validation.ValidationResult;
-import com.restsecure.validation.BaseValidation;
 
 import static com.restsecure.core.response.validation.ValidationStatus.FAIL;
 import static com.restsecure.core.response.validation.ValidationStatus.SUCCESS;
 import static com.restsecure.validation.composite.LogicalOperators.AND;
 
-class LogicalValidation extends BaseValidation {
+class LogicalValidation implements Validation {
 
     private final Validation validation1;
     private final Validation logicalOperator;

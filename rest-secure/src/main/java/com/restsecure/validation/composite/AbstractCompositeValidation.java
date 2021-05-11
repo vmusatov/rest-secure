@@ -4,7 +4,6 @@ import com.restsecure.core.exception.RestSecureException;
 import com.restsecure.core.response.Response;
 import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.response.validation.ValidationResult;
-import com.restsecure.validation.BaseValidation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +13,7 @@ import static com.restsecure.core.response.validation.ValidationStatus.SUCCESS;
 import static com.restsecure.validation.composite.LogicalOperators.AND;
 import static com.restsecure.validation.composite.LogicalOperators.OR;
 
-public abstract class AbstractCompositeValidation extends BaseValidation {
+public abstract class AbstractCompositeValidation implements Validation {
 
     private static final String EXPECTED_VALIDATION_ERROR_TEXT = "Expected validation, but found logical operator";
 

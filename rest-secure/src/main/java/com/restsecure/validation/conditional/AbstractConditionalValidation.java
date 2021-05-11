@@ -3,9 +3,8 @@ package com.restsecure.validation.conditional;
 import com.restsecure.core.response.Response;
 import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.response.validation.ValidationResult;
-import com.restsecure.validation.BaseValidation;
 
-public abstract class AbstractConditionalValidation extends BaseValidation {
+public abstract class AbstractConditionalValidation implements Validation {
 
     protected final Validation validation;
     protected final Validation elseValidation;
