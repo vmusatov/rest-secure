@@ -238,9 +238,8 @@ public class RequestSenderTest extends BaseTest {
         assertThat(MockServer.requestCount, equalTo(8));
     }
 
-    private Validation teardownTestProcessors = response -> {
-        RequestContext context = response.getContext();
-        List<Processor> processors = context.getProcessors();
+    private Validation teardownTestProcessors = (ctx, resp) -> {
+        List<Processor> processors = ctx.getProcessors();
 
         for (Processor processor : processors) {
             if (processor instanceof TestProcessor) {
@@ -254,9 +253,8 @@ public class RequestSenderTest extends BaseTest {
     };
 
     private Validation isUseTestProcessor(int processorsCount) {
-        return response -> {
-            RequestContext context = response.getContext();
-            List<Processor> processors = context.getProcessors();
+        return (ctx, resp) -> {
+            List<Processor> processors = ctx.getProcessors();
 
             int count = 0;
 
@@ -307,7 +305,7 @@ public class RequestSenderTest extends BaseTest {
         }
 
         @Override
-        public void processResponse(Response response) {
+        public void processResponse(RequestContext context, Response response) {
             this.isProcessResponse = true;
         }
     }

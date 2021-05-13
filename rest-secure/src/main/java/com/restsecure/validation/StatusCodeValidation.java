@@ -1,5 +1,6 @@
 package com.restsecure.validation;
 
+import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.response.Response;
 import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.response.validation.ValidationResult;
@@ -17,7 +18,7 @@ public class StatusCodeValidation implements Validation {
     }
 
     @Override
-    public ValidationResult softValidate(Response response) {
+    public ValidationResult softValidate(RequestContext context, Response response) {
         int statusCode = response.getStatusCode();
 
         if (!statusCodeMatcher.matches(statusCode)) {

@@ -25,8 +25,7 @@ public abstract class AbstractObjectValidation<T> implements Validation {
     protected abstract ValidationResult softValidate(T responseObject);
 
     @Override
-    public ValidationResult softValidate(Response response) {
-        RequestContext context = response.getContext();
+    public ValidationResult softValidate(RequestContext context, Response response) {
         String basePath = context.getConfigValue(BaseJsonPathConfig.class);
 
         if (basePath != null && !basePath.isEmpty()) {

@@ -1,5 +1,6 @@
 package com.restsecure.validation.composite;
 
+import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.response.Response;
 import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.response.validation.ValidationResult;
@@ -15,17 +16,17 @@ public class DefaultValidation extends AbstractCompositeValidation {
     }
 
     @Override
-    public ValidationResult softValidate(Response response) {
-        List<Validation> validations = response.getContext().getRequestSpec().getValidations();
+    public ValidationResult softValidate(RequestContext context, Response response) {
+        List<Validation> validations = context.getRequestSpec().getValidations();
 
         if (hasNoDefaultValidation(validations)) {
             return new ValidationResult(SUCCESS);
         } else {
             if (validations.size() == 1) {
-                return calculateValidationResult(response);
+                return calculateValidationResult(context, response);
             } else {
                 if (validations.get(validations.size() - 1).equals(this)) {
-                    return calculateValidationResult(response);
+                    return calculateValidationResult(context, response);
                 } else {
                     return new ValidationResult(SUCCESS);
                 }

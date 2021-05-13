@@ -16,7 +16,7 @@ public class BodyValidationTest extends BaseTest {
 
     @Test
     public void bodySuccessTest() {
-        Response response = new HttpResponse(new RequestContext());
+        Response response = new HttpResponse();
         response.setBody(new ResponseBody(userJson));
 
         Validation validation = body("phone.code", equalTo("+7"));
@@ -25,7 +25,7 @@ public class BodyValidationTest extends BaseTest {
 
     @Test
     public void bodyFailTest() {
-        Response response = new HttpResponse(new RequestContext());
+        Response response = new HttpResponse();
         response.setBody(new ResponseBody(userJson));
 
         Validation validation = body("phone.code", equalTo("wrong value"));

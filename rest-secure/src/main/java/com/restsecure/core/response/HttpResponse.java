@@ -27,22 +27,10 @@ public class HttpResponse implements Response {
     @Getter
     @Setter
     private long time;
-    @Getter
-    @Setter
-    private RequestContext context;
 
     public HttpResponse() {
-        init(null);
-    }
-
-    public HttpResponse(RequestContext context) {
-        init(context);
-    }
-
-    private void init(RequestContext context) {
         this.headers = new NameValueList<>();
         this.cookies = new NameValueList<>();
-        this.context = context;
         this.body = new ResponseBody("");
         this.statusLine = "";
     }

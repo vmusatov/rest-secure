@@ -1,6 +1,7 @@
 package com.restsecure.validation;
 
 import com.restsecure.core.http.Header;
+import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.response.Response;
 import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.response.validation.ValidationResult;
@@ -23,7 +24,7 @@ public class HeadersValidation implements Validation {
     }
 
     @Override
-    public ValidationResult softValidate(Response response) {
+    public ValidationResult softValidate(RequestContext context, Response response) {
         NameValueList<Header> headers = response.getHeaders();
 
         if (!headersMatcher.matches(headers)) {

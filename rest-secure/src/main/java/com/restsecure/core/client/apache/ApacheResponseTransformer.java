@@ -22,7 +22,7 @@ public class ApacheResponseTransformer implements ResponseTransformer<CloseableH
     @Override
     public Response transform(CloseableHttpResponse apacheResponse, RequestContext context) {
         try (apacheResponse) {
-            Response response = new HttpResponse(context);
+            Response response = new HttpResponse();
             response.setTime(System.currentTimeMillis() - context.getRequestTime());
 
             List<Header> headers = parseHeaders(apacheResponse);

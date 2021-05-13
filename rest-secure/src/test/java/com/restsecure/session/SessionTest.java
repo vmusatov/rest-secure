@@ -20,9 +20,8 @@ public class SessionTest {
         response.setCookies(Collections.singletonList(new Cookie(SessionIdNameConfig.DEFAULT_SESSION_ID_NAME, "session_value")));
 
         RequestContext context = new RequestContext();
-        response.setContext(context);
 
-        session.processResponse(response);
+        session.processResponse(context, response);
         session.processRequest(context);
 
         Header expectedHeader = new Header("Cookie", SessionIdNameConfig.DEFAULT_SESSION_ID_NAME + "=session_value");

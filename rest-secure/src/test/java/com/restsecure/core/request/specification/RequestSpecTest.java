@@ -392,7 +392,7 @@ public class RequestSpecTest {
         }
 
         @Override
-        public void processResponse(Response response) {
+        public void processResponse(RequestContext context, Response response) {
 
         }
     }

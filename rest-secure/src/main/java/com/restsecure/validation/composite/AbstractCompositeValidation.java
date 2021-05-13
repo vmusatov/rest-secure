@@ -1,6 +1,7 @@
 package com.restsecure.validation.composite;
 
 import com.restsecure.core.exception.RestSecureException;
+import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.response.Response;
 import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.response.validation.ValidationResult;
@@ -25,28 +26,28 @@ public abstract class AbstractCompositeValidation implements Validation {
     }
 
     @Override
-    public abstract ValidationResult softValidate(Response response);
+    public abstract ValidationResult softValidate(RequestContext context, Response response);
 
-    protected ValidationResult calculateValidationResult(Response response) {
+    protected ValidationResult calculateValidationResult(RequestContext context, Response response) {
         if (hasLogicalOperators(this.validations)) {
             List<Validation> parsedValidations = parseLogicalOperators(this.validations);
-            return calculateResult(response, parsedValidations);
+            return calculateResult(context, response, parsedValidations);
         }
 
         if (validations.size() == 1) {
-            return validations.get(0).softValidate(response);
+            return validations.get(0).softValidate(context, response);
         }
 
-        return calculateWithOneLogical(response, AND, this.validations);
+        return calculateWithOneLogical(context, response, AND, this.validations);
     }
 
-    private ValidationResult calculateResult(Response response, List<Validation> validations) {
+    private ValidationResult calculateResult(RequestContext context, Response response, List<Validation> validations) {
         if (!validations.contains(AND)) {
-            return calculateWithOneLogical(response, OR, validations);
+            return calculateWithOneLogical(context, response, OR, validations);
         }
 
         if (!validations.contains(OR)) {
-            return calculateWithOneLogical(response, AND, validations);
+            return calculateWithOneLogical(context, response, AND, validations);
         }
 
         List<Validation> newValidations = new ArrayList<>();
@@ -67,19 +68,19 @@ public abstract class AbstractCompositeValidation implements Validation {
                     newValidations.addAll(validations.subList(i + 2, validations.size()));
                 }
 
-                return calculateResult(response, newValidations);
+                return calculateResult(context, response, newValidations);
             }
         }
 
         return new ValidationResult(SUCCESS);
     }
 
-    private ValidationResult calculateWithOneLogical(Response response, Validation logical, List<Validation> validations) {
+    private ValidationResult calculateWithOneLogical(RequestContext context, Response response, Validation logical, List<Validation> validations) {
         ValidationResult result = new ValidationResult(FAIL);
 
         for (Validation validation : validations) {
             if (!isLogicalOperator(validation)) {
-                result = validation.softValidate(response);
+                result = validation.softValidate(context, response);
 
                 if (logical == OR && result.getStatus() == SUCCESS) {
                     return result;

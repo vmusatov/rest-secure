@@ -39,7 +39,7 @@ public class Validations {
      * @return Validation
      */
     public static Validation success() {
-        return resp -> new ValidationResult(ValidationStatus.SUCCESS);
+        return (ctx, resp) -> new ValidationResult(ValidationStatus.SUCCESS);
     }
 
     /**
@@ -58,7 +58,7 @@ public class Validations {
      * @return Validation
      */
     public static Validation fail(String msg) {
-        return resp -> new ValidationResult(ValidationStatus.FAIL, msg);
+        return (ctx, resp) -> new ValidationResult(ValidationStatus.FAIL, msg);
     }
 
     /**

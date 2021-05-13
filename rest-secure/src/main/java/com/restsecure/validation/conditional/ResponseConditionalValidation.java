@@ -1,5 +1,6 @@
 package com.restsecure.validation.conditional;
 
+import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.response.Response;
 import com.restsecure.core.response.validation.Validation;
 
@@ -13,7 +14,7 @@ public class ResponseConditionalValidation extends AbstractConditionalValidation
     }
 
     @Override
-    boolean isConditionMet(Response response) {
-        return conditional.softValidate(response).isSuccess();
+    boolean isConditionMet(RequestContext context, Response response) {
+        return conditional.softValidate(context, response).isSuccess();
     }
 }

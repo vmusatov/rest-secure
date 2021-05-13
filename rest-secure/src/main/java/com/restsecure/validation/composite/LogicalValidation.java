@@ -1,6 +1,7 @@
 package com.restsecure.validation.composite;
 
 import com.restsecure.core.exception.RestSecureException;
+import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.response.Response;
 import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.response.validation.ValidationResult;
@@ -22,10 +23,10 @@ class LogicalValidation implements Validation {
     }
 
     @Override
-    public ValidationResult softValidate(Response response) {
+    public ValidationResult softValidate(RequestContext context, Response response) {
 
-        ValidationResult result1 = validation1.softValidate(response);
-        ValidationResult result2 = validation2.softValidate(response);
+        ValidationResult result1 = validation1.softValidate(context, response);
+        ValidationResult result2 = validation2.softValidate(context, response);
 
         if (logicalOperator.equals(AND)) {
             if (result1.isFail()) {

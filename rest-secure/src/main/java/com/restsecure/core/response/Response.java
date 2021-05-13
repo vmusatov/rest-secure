@@ -87,15 +87,4 @@ public interface Response {
      * @return response time in specify time unit
      */
     long getTimeIn(TimeUnit timeUnit);
-
-    /**
-     * Set request context
-     * @param context RequestContext
-     */
-    void setContext(RequestContext context);
-
-    /**
-     * @return RequestContext
-     */
-    RequestContext getContext();
 }

@@ -37,8 +37,8 @@ public abstract class AbstractHttpClient<RequestType, ResponseType> implements C
         ResponseType r = doRequest(request);
         Response response = responseTransformer.transform(r, context);
 
-        precessResponse(response);
-        validateResponse(response);
+        precessResponse(context, response);
+        validateResponse(context, response);
 
         return response;
     }
@@ -51,22 +51,21 @@ public abstract class AbstractHttpClient<RequestType, ResponseType> implements C
                 .forEach(processor -> processor.processRequest(context));
     }
 
-    private static void precessResponse(Response response) {
-        List<Processor> processors = response.getContext().getProcessors();
+    private static void precessResponse(RequestContext context, Response response) {
+        List<Processor> processors = context.getProcessors();
 
         processors.stream()
                 .sorted(Comparator.comparingInt(Processor::getResponseProcessOrder))
-                .forEach(processor -> processor.processResponse(response));
+                .forEach(processor -> processor.processResponse(context, response));
     }
 
-    private static void validateResponse(Response response) {
-        RequestContext context = response.getContext();
+    private static void validateResponse(RequestContext context, Response response) {
         List<Validation> validations = context.getRequestSpec().getValidations();
 
         if (validations == null) {
             return;
         }
 
-        validations.forEach(validation -> validation.validate(response));
+        validations.forEach(validation -> validation.validate(context, response));
     }
 }
