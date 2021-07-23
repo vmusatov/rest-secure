@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @Getter
-public class RequestSpecImpl implements RequestSpec {
+public class RequestSpecImpl implements MutableRequestSpec {
 
     private String url;
     private int port;
@@ -57,25 +57,25 @@ public class RequestSpecImpl implements RequestSpec {
     }
 
     @Override
-    public RequestSpec port(int port) {
+    public RequestSpecImpl port(int port) {
         this.port = port;
         return this;
     }
 
     @Override
-    public RequestSpec method(RequestMethod method) {
+    public RequestSpecImpl method(RequestMethod method) {
         this.method = method;
         return this;
     }
 
     @Override
-    public RequestSpec body(Object body) {
+    public RequestSpecImpl body(Object body) {
         this.body = body;
         return this;
     }
 
     @Override
-    public RequestSpec header(String name, Object value, Object... additionalValues) {
+    public RequestSpecImpl header(String name, Object value, Object... additionalValues) {
         this.headers.put(name, value);
         if (additionalValues != null && additionalValues.length > 0) {
             for (Object additionalValue : additionalValues) {
@@ -86,7 +86,7 @@ public class RequestSpecImpl implements RequestSpec {
     }
 
     @Override
-    public RequestSpec header(Header header, Header... additionalHeaders) {
+    public RequestSpecImpl header(Header header, Header... additionalHeaders) {
         headers.put(header.getName(), header.getValue());
         if (additionalHeaders != null && additionalHeaders.length > 0) {
             for (Header h : additionalHeaders) {
@@ -97,7 +97,7 @@ public class RequestSpecImpl implements RequestSpec {
     }
 
     @Override
-    public RequestSpec headers(List<Header> headers) {
+    public RequestSpecImpl headers(List<Header> headers) {
         if (headers != null && !headers.isEmpty()) {
             for (Header header : headers) {
                 header(header);
@@ -107,7 +107,7 @@ public class RequestSpecImpl implements RequestSpec {
     }
 
     @Override
-    public RequestSpec headers(Map<String, ?> headers) {
+    public RequestSpecImpl headers(Map<String, ?> headers) {
         for (Map.Entry<String, ?> header : headers.entrySet()) {
             header(header.getKey(), header.getValue());
         }
@@ -120,7 +120,29 @@ public class RequestSpecImpl implements RequestSpec {
     }
 
     @Override
-    public RequestSpec param(String name, Object value, Object... additionalValues) {
+    public RequestSpecImpl clearHeaders() {
+        this.headers.clear();
+        return this;
+    }
+
+    @Override
+    public RequestSpecImpl removeHeader(String name) {
+        this.headers.deleteAllWithKey(name);
+        return this;
+    }
+
+    @Override
+    public RequestSpecImpl replaceHeader(String name, Object newValue) {
+        this.headers.forEach(h -> {
+            if (h.getKey().equals(name)) {
+                h.setValue(newValue);
+            }
+        });
+        return this;
+    }
+
+    @Override
+    public RequestSpecImpl param(String name, Object value, Object... additionalValues) {
         this.parameters.put(name, value);
         if (additionalValues != null && additionalValues.length > 0) {
             for (Object additionalValue : additionalValues) {
@@ -131,13 +153,13 @@ public class RequestSpecImpl implements RequestSpec {
     }
 
     @Override
-    public RequestSpec param(Parameter parameter) {
+    public RequestSpecImpl param(Parameter parameter) {
         param(parameter.getName(), parameter.getValue());
         return this;
     }
 
     @Override
-    public RequestSpec params(List<Parameter> parameters) {
+    public RequestSpecImpl params(List<Parameter> parameters) {
         if (parameters != null && !parameters.isEmpty()) {
             for (Parameter param : parameters) {
                 param(param);
@@ -147,7 +169,7 @@ public class RequestSpecImpl implements RequestSpec {
     }
 
     @Override
-    public RequestSpec params(Map<String, ?> parameters) {
+    public RequestSpecImpl params(Map<String, ?> parameters) {
         for (Map.Entry<String, ?> param : parameters.entrySet()) {
             param(param.getKey(), param.getValue());
         }
@@ -155,12 +177,56 @@ public class RequestSpecImpl implements RequestSpec {
     }
 
     @Override
-    public MultiKeyMap<String, Object> getParameters() {
+    public MultiKeyMap<String, Object> getParams() {
         return this.parameters;
     }
 
     @Override
-    public RequestSpec queryParam(String name, Object... value) {
+    public RequestSpecImpl clearParams() {
+        this.parameters.clear();
+        return this;
+    }
+
+    @Override
+    public RequestSpecImpl removeParam(String name) {
+        this.parameters.deleteAllWithKey(name);
+        return this;
+    }
+
+    @Override
+    public RequestSpecImpl replaceParam(String name, Object newValue) {
+        this.parameters.forEach(p -> {
+            if (p.getKey().equals(name)) {
+                p.setValue(newValue);
+            }
+        });
+        return this;
+    }
+
+    @Override
+    public RequestSpecImpl clearQueryParams() {
+        this.queryParams.clear();
+        return this;
+    }
+
+    @Override
+    public RequestSpecImpl removeQueryParam(String name) {
+        this.queryParams.deleteAllWithKey(name);
+        return this;
+    }
+
+    @Override
+    public RequestSpecImpl replaceQueryParam(String name, Object newValue) {
+        this.queryParams.forEach(qp -> {
+            if (qp.getKey().equals(name)) {
+                qp.setValue(newValue);
+            }
+        });
+        return this;
+    }
+
+    @Override
+    public RequestSpecImpl queryParam(String name, Object... value) {
         if (value.length > 0) {
             for (Object val : value) {
                 this.queryParams.put(name, val);
@@ -172,13 +238,13 @@ public class RequestSpecImpl implements RequestSpec {
     }
 
     @Override
-    public RequestSpec queryParam(Parameter param) {
+    public RequestSpecImpl queryParam(Parameter param) {
         queryParam(param.getName(), param.getValue());
         return this;
     }
 
     @Override
-    public RequestSpec queryParams(List<Parameter> parameters) {
+    public RequestSpecImpl queryParams(List<Parameter> parameters) {
         if (parameters != null && !parameters.isEmpty()) {
             for (Parameter param : parameters) {
                 queryParam(param);
@@ -188,7 +254,7 @@ public class RequestSpecImpl implements RequestSpec {
     }
 
     @Override
-    public RequestSpec queryParams(Map<String, ?> parameters) {
+    public RequestSpecImpl queryParams(Map<String, ?> parameters) {
         for (Map.Entry<String, ?> param : parameters.entrySet()) {
             queryParam(param.getKey(), param.getValue());
         }
@@ -196,7 +262,7 @@ public class RequestSpecImpl implements RequestSpec {
     }
 
     @Override
-    public RequestSpec routeParam(String name, Object value) {
+    public RequestSpecImpl routeParam(String name, Object value) {
         this.routeParams.deleteAllWithKey(name);
         this.routeParams.put(name, value);
         return this;
@@ -208,7 +274,29 @@ public class RequestSpecImpl implements RequestSpec {
     }
 
     @Override
-    public RequestSpec cookie(String name, Object value, Object... additionalValues) {
+    public RequestSpecImpl clearRouteParams() {
+        this.routeParams.clear();
+        return this;
+    }
+
+    @Override
+    public RequestSpecImpl removeRouteParam(String name) {
+        this.routeParams.deleteAllWithKey(name);
+        return this;
+    }
+
+    @Override
+    public RequestSpecImpl replaceRouteParam(String name, Object newValue) {
+        this.routeParams.forEach(rp -> {
+            if (rp.getKey().equals(name)) {
+                rp.setValue(newValue);
+            }
+        });
+        return this;
+    }
+
+    @Override
+    public RequestSpecImpl cookie(String name, Object value, Object... additionalValues) {
         this.cookiesWithValueToSerialize.put(name, value);
         if (additionalValues != null && additionalValues.length > 0) {
             for (Object additionalValue : additionalValues) {
@@ -219,13 +307,13 @@ public class RequestSpecImpl implements RequestSpec {
     }
 
     @Override
-    public RequestSpec cookie(Cookie cookie) {
+    public RequestSpecImpl cookie(Cookie cookie) {
         header("Cookie", cookie.toString());
         return this;
     }
 
     @Override
-    public RequestSpec cookies(List<Cookie> cookies) {
+    public RequestSpecImpl cookies(List<Cookie> cookies) {
         for (Cookie cookie : cookies) {
             cookie(cookie);
         }
@@ -233,7 +321,7 @@ public class RequestSpecImpl implements RequestSpec {
     }
 
     @Override
-    public RequestSpec cookies(Map<String, ?> cookies) {
+    public RequestSpecImpl cookies(Map<String, ?> cookies) {
         for (Map.Entry<String, ?> cookie : cookies.entrySet()) {
             cookie(cookie.getKey(), cookie.getValue());
         }
@@ -246,7 +334,13 @@ public class RequestSpecImpl implements RequestSpec {
     }
 
     @Override
-    public RequestSpec process(Processor processor, Processor... additionalProcessors) {
+    public RequestSpecImpl removeProcessor(Class<? extends Processor> processor) {
+        this.processors.removeIf(p -> p.getClass().equals(processor));
+        return this;
+    }
+
+    @Override
+    public RequestSpecImpl process(Processor processor, Processor... additionalProcessors) {
         this.processors.add(processor);
         this.processors.addAll(Arrays.asList(additionalProcessors));
 
@@ -254,13 +348,13 @@ public class RequestSpecImpl implements RequestSpec {
     }
 
     @Override
-    public RequestSpec process(List<Processor> processors) {
+    public RequestSpecImpl process(List<Processor> processors) {
         this.processors.addAll(processors);
         return this;
     }
 
     @Override
-    public RequestSpec config(Config<?> config, Config<?>... additionalConfigs) {
+    public RequestSpecImpl config(Config<?> config, Config<?>... additionalConfigs) {
         addConfig(config);
         for (Config<?> cfg : additionalConfigs) {
             addConfig(cfg);
@@ -269,7 +363,7 @@ public class RequestSpecImpl implements RequestSpec {
     }
 
     @Override
-    public RequestSpec config(List<Config<?>> configs) {
+    public RequestSpecImpl config(List<Config<?>> configs) {
         for (Config<?> config : configs) {
             addConfig(config);
         }
@@ -287,31 +381,32 @@ public class RequestSpecImpl implements RequestSpec {
     }
 
     @Override
-    public RequestSpec mergeWith(RequestSpec with) {
-        SpecificationMerger.merge(with, this);
+    public RequestSpecImpl removeConfig(Class<? extends Config<?>> config) {
+        this.configs.removeIf(c -> c.getClass().equals(config));
         return this;
     }
 
     @Override
-    public RequestSpec expect(Validation validation, Validation... additionalValidation) {
+    public RequestSpecImpl mergeWith(RequestSpec with) {
+        SpecificationMerger.merge((MutableRequestSpec) with, this);
+        return this;
+    }
+
+    @Override
+    public RequestSpecImpl expect(Validation validation, Validation... additionalValidation) {
         this.validations.add(validation);
         this.validations.addAll(Arrays.asList(additionalValidation));
         return this;
     }
 
     @Override
-    public RequestSpec expect(List<Validation> validations) {
+    public RequestSpecImpl expect(List<Validation> validations) {
         this.validations.addAll(validations);
         return this;
     }
 
     @Override
-    public List<Validation> getValidations() {
-        return this.validations;
-    }
-
-    @Override
-    public RequestSpec and() {
+    public RequestSpecImpl and() {
         return this;
     }
 

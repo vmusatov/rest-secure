@@ -2,10 +2,10 @@ package com.restsecure.core.config;
 
 import com.restsecure.BaseTest;
 import com.restsecure.MockServer;
-import com.restsecure.RestSecure;
 import com.restsecure.core.configuration.configs.OverwriteAllHeadersConfig;
+import com.restsecure.core.http.RequestMethod;
 import com.restsecure.core.request.RequestContext;
-import com.restsecure.core.request.specification.RequestSpec;
+import com.restsecure.core.request.specification.RequestSpecImpl;
 import com.restsecure.core.util.MultiKeyMap;
 import org.testng.annotations.Test;
 
@@ -43,7 +43,10 @@ public class OverwriteAllHeadersConfigTest extends BaseTest {
 
     @Test
     public void applyConfigTest() {
-        RequestSpec spec = RestSecure.get(MockServer.GET_PATH)
+        RequestSpecImpl spec = new RequestSpecImpl();
+
+        spec.url(MockServer.GET_PATH)
+                .method(RequestMethod.GET)
                 .config(overwriteAllHeaders(true))
                 .header("one", "one value1")
                 .header("two", "two value1")

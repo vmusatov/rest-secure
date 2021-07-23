@@ -1,8 +1,8 @@
 package com.restsecure.core.processor;
 
-import com.restsecure.RestSecure;
+import com.restsecure.core.http.RequestMethod;
 import com.restsecure.core.request.RequestContext;
-import com.restsecure.core.request.specification.RequestSpec;
+import com.restsecure.core.request.specification.RequestSpecImpl;
 import org.testng.annotations.Test;
 
 import static com.restsecure.Configs.baseUrl;
@@ -13,7 +13,11 @@ public class UrlProcessorTest {
 
     @Test
     public void setBaseUrlTest() {
-        RequestSpec spec = RestSecure.get("/user").config(baseUrl("http://localhost"));
+        RequestSpecImpl spec = new RequestSpecImpl();
+        spec.url("/user")
+                .method(RequestMethod.GET)
+                .config(baseUrl("http://localhost"));
+
         RequestContext context = new RequestContext(spec);
         UrlProcessor processor = new UrlProcessor();
 
@@ -23,7 +27,12 @@ public class UrlProcessorTest {
 
     @Test
     public void notSetBaseUrlTest() {
-        RequestSpec spec = RestSecure.get("http://otherhost/user").config(baseUrl("http://localhost"));
+        RequestSpecImpl spec = new RequestSpecImpl();
+
+        spec.url("http://otherhost/user")
+                .method(RequestMethod.GET)
+                .config(baseUrl("http://localhost"));
+
         RequestContext context = new RequestContext(spec);
         UrlProcessor processor = new UrlProcessor();
 
@@ -33,7 +42,12 @@ public class UrlProcessorTest {
 
     @Test
     public void applyRouteParamTest() {
-        RequestSpec spec = RestSecure.get("http://localhost/user/{user_id}").routeParam("user_id", 10);
+        RequestSpecImpl spec = new RequestSpecImpl();
+
+        spec.url("http://localhost/user/{user_id}")
+                .method(RequestMethod.GET)
+                .routeParam("user_id", 10);
+
         RequestContext context = new RequestContext(spec);
         UrlProcessor processor = new UrlProcessor();
 
@@ -44,7 +58,10 @@ public class UrlProcessorTest {
     @Test
     public void applyRouteParamInBaseUrlTest() {
 
-        RequestSpec spec = RestSecure.get("/user/{user_id}")
+        RequestSpecImpl spec = new RequestSpecImpl();
+
+        spec.url("/user/{user_id}")
+                .method(RequestMethod.GET)
                 .config(baseUrl("http://{host}"))
                 .routeParam("host", "localhost")
                 .routeParam("user_id", 10);
@@ -58,7 +75,12 @@ public class UrlProcessorTest {
 
     @Test
     public void applyFewEqualRouteParamsTest() {
-        RequestSpec spec = RestSecure.get("http://localhost/user/{user_id}/{user_id}").routeParam("user_id", 10);
+        RequestSpecImpl spec = new RequestSpecImpl();
+
+        spec.url("http://localhost/user/{user_id}/{user_id}")
+                .method(RequestMethod.GET)
+                .routeParam("user_id", 10);
+
         RequestContext context = new RequestContext(spec);
         UrlProcessor processor = new UrlProcessor();
 
@@ -69,7 +91,10 @@ public class UrlProcessorTest {
     @Test
     public void applyFewRouteParamsInBaseUrlTest() {
 
-        RequestSpec spec = RestSecure.get("/user/{user_id}")
+        RequestSpecImpl spec = new RequestSpecImpl();
+
+        spec.url("/user/{user_id}")
+                .method(RequestMethod.GET)
                 .config(baseUrl("http://{host}:{port}"))
                 .routeParam("port", 8080)
                 .routeParam("host", "localhost")
@@ -84,7 +109,12 @@ public class UrlProcessorTest {
 
     @Test
     public void applyPortTest() {
-        RequestSpec spec = RestSecure.get("http://localhost/user").port(8080);
+        RequestSpecImpl spec = new RequestSpecImpl();
+
+        spec.url("http://localhost/user")
+                .method(RequestMethod.GET)
+                .port(8080);
+
         RequestContext context = new RequestContext(spec);
         UrlProcessor processor = new UrlProcessor();
 
@@ -94,7 +124,10 @@ public class UrlProcessorTest {
 
     @Test
     public void applyParamsTest() {
-        RequestSpec spec = RestSecure.get("http://localhost/user")
+        RequestSpecImpl spec = new RequestSpecImpl();
+
+        spec.url("http://localhost/user")
+                .method(RequestMethod.GET)
                 .param("param1", "value1")
                 .param("param2", "value2");
 
@@ -107,7 +140,10 @@ public class UrlProcessorTest {
 
     @Test
     public void notApplyParamsWhenRequestHasBodyTest() {
-        RequestSpec spec = RestSecure.post("http://localhost/user")
+        RequestSpecImpl spec = new RequestSpecImpl();
+
+        spec.url("http://localhost/user")
+                .method(RequestMethod.POST)
                 .param("param1", "value1")
                 .param("param2", "value2");
 
@@ -120,7 +156,10 @@ public class UrlProcessorTest {
 
     @Test
     public void applyQueryParamsTest() {
-        RequestSpec spec = RestSecure.get("http://localhost/user")
+        RequestSpecImpl spec = new RequestSpecImpl();
+
+        spec.url("http://localhost/user")
+                .method(RequestMethod.GET)
                 .queryParam("param1", "value1")
                 .queryParam("param2", "value2");
 

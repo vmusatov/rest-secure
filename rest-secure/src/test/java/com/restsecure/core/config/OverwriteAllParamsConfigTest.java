@@ -2,10 +2,10 @@ package com.restsecure.core.config;
 
 import com.restsecure.BaseTest;
 import com.restsecure.MockServer;
-import com.restsecure.RestSecure;
 import com.restsecure.core.configuration.configs.OverwriteAllParamsConfig;
+import com.restsecure.core.http.RequestMethod;
 import com.restsecure.core.request.RequestContext;
-import com.restsecure.core.request.specification.RequestSpec;
+import com.restsecure.core.request.specification.RequestSpecImpl;
 import com.restsecure.core.util.MultiKeyMap;
 import org.testng.annotations.Test;
 
@@ -43,7 +43,10 @@ public class OverwriteAllParamsConfigTest extends BaseTest {
 
     @Test
     public void applyConfigTest() {
-        RequestSpec spec = RestSecure.get(MockServer.GET_PATH)
+        RequestSpecImpl spec = new RequestSpecImpl();
+
+        spec.url(MockServer.GET_PATH)
+                .method(RequestMethod.GET)
                 .config(overwriteAllParams(true))
                 .param("one", "one value1")
                 .param("two", "two value1")
@@ -55,7 +58,7 @@ public class OverwriteAllParamsConfigTest extends BaseTest {
         RequestContext context = new RequestContext(spec);
         processRequest(context);
 
-        MultiKeyMap<String, Object> params = context.getRequestSpec().getParameters();
+        MultiKeyMap<String, Object> params = context.getRequestSpec().getParams();
 
         assertThat(params.size(), equalTo(3));
         assertThat(params.getFirst("one"), equalTo("one value2"));

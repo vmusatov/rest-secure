@@ -31,11 +31,6 @@ public interface RequestSpec {
     RequestSpec url(String url);
 
     /**
-     * @return request url
-     */
-    String getUrl();
-
-    /**
      * Allows you to specify request port<br><br>
      * <pre>
      *     RequestSpec spec = spec().port(8080);
@@ -45,11 +40,6 @@ public interface RequestSpec {
      * @return RequestSpec
      */
     RequestSpec port(int port);
-
-    /**
-     * @return request port
-     */
-    int getPort();
 
     /**
      * Allows you to specify request method<br><br>
@@ -63,22 +53,12 @@ public interface RequestSpec {
     RequestSpec method(RequestMethod method);
 
     /**
-     * @return request method
-     */
-    RequestMethod getMethod();
-
-    /**
      * Allow you to set request body
      *
      * @param body request body
      * @return RequestSpec
      */
     RequestSpec body(Object body);
-
-    /**
-     * @return reqeust body
-     */
-    Object getBody();
 
     /**
      * Allows you to specify request header<br><br>
@@ -128,11 +108,6 @@ public interface RequestSpec {
      * @return RequestSpec
      */
     RequestSpec headers(Map<String, ?> headers);
-
-    /**
-     * @return request headers
-     */
-    MultiKeyMap<String, Object> getHeaders();
 
     /**
      * Allows you to specify request parameters<br>
@@ -190,11 +165,6 @@ public interface RequestSpec {
     RequestSpec params(Map<String, ?> parameters);
 
     /**
-     * @return request parameters
-     */
-    MultiKeyMap<String, Object> getParameters();
-
-    /**
      * Allows you to specify query parameters
      *
      * @return RequestSpec
@@ -223,11 +193,6 @@ public interface RequestSpec {
     RequestSpec queryParams(Map<String, ?> params);
 
     /**
-     * @return RequestSpec
-     */
-    MultiKeyMap<String, Object> getQueryParams();
-
-    /**
      * Allow you to specify route param, for example:
      * <pre>
      *     get("http://localhost/users/{user_id}")
@@ -239,11 +204,6 @@ public interface RequestSpec {
      * @return RequestSpec
      */
     RequestSpec routeParam(String name, Object value);
-
-    /**
-     * @return route params
-     */
-    MultiKeyMap<String, Object> getRouteParams();
 
     /**
      * Allow you to specify request cookies
@@ -301,11 +261,6 @@ public interface RequestSpec {
     RequestSpec cookies(Map<String, ?> cookies);
 
     /**
-     * @return cookies with Object value
-     */
-    MultiKeyMap<String, Object> getCookiesWithValueToSerialize();
-
-    /**
      * Allow you to specify Processor to process request and response
      * For example, a {@link Session} class is a Processor,<br>
      * which allows it to receive session ID from a response
@@ -325,11 +280,6 @@ public interface RequestSpec {
      * @return RequestSpec
      */
     RequestSpec process(List<Processor> processors);
-
-    /**
-     * @return Processors list
-     */
-    List<Processor> getProcessors();
 
     /**
      * Allow tou to add configuration<br>
@@ -361,11 +311,6 @@ public interface RequestSpec {
      * @return RequestSpec
      */
     RequestSpec config(List<Config<?>> configs);
-
-    /**
-     * @return Configs list
-     */
-    List<Config<?>> getConfigs();
 
     /**
      * Allows you to merge another specification into the current
@@ -400,11 +345,6 @@ public interface RequestSpec {
      * @return RequestSpec
      */
     RequestSpec expect(List<Validation> validations);
-
-    /**
-     * @return List<ResponseValidation>
-     */
-    List<Validation> getValidations();
 
     /**
      * Syntactic sugar

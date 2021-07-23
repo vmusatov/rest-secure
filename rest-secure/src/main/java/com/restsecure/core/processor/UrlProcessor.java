@@ -5,7 +5,7 @@ import com.restsecure.core.exception.RestSecureException;
 import com.restsecure.core.http.HttpHelper;
 import com.restsecure.core.http.RequestMethod;
 import com.restsecure.core.request.RequestContext;
-import com.restsecure.core.request.specification.RequestSpec;
+import com.restsecure.core.request.specification.MutableRequestSpec;
 import com.restsecure.core.util.MultiKeyMap;
 import org.apache.http.client.utils.URIBuilder;
 
@@ -52,7 +52,7 @@ public class UrlProcessor implements Processor {
 
     public static void buildUrl(RequestContext context) {
         try {
-            RequestSpec spec = context.getRequestSpec();
+            MutableRequestSpec spec = context.getRequestSpec();
             URIBuilder uriBuilder = new URIBuilder(spec.getUrl());
             RequestMethod method = spec.getMethod();
 
@@ -63,7 +63,7 @@ public class UrlProcessor implements Processor {
             uriBuilder.addParameters(toApacheNameValuePair(spec.getQueryParams()));
 
             if (!HttpHelper.isHaveBody(method)) {
-                uriBuilder.addParameters(toApacheNameValuePair(spec.getParameters()));
+                uriBuilder.addParameters(toApacheNameValuePair(spec.getParams()));
             }
 
             if (spec.getPort() != 0) {

@@ -60,6 +60,10 @@ public class MultiKeyMap<T, E> implements Iterable<MultiKeyMap.Entity<T, E>> {
         this.items.removeIf(item -> item.getKey().equals(key));
     }
 
+    public void clear() {
+        this.items.clear();
+    }
+
     public boolean isEmpty() {
         return this.items.isEmpty();
     }

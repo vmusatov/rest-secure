@@ -2,7 +2,7 @@ package com.restsecure.logging.logger;
 
 import com.restsecure.core.http.Cookie;
 import com.restsecure.core.http.Header;
-import com.restsecure.core.request.specification.RequestSpec;
+import com.restsecure.core.request.specification.MutableRequestSpec;
 import com.restsecure.core.response.Response;
 import com.restsecure.logging.LogInfo;
 import com.restsecure.logging.LogWriter;
@@ -13,7 +13,7 @@ import static com.restsecure.logging.logger.LogHelper.*;
 
 public class ResponseLogger {
 
-    public static void log(LogWriter writer, Response response, RequestSpec spec, List<LogInfo> logInfoList) {
+    public static void log(LogWriter writer, Response response, MutableRequestSpec spec, List<LogInfo> logInfoList) {
         final StringBuilder builder = new StringBuilder();
 
         builder.append("----------------------------------------")

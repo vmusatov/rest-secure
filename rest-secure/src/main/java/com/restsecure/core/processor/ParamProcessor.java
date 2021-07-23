@@ -17,7 +17,7 @@ public class ParamProcessor implements Processor {
 
     @Override
     public void processRequest(RequestContext context) {
-        MultiKeyMap<String, Object> params = context.getRequestSpec().getParameters();
+        MultiKeyMap<String, Object> params = context.getRequestSpec().getParams();
 
         context.getConfigValue(ObjectMapperConfig.class)
                 .ifPresent(mapper -> SerializeHelper.serializeValuesIfNeed(params, mapper));

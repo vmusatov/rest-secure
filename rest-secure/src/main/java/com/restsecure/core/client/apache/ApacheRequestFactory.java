@@ -6,7 +6,7 @@ import com.restsecure.core.exception.RestSecureException;
 import com.restsecure.core.http.HttpHelper;
 import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.request.RequestFactory;
-import com.restsecure.core.request.specification.RequestSpec;
+import com.restsecure.core.request.specification.MutableRequestSpec;
 import com.restsecure.core.util.MultiKeyMap;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
@@ -58,7 +58,7 @@ public class ApacheRequestFactory implements RequestFactory<HttpUriRequest> {
         return builder.build();
     }
 
-    private HttpRequestBase createApacheRequest(RequestSpec spec) {
+    private HttpRequestBase createApacheRequest(MutableRequestSpec spec) {
         URI uri = toURI(spec.getUrl());
         HttpRequestBase request;
 
@@ -111,8 +111,8 @@ public class ApacheRequestFactory implements RequestFactory<HttpUriRequest> {
         });
     }
 
-    private HttpEntityEnclosingRequestBase entityRequest(RequestSpec spec, HttpEntityEnclosingRequestBase request) {
-        List<NameValuePair> params = HttpHelper.toApacheNameValuePair(spec.getParameters());
+    private HttpEntityEnclosingRequestBase entityRequest(MutableRequestSpec spec, HttpEntityEnclosingRequestBase request) {
+        List<NameValuePair> params = HttpHelper.toApacheNameValuePair(spec.getParams());
         Object body = spec.getBody();
 
         if (!params.isEmpty() && body != null) {

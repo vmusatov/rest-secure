@@ -2,14 +2,14 @@ package com.restsecure.core.request.specification;
 
 class SpecificationMerger {
 
-    static void merge(RequestSpec from, RequestSpec to) {
+    static void merge(MutableRequestSpec from, RequestSpec to) {
         to.url(from.getUrl());
         to.method(from.getMethod());
         to.port(from.getPort());
 
         to.body(from.getBody());
 
-        from.getParameters().forEach(param -> to.param(param.getKey(), param.getValue()));
+        from.getParams().forEach(param -> to.param(param.getKey(), param.getValue()));
         from.getRouteParams().forEach(param -> to.routeParam(param.getKey(), param.getValue()));
         from.getQueryParams().forEach(param -> to.queryParam(param.getKey(), param.getValue()));
 

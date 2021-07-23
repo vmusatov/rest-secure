@@ -4,7 +4,7 @@ import com.restsecure.RestSecure;
 import com.restsecure.core.configuration.Config;
 import com.restsecure.core.configuration.ConfigFactory;
 import com.restsecure.core.processor.Processor;
-import com.restsecure.core.request.specification.RequestSpec;
+import com.restsecure.core.request.specification.MutableRequestSpec;
 import com.restsecure.core.request.specification.RequestSpecImpl;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 
 public class RequestContext {
     @Getter
-    private RequestSpec requestSpec;
+    private MutableRequestSpec requestSpec;
     private List<Config<?>> configs;
     @Getter
     private List<Processor> processors;
@@ -28,11 +28,11 @@ public class RequestContext {
         init(null);
     }
 
-    public RequestContext(RequestSpec spec) {
+    public RequestContext(MutableRequestSpec spec) {
         init(spec);
     }
 
-    private void init(RequestSpec spec) {
+    private void init(MutableRequestSpec spec) {
         this.requestSpec = new RequestSpecImpl();
         this.requestSpec.mergeWith(RestSecure.getGlobalRequestSpec());
 

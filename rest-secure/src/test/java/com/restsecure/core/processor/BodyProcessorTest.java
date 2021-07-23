@@ -3,7 +3,6 @@ package com.restsecure.core.processor;
 import com.restsecure.BaseTest;
 import com.restsecure.TestObjectMapper;
 import com.restsecure.core.request.RequestContext;
-import com.restsecure.core.request.specification.RequestSpec;
 import com.restsecure.core.request.specification.RequestSpecImpl;
 import org.testng.annotations.Test;
 
@@ -15,7 +14,9 @@ public class BodyProcessorTest {
 
     @Test
     public void processContextWithNoSerializationTest() {
-        RequestSpec spec = new RequestSpecImpl().body(1);
+        RequestSpecImpl spec = new RequestSpecImpl();
+        spec.body(1);
+
         RequestContext context = new RequestContext(spec);
         BodyProcessor processor = new BodyProcessor();
 
@@ -29,9 +30,9 @@ public class BodyProcessorTest {
         phone.setCode("+7");
         phone.setNumber("7777777777");
 
-        RequestSpec spec = new RequestSpecImpl()
-                .body(phone)
-                .config(objectMapper(new TestObjectMapper()));
+        RequestSpecImpl spec = new RequestSpecImpl();
+        spec.body(phone);
+        spec.config(objectMapper(new TestObjectMapper()));
 
         RequestContext context = new RequestContext(spec);
         BodyProcessor processor = new BodyProcessor();

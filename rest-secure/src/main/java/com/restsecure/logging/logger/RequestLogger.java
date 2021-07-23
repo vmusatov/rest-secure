@@ -2,7 +2,7 @@ package com.restsecure.logging.logger;
 
 import com.restsecure.core.http.Header;
 import com.restsecure.core.http.Parameter;
-import com.restsecure.core.request.specification.RequestSpec;
+import com.restsecure.core.request.specification.MutableRequestSpec;
 import com.restsecure.logging.LogInfo;
 import com.restsecure.logging.LogWriter;
 
@@ -12,7 +12,7 @@ import static com.restsecure.logging.logger.LogHelper.*;
 
 public class RequestLogger {
 
-    public static void log(LogWriter writer, RequestSpec spec, List<LogInfo> logInfoList) {
+    public static void log(LogWriter writer, MutableRequestSpec spec, List<LogInfo> logInfoList) {
         final StringBuilder builder = new StringBuilder();
 
         builder.append("----------------------------------------")
@@ -51,7 +51,7 @@ public class RequestLogger {
         writer.writeLog(builder.toString());
     }
 
-    private static void addAll(StringBuilder builder, RequestSpec spec) {
+    private static void addAll(StringBuilder builder, MutableRequestSpec spec) {
         addUrl(builder, spec);
         addMethod(builder, spec);
         addBody(builder, spec);
@@ -59,19 +59,19 @@ public class RequestLogger {
         addHeaders(builder, spec);
     }
 
-    private static void addUrl(StringBuilder builder, RequestSpec spec) {
+    private static void addUrl(StringBuilder builder, MutableRequestSpec spec) {
         builder.append("Url: ")
                 .append(spec.getUrl())
                 .append(lineSeparator());
     }
 
-    private static void addMethod(StringBuilder builder, RequestSpec spec) {
+    private static void addMethod(StringBuilder builder, MutableRequestSpec spec) {
         builder.append("Method: ")
                 .append(spec.getMethod())
                 .append(lineSeparator());
     }
 
-    private static void addBody(StringBuilder builder, RequestSpec spec) {
+    private static void addBody(StringBuilder builder, MutableRequestSpec spec) {
         builder.append("Request body: ");
 
         if (spec.getBody() == null) {
@@ -85,20 +85,20 @@ public class RequestLogger {
                 .append(lineSeparator());
     }
 
-    private static void addParams(StringBuilder builder, RequestSpec spec) {
+    private static void addParams(StringBuilder builder, MutableRequestSpec spec) {
         builder.append("Request parameters: ");
 
-        if (spec.getParameters().isEmpty()) {
+        if (spec.getParams().isEmpty()) {
             builder.append(NONE).append(lineSeparator());
             return;
         }
 
         builder.append(lineSeparator());
 
-        spec.getParameters().forEach(param -> addNameAndValue(builder, new Parameter(param.getKey(), param.getValue().toString())));
+        spec.getParams().forEach(param -> addNameAndValue(builder, new Parameter(param.getKey(), param.getValue().toString())));
     }
 
-    private static void addHeaders(StringBuilder builder, RequestSpec spec) {
+    private static void addHeaders(StringBuilder builder, MutableRequestSpec spec) {
         builder.append("Request headers: ");
 
         if (spec.getHeaders().isEmpty()) {
