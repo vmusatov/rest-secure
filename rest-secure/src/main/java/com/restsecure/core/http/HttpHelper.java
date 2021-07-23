@@ -4,8 +4,6 @@ import com.restsecure.core.exception.RestSecureException;
 import com.restsecure.core.util.MultiKeyMap;
 import com.restsecure.core.util.NameValueList;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.net.URI;
@@ -19,7 +17,10 @@ public class HttpHelper {
 
     public static List<NameValuePair> toApacheNameValuePair(MultiKeyMap<String, Object> parameters) {
         List<NameValuePair> pairs = new ArrayList<>();
-        parameters.forEach(param -> pairs.add(new BasicNameValuePair(param.getKey(), param.getValue().toString())));
+        parameters.forEach(param -> {
+            BasicNameValuePair pair = new BasicNameValuePair(param.getKey(), String.valueOf(param.getValue()));
+            pairs.add(pair);
+        });
         return pairs;
     }
 
@@ -35,7 +36,9 @@ public class HttpHelper {
 
         List<Cookie> cookies = new ArrayList<>();
         for (Header header : headersWithCookies) {
-            cookies.add(new Cookie(header.getValue()));
+            if (header.getValue() != null) {
+                cookies.add(new Cookie(header.getValue()));
+            }
         }
         return cookies;
     }

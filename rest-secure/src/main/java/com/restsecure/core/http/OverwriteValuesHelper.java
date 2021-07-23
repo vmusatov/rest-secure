@@ -12,7 +12,7 @@ public class OverwriteValuesHelper {
         if (!values.isEmpty() && values.size() > 1) {
             Object value = items.getLast(key);
             items.deleteAllWithKey(key);
-            items.put(key, value.toString());
+            items.put(key, String.valueOf(value));
         }
     }
 

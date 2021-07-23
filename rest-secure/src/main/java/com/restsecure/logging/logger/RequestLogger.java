@@ -81,7 +81,7 @@ public class RequestLogger {
 
         builder.append(lineSeparator())
                 .append(tabs(1))
-                .append(spec.getBody().toString())
+                .append(spec.getBody())
                 .append(lineSeparator());
     }
 
@@ -95,7 +95,7 @@ public class RequestLogger {
 
         builder.append(lineSeparator());
 
-        spec.getParams().forEach(param -> addNameAndValue(builder, new Parameter(param.getKey(), param.getValue().toString())));
+        spec.getParams().forEach(param -> addNameAndValue(builder, new Parameter(param.getKey(), String.valueOf(param.getValue()))));
     }
 
     private static void addHeaders(StringBuilder builder, MutableRequestSpec spec) {

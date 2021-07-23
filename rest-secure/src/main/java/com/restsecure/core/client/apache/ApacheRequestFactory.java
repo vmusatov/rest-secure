@@ -126,7 +126,7 @@ public class ApacheRequestFactory implements RequestFactory<HttpUriRequest> {
         HttpEntity entity = null;
 
         if (body != null) {
-            entity = new StringEntity(body.toString(), StandardCharsets.UTF_8);
+            entity = new StringEntity(String.valueOf(body), StandardCharsets.UTF_8);
         }
 
         if (!params.isEmpty()) {

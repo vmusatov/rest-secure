@@ -29,7 +29,7 @@ public class ApacheResponseTransformer implements ResponseTransformer<CloseableH
             response.setHeaders(headers);
             response.setCookies(HttpHelper.getCookiesFromHeaders(headers));
 
-            response.setStatusLine(apacheResponse.getStatusLine().toString());
+            response.setStatusLine(String.valueOf(apacheResponse.getStatusLine()));
             response.setStatusCode(apacheResponse.getStatusLine().getStatusCode());
 
             byte[] bodyContent = getBodyContent(apacheResponse);
