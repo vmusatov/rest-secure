@@ -7,7 +7,6 @@ import com.restsecure.core.http.HttpHelper;
 import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.request.RequestFactory;
 import com.restsecure.core.request.specification.MutableRequestSpec;
-import com.restsecure.core.util.MultiKeyMap;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.NameValuePair;
@@ -91,7 +90,7 @@ public class ApacheRequestFactory implements RequestFactory<HttpUriRequest> {
                 throw new RequestConfigurationException("Unsupported request method " + spec.getMethod());
         }
 
-        setHeadersToRequest(spec.getHeaders(), request);
+        setHeadersToRequest(spec, request);
 
         return request;
     }
@@ -104,9 +103,14 @@ public class ApacheRequestFactory implements RequestFactory<HttpUriRequest> {
         }
     }
 
-    private void setHeadersToRequest(MultiKeyMap<String, Object> headers, HttpUriRequest request) {
-        headers.forEach(header -> {
-            BasicHeader basicHeader = new BasicHeader(header.getKey(), header.getValue().toString());
+    private void setHeadersToRequest(MutableRequestSpec spec, HttpUriRequest request) {
+        spec.getHeaders().forEach(header -> {
+            BasicHeader basicHeader = new BasicHeader(header.getKey(), String.valueOf(header.getValue()));
+            request.addHeader(basicHeader);
+        });
+
+        spec.getCookies().forEach(cookie -> {
+            BasicHeader basicHeader = new BasicHeader("Cookie", cookie.toString());
             request.addHeader(basicHeader);
         });
     }

@@ -1,6 +1,7 @@
 package com.restsecure.core.request.specification;
 
 import com.restsecure.core.configuration.Config;
+import com.restsecure.core.http.Cookie;
 import com.restsecure.core.http.RequestMethod;
 import com.restsecure.core.processor.Processor;
 import com.restsecure.core.response.validation.Validation;
@@ -146,9 +147,24 @@ public interface MutableRequestSpec extends RequestSpec {
     MutableRequestSpec replaceRouteParam(String name, Object newValue);
 
     /**
+     * Clear all cookies
+     *
+     * @return MutableRequestSpec
+     */
+    MutableRequestSpec clearCookies();
+
+    /**
+     * Remove all cookies with specified name
+     *
+     * @param name The cookies name
+     * @return MutableRequestSpec
+     */
+    MutableRequestSpec removeCookie(String name);
+
+    /**
      * @return cookies with Object value
      */
-    MultiKeyMap<String, Object> getCookiesWithValueToSerialize();
+    List<Cookie> getCookies();
 
     /**
      * @return Processors list

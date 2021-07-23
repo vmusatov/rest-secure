@@ -3,7 +3,10 @@ package com.restsecure.core.request.specification;
 import com.restsecure.core.client.Client;
 import com.restsecure.core.configuration.Config;
 import com.restsecure.core.configuration.configs.HttpClientConfig;
-import com.restsecure.core.http.*;
+import com.restsecure.core.http.Cookie;
+import com.restsecure.core.http.Header;
+import com.restsecure.core.http.Parameter;
+import com.restsecure.core.http.RequestMethod;
 import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.response.Response;
@@ -29,7 +32,7 @@ public class RequestSpecImpl implements MutableRequestSpec {
     private final MultiKeyMap<String, Object> parameters;
     private final MultiKeyMap<String, Object> queryParams;
     private final MultiKeyMap<String, Object> routeParams;
-    private final MultiKeyMap<String, Object> cookiesWithValueToSerialize;
+    private final List<Cookie> cookies;
 
     private final List<Processor> processors;
     private final List<Validation> validations;
@@ -42,7 +45,7 @@ public class RequestSpecImpl implements MutableRequestSpec {
         this.parameters = new MultiKeyMap<>();
         this.queryParams = new MultiKeyMap<>();
         this.routeParams = new MultiKeyMap<>();
-        this.cookiesWithValueToSerialize = new MultiKeyMap<>();
+        this.cookies = new ArrayList<>();
 
         this.processors = new ArrayList<>();
         this.validations = new ArrayList<>();
@@ -296,11 +299,23 @@ public class RequestSpecImpl implements MutableRequestSpec {
     }
 
     @Override
+    public MutableRequestSpec clearCookies() {
+        this.cookies.clear();
+        return this;
+    }
+
+    @Override
+    public MutableRequestSpec removeCookie(String name) {
+        this.cookies.removeIf(c -> c.getName().equals(name));
+        return this;
+    }
+
+    @Override
     public RequestSpecImpl cookie(String name, Object value, Object... additionalValues) {
-        this.cookiesWithValueToSerialize.put(name, value);
+        this.cookies.add(new Cookie(name, String.valueOf(value)));
         if (additionalValues != null && additionalValues.length > 0) {
             for (Object additionalValue : additionalValues) {
-                this.cookiesWithValueToSerialize.put(name, additionalValue);
+                this.cookies.add(new Cookie(name, String.valueOf(additionalValue)));
             }
         }
         return this;
@@ -308,7 +323,9 @@ public class RequestSpecImpl implements MutableRequestSpec {
 
     @Override
     public RequestSpecImpl cookie(Cookie cookie) {
-        header("Cookie", cookie.toString());
+        if (cookie != null) {
+            this.cookies.add(cookie);
+        }
         return this;
     }
 
@@ -326,11 +343,6 @@ public class RequestSpecImpl implements MutableRequestSpec {
             cookie(cookie.getKey(), cookie.getValue());
         }
         return this;
-    }
-
-    @Override
-    public MultiKeyMap<String, Object> getCookiesWithValueToSerialize() {
-        return this.cookiesWithValueToSerialize;
     }
 
     @Override

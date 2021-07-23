@@ -14,7 +14,7 @@ class SpecificationMerger {
         from.getQueryParams().forEach(param -> to.queryParam(param.getKey(), param.getValue()));
 
         from.getHeaders().forEach(header -> to.header(header.getKey(), header.getValue()));
-        from.getCookiesWithValueToSerialize().forEach(cookie -> to.cookie(cookie.getKey(), cookie.getValue()));
+        from.getCookies().forEach(to::cookie);
 
         to.process(from.getProcessors());
         to.expect(from.getValidations());
