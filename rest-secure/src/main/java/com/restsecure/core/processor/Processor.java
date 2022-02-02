@@ -1,6 +1,7 @@
 package com.restsecure.core.processor;
 
 import com.restsecure.core.request.RequestContext;
+import com.restsecure.core.response.MutableResponse;
 import com.restsecure.core.response.Response;
 
 public interface Processor {
@@ -22,7 +23,7 @@ public interface Processor {
      * @param context  request context
      * @param response response
      */
-    default void processResponse(RequestContext context, Response response) {
+    default void processResponse(RequestContext context, MutableResponse response) {
     }
 
     /**

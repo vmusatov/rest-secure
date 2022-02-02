@@ -1,10 +1,10 @@
 package com.restsecure.validation.base;
 
 import com.restsecure.BaseTest;
-import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.http.Cookie;
 import com.restsecure.core.response.HttpResponse;
-import com.restsecure.core.response.Response;
+import com.restsecure.core.response.MutableResponse;
+import com.restsecure.core.response.validation.Validation;
 import org.testng.annotations.Test;
 
 import static com.restsecure.Matchers.containsPair;
@@ -17,7 +17,7 @@ public class CookiesValidationTest extends BaseTest {
 
     @Test
     public void nameAndValueCookieSuccessTest() {
-        Response response = new HttpResponse();
+        MutableResponse response = new HttpResponse();
         response.setCookies(cookiesWithNumberValues);
 
         Validation validation = cookie("name1", "1");
@@ -26,7 +26,7 @@ public class CookiesValidationTest extends BaseTest {
 
     @Test
     public void nameAndValueCookieFailTest() {
-        Response response = new HttpResponse();
+        MutableResponse response = new HttpResponse();
         response.setCookies(cookiesWithNumberValues);
 
         Validation validation = cookie("name2", "1");
@@ -35,7 +35,7 @@ public class CookiesValidationTest extends BaseTest {
 
     @Test
     public void cookieSuccessTest() {
-        Response response = new HttpResponse();
+        MutableResponse response = new HttpResponse();
         response.setCookies(cookiesWithNumberValues);
 
         Validation validation = cookie(new Cookie("name1", "1"));
@@ -44,7 +44,7 @@ public class CookiesValidationTest extends BaseTest {
 
     @Test
     public void cookieFailTest() {
-        Response response = new HttpResponse();
+        MutableResponse response = new HttpResponse();
         response.setCookies(cookiesWithNumberValues);
 
         Validation validation = cookie(new Cookie("name2", "1"));
@@ -53,7 +53,7 @@ public class CookiesValidationTest extends BaseTest {
 
     @Test
     public void nameAndValueMatcherCookieSuccessTest() {
-        Response response = new HttpResponse();
+        MutableResponse response = new HttpResponse();
         response.setCookies(cookiesWithNumberValues);
 
         Validation validation = cookie("name1", containsString("1"));
@@ -62,7 +62,7 @@ public class CookiesValidationTest extends BaseTest {
 
     @Test
     public void nameAndValueMatcherCookieFailTest() {
-        Response response = new HttpResponse();
+        MutableResponse response = new HttpResponse();
         response.setCookies(cookiesWithNumberValues);
 
         Validation validation = cookie("name1", containsString("2"));
@@ -71,7 +71,7 @@ public class CookiesValidationTest extends BaseTest {
 
     @Test
     public void nameAndParsingFunctionAndValueMatcherCookieSuccessTest() {
-        Response response = new HttpResponse();
+        MutableResponse response = new HttpResponse();
         response.setCookies(cookiesWithNumberValues);
 
         Validation validation = cookie("name1", Integer::parseInt, lessThan(2));
@@ -80,7 +80,7 @@ public class CookiesValidationTest extends BaseTest {
 
     @Test
     public void nameAndParsingFunctionAndValueMatcherCookieFailTest() {
-        Response response = new HttpResponse();
+        MutableResponse response = new HttpResponse();
         response.setCookies(cookiesWithNumberValues);
 
         Validation validation = cookie("name1", Integer::parseInt, lessThan(1));
@@ -89,7 +89,7 @@ public class CookiesValidationTest extends BaseTest {
 
     @Test
     public void cookiesSuccessTest() {
-        Response response = new HttpResponse();
+        MutableResponse response = new HttpResponse();
         response.setCookies(cookiesWithStringValues);
 
         Validation validation = cookies(containsPair("name1", "value1"));
@@ -98,7 +98,7 @@ public class CookiesValidationTest extends BaseTest {
 
     @Test
     public void cookiesFailTest() {
-        Response response = new HttpResponse();
+        MutableResponse response = new HttpResponse();
         response.setCookies(cookiesWithStringValues);
 
         Validation validation = cookies(containsPair("name1", "wrong value"));

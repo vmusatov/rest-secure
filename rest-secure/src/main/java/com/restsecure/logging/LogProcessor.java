@@ -3,7 +3,7 @@ package com.restsecure.logging;
 import com.restsecure.core.processor.ProcessAll;
 import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.RequestContext;
-import com.restsecure.core.response.Response;
+import com.restsecure.core.response.MutableResponse;
 import com.restsecure.logging.config.LogWriterConfig;
 import com.restsecure.logging.config.RequestLogConfig;
 import com.restsecure.logging.config.ResponseLogConfig;
@@ -16,7 +16,7 @@ import java.util.List;
 public class LogProcessor implements Processor {
 
     @Override
-    public void processResponse(RequestContext context, Response response) {
+    public void processResponse(RequestContext context, MutableResponse response) {
         LogWriter writer = context.getConfigValue(LogWriterConfig.class);
         List<LogInfo> logInfo = context.getConfigValue(ResponseLogConfig.class);
 

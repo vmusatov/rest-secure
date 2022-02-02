@@ -7,6 +7,7 @@ import com.restsecure.core.http.Parameter;
 import com.restsecure.core.http.RequestMethod;
 import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.RequestContext;
+import com.restsecure.core.response.MutableResponse;
 import com.restsecure.core.response.Response;
 import com.restsecure.session.SessionIdNameConfig;
 import org.testng.annotations.Test;
@@ -403,7 +404,7 @@ public class RequestSpecTest {
         }
 
         @Override
-        public void processResponse(RequestContext context, Response response) {
+        public void processResponse(RequestContext context, MutableResponse response) {
 
         }
     }

@@ -4,7 +4,7 @@ import com.restsecure.core.http.Cookie;
 import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.request.RequestSender;
-import com.restsecure.core.response.Response;
+import com.restsecure.core.response.MutableResponse;
 import com.restsecure.core.util.NameValueList;
 import lombok.Getter;
 
@@ -52,7 +52,7 @@ public class Session implements Processor {
     }
 
     @Override
-    public void processResponse(RequestContext context, Response response) {
+    public void processResponse(RequestContext context, MutableResponse response) {
         NameValueList<Cookie> responseCookies = response.getCookies();
         if (responseCookies == null) {
             return;

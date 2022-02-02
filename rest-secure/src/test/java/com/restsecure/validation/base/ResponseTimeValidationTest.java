@@ -2,7 +2,7 @@ package com.restsecure.validation.base;
 
 import com.restsecure.BaseTest;
 import com.restsecure.core.response.HttpResponse;
-import com.restsecure.core.response.Response;
+import com.restsecure.core.response.MutableResponse;
 import com.restsecure.core.response.validation.Validation;
 import org.testng.annotations.Test;
 
@@ -15,7 +15,7 @@ public class ResponseTimeValidationTest extends BaseTest {
 
     @Test
     public void timeValidationTest() {
-        Response response = new HttpResponse();
+        MutableResponse response = new HttpResponse();
         response.setTime(1000);
 
         Validation validation = time(lessThan(2000L));
@@ -25,7 +25,7 @@ public class ResponseTimeValidationTest extends BaseTest {
 
     @Test
     public void timeValidationFailTest() {
-        Response response = new HttpResponse();
+        MutableResponse response = new HttpResponse();
         response.setTime(1000);
 
         Validation validation = time(lessThan(1000L));
@@ -35,7 +35,7 @@ public class ResponseTimeValidationTest extends BaseTest {
 
     @Test
     public void timeInTimeUnitValidationTest() {
-        Response response = new HttpResponse();
+        MutableResponse response = new HttpResponse();
         response.setTime(1000);
 
         Validation validation = time(lessThan(2L), TimeUnit.SECONDS);
@@ -45,7 +45,7 @@ public class ResponseTimeValidationTest extends BaseTest {
 
     @Test
     public void timeInTimeUnitValidationFailTest() {
-        Response response = new HttpResponse();
+        MutableResponse response = new HttpResponse();
         response.setTime(1000);
 
         Validation validation = time(lessThan(1L), TimeUnit.SECONDS);

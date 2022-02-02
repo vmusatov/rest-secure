@@ -5,10 +5,7 @@ import com.restsecure.core.exception.RestSecureException;
 import com.restsecure.core.http.Header;
 import com.restsecure.core.http.HttpHelper;
 import com.restsecure.core.request.RequestContext;
-import com.restsecure.core.response.HttpResponse;
-import com.restsecure.core.response.Response;
-import com.restsecure.core.response.ResponseBody;
-import com.restsecure.core.response.ResponseTransformer;
+import com.restsecure.core.response.*;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 
@@ -20,9 +17,9 @@ import java.util.stream.Collectors;
 public class ApacheResponseTransformer implements ResponseTransformer<CloseableHttpResponse> {
 
     @Override
-    public Response transform(CloseableHttpResponse apacheResponse, RequestContext context) {
+    public MutableResponse transform(CloseableHttpResponse apacheResponse, RequestContext context) {
         try (apacheResponse) {
-            Response response = new HttpResponse();
+            MutableResponse response = new HttpResponse();
             response.setTime(System.currentTimeMillis() - context.getRequestTime());
 
             List<Header> headers = parseHeaders(apacheResponse);

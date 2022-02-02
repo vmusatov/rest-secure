@@ -2,9 +2,8 @@ package com.restsecure.validation.object;
 
 import com.restsecure.BaseTest;
 import com.restsecure.TestObjectMapper;
-import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.response.HttpResponse;
-import com.restsecure.core.response.Response;
+import com.restsecure.core.response.MutableResponse;
 import com.restsecure.core.response.ResponseBody;
 import com.restsecure.core.response.validation.Validation;
 import org.testng.annotations.Test;
@@ -16,7 +15,7 @@ public class ObjectMatcherValidationTest extends BaseTest {
 
     @Test
     public void matcherSuccessTest() {
-        Response response = new HttpResponse();
+        MutableResponse response = new HttpResponse();
         response.setBody(new ResponseBody(userJson, new TestObjectMapper()));
 
         Validation validation = as(User.class, idIs(1), loginIs("UserLogin"), isSubscribe(true));
@@ -26,7 +25,7 @@ public class ObjectMatcherValidationTest extends BaseTest {
 
     @Test
     public void matcherFailTest() {
-        Response response = new HttpResponse();
+        MutableResponse response = new HttpResponse();
         response.setBody(new ResponseBody(userJson, new TestObjectMapper()));
 
         Validation validation = as(User.class, idIs(1), loginIs("Wrong login"), isSubscribe(true));

@@ -2,7 +2,7 @@ package com.restsecure.validation.base;
 
 import com.restsecure.BaseTest;
 import com.restsecure.core.response.HttpResponse;
-import com.restsecure.core.response.Response;
+import com.restsecure.core.response.MutableResponse;
 import com.restsecure.core.response.validation.Validation;
 import org.testng.annotations.Test;
 
@@ -13,7 +13,7 @@ public class StatusCodeValidationTest extends BaseTest {
 
     @Test
     public void intStatusCodeSuccessTest() {
-        Response response = new HttpResponse();
+        MutableResponse response = new HttpResponse();
         response.setStatusCode(200);
 
         Validation validation = statusCode(200);
@@ -23,7 +23,7 @@ public class StatusCodeValidationTest extends BaseTest {
 
     @Test
     public void intStatusCodeFailTest() {
-        Response response = new HttpResponse();
+        MutableResponse response = new HttpResponse();
         response.setStatusCode(500);
 
         Validation validation = statusCode(200);
@@ -32,7 +32,7 @@ public class StatusCodeValidationTest extends BaseTest {
 
     @Test
     public void matcherStatusCodeSuccessTest() {
-        Response response = new HttpResponse();
+        MutableResponse response = new HttpResponse();
         response.setStatusCode(200);
 
         Validation validation = statusCode(equalTo(200));
@@ -42,7 +42,7 @@ public class StatusCodeValidationTest extends BaseTest {
 
     @Test
     public void matcherStatusCodeFailTest() {
-        Response response = new HttpResponse();
+        MutableResponse response = new HttpResponse();
         response.setStatusCode(500);
 
         Validation validation = statusCode(equalTo(200));

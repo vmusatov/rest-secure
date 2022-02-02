@@ -4,6 +4,7 @@ import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.request.RequestFactory;
 import com.restsecure.core.request.specification.SpecificationValidator;
+import com.restsecure.core.response.MutableResponse;
 import com.restsecure.core.response.Response;
 import com.restsecure.core.response.ResponseTransformer;
 import com.restsecure.core.response.validation.Validation;
@@ -35,7 +36,7 @@ public abstract class AbstractHttpClient<RequestType, ResponseType> implements C
         context.setRequestTime(System.currentTimeMillis());
 
         ResponseType r = doRequest(request);
-        Response response = responseTransformer.transform(r, context);
+        MutableResponse response = responseTransformer.transform(r, context);
 
         precessResponse(context, response);
         validateResponse(context, response);
@@ -51,7 +52,7 @@ public abstract class AbstractHttpClient<RequestType, ResponseType> implements C
                 .forEach(processor -> processor.processRequest(context));
     }
 
-    private static void precessResponse(RequestContext context, Response response) {
+    private static void precessResponse(RequestContext context, MutableResponse response) {
         List<Processor> processors = context.getProcessors();
 
         processors.stream()

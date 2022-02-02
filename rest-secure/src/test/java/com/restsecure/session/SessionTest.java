@@ -4,7 +4,7 @@ import com.restsecure.core.http.Cookie;
 import com.restsecure.core.http.Header;
 import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.response.HttpResponse;
-import com.restsecure.core.response.Response;
+import com.restsecure.core.response.MutableResponse;
 import org.testng.annotations.Test;
 
 import java.util.Collections;
@@ -16,7 +16,7 @@ public class SessionTest {
     @Test
     public void sessionTest() {
         Session session = new Session();
-        Response response = new HttpResponse();
+        MutableResponse response = new HttpResponse();
         response.setCookies(Collections.singletonList(new Cookie(SessionIdNameConfig.DEFAULT_SESSION_ID_NAME, "session_value")));
 
         RequestContext context = new RequestContext();

@@ -2,7 +2,6 @@ package com.restsecure.core.response;
 
 import com.restsecure.core.http.Cookie;
 import com.restsecure.core.http.Header;
-import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.util.NameValueList;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +9,7 @@ import lombok.Setter;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class HttpResponse implements Response {
+public class HttpResponse implements MutableResponse {
     @Getter
     @Setter
     private ResponseBody body;

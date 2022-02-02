@@ -1,10 +1,10 @@
 package com.restsecure.validation.base;
 
 import com.restsecure.BaseTest;
-import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.http.Header;
 import com.restsecure.core.response.HttpResponse;
-import com.restsecure.core.response.Response;
+import com.restsecure.core.response.MutableResponse;
+import com.restsecure.core.response.validation.Validation;
 import org.testng.annotations.Test;
 
 import static com.restsecure.Matchers.containsPair;
@@ -17,7 +17,7 @@ public class HeadersValidationTest extends BaseTest {
 
     @Test
     public void nameAndValueHeaderSuccessTest() {
-        Response response = new HttpResponse();
+        MutableResponse response = new HttpResponse();
         response.setHeaders(headersWithNumberValues);
 
         Validation validation = header("name1", "1");
@@ -26,7 +26,7 @@ public class HeadersValidationTest extends BaseTest {
 
     @Test
     public void nameAndValueHeaderFailTest() {
-        Response response = new HttpResponse();
+        MutableResponse response = new HttpResponse();
         response.setHeaders(headersWithNumberValues);
 
         Validation validation = header("name2", "1");
@@ -35,7 +35,7 @@ public class HeadersValidationTest extends BaseTest {
 
     @Test
     public void headerSuccessTest() {
-        Response response = new HttpResponse();
+        MutableResponse response = new HttpResponse();
         response.setHeaders(headersWithNumberValues);
 
         Validation validation = header(new Header("name1", "1"));
@@ -44,7 +44,7 @@ public class HeadersValidationTest extends BaseTest {
 
     @Test
     public void headerFailTest() {
-        Response response = new HttpResponse();
+        MutableResponse response = new HttpResponse();
         response.setHeaders(headersWithNumberValues);
 
         Validation validation = header(new Header("name2", "1"));
@@ -53,7 +53,7 @@ public class HeadersValidationTest extends BaseTest {
 
     @Test
     public void nameAndValueMatcherHeaderSuccessTest() {
-        Response response = new HttpResponse();
+        MutableResponse response = new HttpResponse();
         response.setHeaders(headersWithNumberValues);
 
         Validation validation = header("name1", containsString("1"));
@@ -62,7 +62,7 @@ public class HeadersValidationTest extends BaseTest {
 
     @Test
     public void nameAndValueMatcherHeaderFailTest() {
-        Response response = new HttpResponse();
+        MutableResponse response = new HttpResponse();
         response.setHeaders(headersWithNumberValues);
 
         Validation validation = header("name1", containsString("2"));
@@ -71,7 +71,7 @@ public class HeadersValidationTest extends BaseTest {
 
     @Test
     public void nameAndParsingFunctionAndValueMatcherHeaderSuccessTest() {
-        Response response = new HttpResponse();
+        MutableResponse response = new HttpResponse();
         response.setHeaders(headersWithNumberValues);
 
         Validation validation = header("name1", Integer::parseInt, lessThan(2));
@@ -80,7 +80,7 @@ public class HeadersValidationTest extends BaseTest {
 
     @Test
     public void nameAndParsingFunctionAndValueMatcherHeaderFailTest() {
-        Response response = new HttpResponse();
+        MutableResponse response = new HttpResponse();
         response.setHeaders(headersWithNumberValues);
 
         Validation validation = header("name1", Integer::parseInt, lessThan(1));
@@ -89,7 +89,7 @@ public class HeadersValidationTest extends BaseTest {
 
     @Test
     public void headersSuccessTest() {
-        Response response = new HttpResponse();
+        MutableResponse response = new HttpResponse();
         response.setHeaders(headersWithStringValues);
 
         Validation validation = headers(containsPair("name1", "value1"));
@@ -98,7 +98,7 @@ public class HeadersValidationTest extends BaseTest {
 
     @Test
     public void headersFailTest() {
-        Response response = new HttpResponse();
+        MutableResponse response = new HttpResponse();
         response.setHeaders(headersWithStringValues);
 
         Validation validation = headers(containsPair("name1", "wrong value"));

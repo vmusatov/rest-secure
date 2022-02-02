@@ -2,9 +2,8 @@ package com.restsecure.validation.object;
 
 import com.restsecure.BaseTest;
 import com.restsecure.TestObjectMapper;
-import com.restsecure.core.request.RequestContext;
 import com.restsecure.core.response.HttpResponse;
-import com.restsecure.core.response.Response;
+import com.restsecure.core.response.MutableResponse;
 import com.restsecure.core.response.ResponseBody;
 import com.restsecure.core.response.validation.Validation;
 import org.testng.annotations.BeforeMethod;
@@ -20,7 +19,7 @@ public class ObjectValidationTest extends BaseTest {
 
     @Test
     public void predicateSuccessTest() {
-        Response response = new HttpResponse();
+        MutableResponse response = new HttpResponse();
         response.setBody(new ResponseBody(userJson, new TestObjectMapper()));
 
         Validation validation = as(User.class, user -> user.getId() == 1);
@@ -29,7 +28,7 @@ public class ObjectValidationTest extends BaseTest {
 
     @Test
     public void predicateFailTest() {
-        Response response = new HttpResponse();
+        MutableResponse response = new HttpResponse();
         response.setBody(new ResponseBody(userJson, new TestObjectMapper()));
 
         Validation validation = as(User.class, user -> user.getId() == 2);
@@ -38,7 +37,7 @@ public class ObjectValidationTest extends BaseTest {
 
     @Test
     public void predicateWithReasonSuccessTest() {
-        Response response = new HttpResponse();
+        MutableResponse response = new HttpResponse();
         response.setBody(new ResponseBody(userJson, new TestObjectMapper()));
 
         Validation validation = as(User.class, user -> user.getId() == 1, "Id validation");
@@ -47,7 +46,7 @@ public class ObjectValidationTest extends BaseTest {
 
     @Test
     public void predicateWithReasonFailTest() {
-        Response response = new HttpResponse();
+        MutableResponse response = new HttpResponse();
         response.setBody(new ResponseBody(userJson, new TestObjectMapper()));
 
         Validation validation = as(User.class, user -> user.getId() == 2, "Id validation");

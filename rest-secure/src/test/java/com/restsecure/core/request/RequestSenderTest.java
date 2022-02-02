@@ -10,7 +10,7 @@ import com.restsecure.core.http.RequestMethod;
 import com.restsecure.core.http.StatusCode;
 import com.restsecure.core.processor.Processor;
 import com.restsecure.core.request.specification.RequestSpec;
-import com.restsecure.core.response.Response;
+import com.restsecure.core.response.MutableResponse;
 import com.restsecure.core.response.validation.Validation;
 import com.restsecure.core.response.validation.ValidationResult;
 import com.restsecure.core.response.validation.ValidationStatus;
@@ -305,7 +305,7 @@ public class RequestSenderTest extends BaseTest {
         }
 
         @Override
-        public void processResponse(RequestContext context, Response response) {
+        public void processResponse(RequestContext context, MutableResponse response) {
             this.isProcessResponse = true;
         }
     }

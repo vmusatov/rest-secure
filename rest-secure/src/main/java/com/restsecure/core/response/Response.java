@@ -16,42 +16,14 @@ public interface Response {
     ResponseBody getBody();
 
     /**
-     * Setting the body in response
-     *
-     * @param body ResponseBody
-     */
-    void setBody(ResponseBody body);
-
-    /**
      * @return MultiValueList<Header>
      */
     NameValueList<Header> getHeaders();
 
     /**
-     * Setting the headers in response
-     *
-     * @param headers response headers
-     */
-    void setHeaders(List<Header> headers);
-
-    /**
      * @return MultiValueList<Cookie>
      */
     NameValueList<Cookie> getCookies();
-
-    /**
-     * Setting the cookies in response
-     *
-     * @param cookies response cookies
-     */
-    void setCookies(List<Cookie> cookies);
-
-    /**
-     * Setting the response status line
-     *
-     * @param statusLine response status line
-     */
-    void setStatusLine(String statusLine);
 
     /**
      * @return response status line
@@ -62,20 +34,6 @@ public interface Response {
      * @return status code
      */
     int getStatusCode();
-
-    /**
-     * Setting the status code in response
-     *
-     * @param statusCode response status code
-     */
-    void setStatusCode(int statusCode);
-
-    /**
-     * Set the response time in milliseconds
-     *
-     * @param time response time
-     */
-    void setTime(long time);
 
     /**
      * @return response time in milliseconds
